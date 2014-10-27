@@ -1,0 +1,12 @@
+server:
+  address: smtp.gmail.com
+  port: 587
+  domain: gmail.com
+  authentication: plain
+  enable_starttls_auto: true
+credentials:
+  sender_email: Automatic Diary <automaticdiary@gmail.com>
+  user_name: automaticdiary@gmail.com
+  password: fV2z6OE2gkJ
+pop:
+  pop_server: pop.gmail.com

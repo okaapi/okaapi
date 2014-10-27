@@ -1,0 +1,12 @@
+server:
+  address: smtp.1and1.com
+  port: 587
+  domain: okaapi.com
+  authentication: plain
+  enable_starttls_auto: true
+credentials:
+  sender_email: Okaapi Do Not Reply <noreply@okaapi.com>
+  user_name: email@okaapi.com
+  password: fV2z6OE2gkJ
+pop:
+  pop_server: pop.1and1.com  

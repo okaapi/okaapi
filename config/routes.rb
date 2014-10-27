@@ -1,9 +1,21 @@
 Rails.application.routes.draw do
+  
+  resources :reminders
+
+  get 'diary/calendar', as: "calendar"
+  get 'diary/send_diary_email', as: "send_diary_email"
+  get 'diary/send_all_diary_emails', as: "send_all_diary_emails"
+  get 'diary/receive_diary_emails', as: "receive_diary_emails"  
+  get 'diary/turn_off_diary_emails', as: "turn_off_diary_emails"  
+
+  resources :diary_entries
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  mount Auth::Engine => "/", as: "auth_engine"
+
+  root "diary#calendar", as: "root"
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
