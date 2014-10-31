@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141024223046) do
+ActiveRecord::Schema.define(version: 20141027202901) do
 
   create_table "auth_user_actions", force: true do |t|
     t.integer  "user_session_id"
@@ -52,6 +52,28 @@ ActiveRecord::Schema.define(version: 20141024223046) do
     t.integer  "year",       default: 0
     t.text     "content"
     t.text     "from"
+    t.string   "archived",   default: "false"
+    t.integer  "user_id",    default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "okaapis", force: true do |t|
+    t.string   "subject"
+    t.text     "content"
+    t.datetime "time"
+    t.string   "from"
+    t.string   "reminder",   default: "0"
+    t.string   "archived",   default: "false"
+    t.integer  "user_id",    default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "words", force: true do |t|
+    t.string   "term"
+    t.integer  "priority",   default: 0
+    t.string   "person",     default: "false"
     t.string   "archived",   default: "false"
     t.integer  "user_id",    default: 0
     t.datetime "created_at"

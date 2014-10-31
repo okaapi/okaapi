@@ -61,6 +61,58 @@ class DiaryEntriesController < ApplicationController
     end
   end
 
+  def upload
+    
+    if @user
+      uploaded_file = params[:file]
+      file_content = uploaded_file.read
+      lines = file_content.split("\n")
+
+      lines.each do |line|
+
+        # replace the : between digits with - ...for time stamps
+        line.gsub(/(\d):(\d)/,'\1-\2')
+        # remove the annoying additions from before
+        line.gsub!(/added(?:(?!added).)*?UTC\s?:/m, '')
+        # sometimes mailers add this
+        line.gsub!(/This message has no content./,'')    
+         
+        # split line in key/value pairs
+        values = line.strip.split(";")        
+        parameters = {}
+        values.each do |v|
+          key = v.split(': ')[0].strip
+          value = v.split(': ')[1]
+          # strip leading or trailing "
+          value.gsub!(/^\"/,'')
+          value.gsub!(/\"$/,'')
+          parameters[key] = value;       
+        end
+        # prepare symbols for DiaryEntry create call   
+        parameters.symbolize_keys!
+        parameters[:user_id] = @user.id
+        entry = DiaryEntry.create( parameters.symbolize_keys )   
+        entry.save!
+      end
+    end
+    respond_to do |format|
+      format.html { redirect_to diary_entries_url, notice: 'File was successfully parsed...' }
+      format.json { head :no_content }
+    end   
+    
+=begin
+<% @diary_entries.each do |diary_entry| %>
+  day: <%= diary_entry.day %>; month: <%= diary_entry.month %>;
+  year: <%= diary_entry.year %>;
+  content: "<%= diary_entry.content.gsub(/\n/,'<br >') %>";
+  from: <%= diary_entry.from %>;
+  date: <%= diary_entry.date %>; <br >
+<% end %>
+
+=end
+     
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_diary_entry
@@ -69,6 +121,6 @@ class DiaryEntriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diary_entry_params
-      params.require(:diary_entry).permit(:entry, :day, :month, :year, :archived, :user_id)
+      params.require(:diary_entry).permit(:content, :day, :month, :year, :archived, :user_id)
     end
 end

@@ -1,0 +1,63 @@
+// Place all the styles related to the Okaapis controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+@import "mixins";
+  
+#termcloud, #people {
+  //border: 1px solid green;
+  float: left;
+  width: 100%;  
+  margin: 3px;  
+  @include header-block;   
+
+  // for the termcloud
+
+  .person a { 
+    color: grey; 
+    font-weight: bold; 
+    font-size: 30px; 
+  }
+  .term_color_1 a { font-weight: bold; color: grey }
+  .term_color_2 a { font-weight: bold; color: teal }  
+  .term_color_3 a { font-weight: bold; color: red }    
+  .term_size_1 a { font-size: 20px; }
+  .term_size_2 a { font-size: 24px; }
+  .term_size_3 a { font-size: 30px; }
+  .term_size_4 a { font-size: 38px; }
+  .term_size_5 a { font-size: 50px; }
+ 
+  #term_detail_dialogue {
+    position: absolute;    
+    display: none;
+    // links to okaapis
+    a { 
+      color: teal;
+      &:visited { 
+        color: teal;
+      }
+      &:hover { 
+        color: $a-hover-color;
+      }      
+    }   
+    @include box-with-legend;
+	fieldset {
+	  font-size: $title-size;
+	  .term_modifiers, .okaapi_modifiers {
+	    margin-left: 20px;
+	    color: grey;
+	    a { 
+	      $text-size: 15px;
+	      color: grey;
+          &:visited { 
+            color: grey;
+          }	      
+          &:hover { 
+            color: $a-hover-color;
+          } 
+        }        
+	  } 
+	}
+  }  
+}

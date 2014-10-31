@@ -1,48 +1,61 @@
 
  
-<div id="diary">
+<div id="calendar">
   
-  <% if @user %>
-  
-	  <div class="month_heading">
-	    <%= link_to '&laquo;'.html_safe, calendar_path( month: @month-1, year: @year ), title: "One month back"  %>
-	    &nbsp;<%= monthname( @month ) %> <%= @year %>&nbsp;
-	    <%= link_to '&raquo;'.html_safe, calendar_path( month: @month+1, year: @year ), title: "One month forward"  %>
-	    <div class="month_heading_right">
-	      <% if @user.diary_service == 'on' %>	      
+	  <div class="header">
+	    <div>
+	      <%= link_to '&laquo;'.html_safe, calendar_path( month: @month-1, year: @year ), title: "One month back"  %>
+	      &nbsp;<%= monthname( @month ) %> <%= @year %>&nbsp;
+	      <%= link_to '&raquo;'.html_safe, calendar_path( month: @month+1, year: @year ), title: "One month forward"  %>
+	    </div>
+	    <div class="header_right">
+	      <% if @user and @user.diary_service == 'on' %>	      
 	        <%= link_to '&#9728;'.html_safe , calendar_path, title: "Jump to last entry" %>	      
 	        <%= link_to '&#9993;'.html_safe , send_diary_email_path, title: "Send daily reminder email" %>
 	        <%= link_to '&#9775;'.html_safe , receive_diary_emails_path, title: "Check emails"  %>
 	        <%= link_to '&#920;'.html_safe , turn_off_diary_emails_path, title: "Turn off reminder emails"  %>
-	      <% else %>
+	      <% elsif @user %>
 	        <%= link_to '&#9993;'.html_safe , send_diary_email_path, title: "Send daily reminder email" %>
           <% end %>
+          <%= link_to '&#9166;'.html_safe , root_path, title: "Back"  %>
         </div>
 	  </div>
+	  <div class="cleardiv"> </div>
 	  
 	  <div id="setup_diary_emails">
 	  </div>
 	  
 	  <% @calendar.each do |i,week| %>
-	    <% week.each do |j,day| %>
-	      
-	      <% @content = content_for_day( @user.id, @month, day, @year ) %> 
-	
-		  <div class="diary_entry">
-		    <% if @content %>
-		      <fieldset>
-		        <legend><%= weekday(@month,day,@year)%>&nbsp;
-		                 <%= day %></legend>
-		        <%= simple_format @content  %>      
+	    <% week.each do |j,entry| %>
+		  <% if entry and entry[:content] %>   
+		    <div class="diary_entry" >
+		      <fieldset >
+		        <legend><%= weekday(@month,entry[:day],@year)%>&nbsp;
+		                 <%= entry[:day] %></legend>
+		        <div id="diary_entry_<%=i%>_<%=j%>"  >
+		          <%= simple_format entry[:content].strip  %>
+                  <script>
+		             $("#diary_entry_<%=i%>_<%=j%>").click( 		      
+		                  function() {  $("#diary_entry_<%=i%>_<%=j%>").css("overflow-y","auto"); });
+		          </script>		        
+		        </div> 		    
 		      </fieldset>
-		    <% end %>
-		  </div>
-		   
+		    </div>
+		  <% elsif entry %>
+		    <div class="empty_diary_entry" >
+		      <fieldset>
+		        <legend><%= weekday(@month,entry[:day],@year)%>&nbsp;
+		                 <%= entry[:day] %></legend>
+		      </fieldset>
+		    </div>		
+		  <% else %>     
+		     <div class="empty_diary_entry" >
+		     </div>
+		  <% end %>		   
 	    <% end %>
-	    <div style="clear:both">
+	    <div class="cleardiv">
 	    </div>
 	  <% end %>
 	  
-	<% end %>
       
 </div>

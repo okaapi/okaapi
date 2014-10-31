@@ -1,0 +1,45 @@
+<%= form_for(@okaapi) do |f| %>
+  <% if @okaapi.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@okaapi.errors.count, "error") %> prohibited this okaapi from being saved:</h2>
+
+      <ul>
+      <% @okaapi.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :subject %><br>
+    <%= f.text_field :subject %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br>
+    <%= f.text_area :content %>
+  </div>
+  <div class="field">
+    <%= f.label :time %><br>
+    <%= f.datetime_select :time %>
+  </div>
+  <div class="field">
+    <%= f.label :from %><br>
+    <%= f.text_field :from %>
+  </div>
+  <div class="field">
+    <%= f.label :reminder %><br>
+    <%= f.text_field :reminder %>
+  </div>
+  <div class="field">
+    <%= f.label :archived %><br>
+    <%= f.text_field :archived %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.number_field :user_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

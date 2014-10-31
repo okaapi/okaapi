@@ -8,5 +8,6 @@ credentials:
   sender_email: Automatic Diary <automaticdiary@gmail.com>
   user_name: automaticdiary@gmail.com
   password: fV2z6OE2gkJ
+  token: 1959
 pop:
   pop_server: pop.gmail.com

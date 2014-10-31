@@ -1,0 +1,17 @@
+  <div class="header">
+     <div>
+	   <%= link_to 'cloud', termcloud_path, title: "Term Cloud", 
+	            class: ( controller.action_name == 'termcloud' ) ? 'emphasis' : ''  %>
+	   <%= link_to 'map', mindmap_path, title: "Mind Map"  %>
+	   <%= link_to 'people', people_path, title: "People"  , 
+	          class: ( controller.action_name == 'people' ) ? 'emphasis' : ''  %>
+	 </div>
+	 <div class="header_right">
+	   <% if @user  %>	         
+	     <%= link_to '&#9993;'.html_safe , send_okaapi_emails_path, title: "Send daily reminder email" %>
+	     <%= link_to '&#9775;'.html_safe , receive_okaapi_emails_path, title: "Check emails"  %>
+       <% end %>
+       <%= link_to '&#9166;'.html_safe , root_path, title: "Back"  %>
+     </div>
+  </div>
+  <div class="cleardiv"> </div>

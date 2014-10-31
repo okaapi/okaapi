@@ -8,7 +8,7 @@
 
 Auth::User.create( id: 11, username: 'wido', email: 'wido@menhardt.com', active: 'confirmed',
                            password: 'wido', password_confirmation: 'wido')
-                             
+                                                        
 (10..20).each do |i|                           
   DiaryEntry.create( date: "", day: i.to_s, month: 10, year: 2014, content: "test entry for day #{i}", user_id: 11 ) 
   puts "."; sleep( 1 )
@@ -24,5 +24,11 @@ DiaryEntry.create( date: "", day: 20, month: 10, year: 2014, content: "2nd test 
 puts "."; sleep( 1 )         
 DiaryEntry.create( date: "", day: 21, month: 10, year: 2014, archived: "true", content: "archived entry", user_id: 11 )
 puts "."; sleep( 1 )    
+
+Okaapi.create( user_id: 11, subject: "red blue green" )
+Okaapi.create( user_id: 11, subject: "red blue purple" )
+Okaapi.create( user_id: 11, subject: "red purple gray" )
+Okaapi.create( user_id: 11, subject: "black white" )
+
                              
                              

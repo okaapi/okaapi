@@ -1,0 +1,23 @@
+
+<fieldset>
+  <legend><%= @word.term %></legend>
+  <div class="term_modifiers">
+    <%= link_to ( @word.person == 'false' ? 'is a person' : 'is not a person' ), 
+              toggle_person_path( id: @word.id ) %> &nbsp;
+    <% if @word.person == 'false' %>
+      priority <%= @word.priority %> 
+      <%= link_to 'down'.html_safe, priority_path( id: @word.id, increment: -1 ) %> 
+      <%= link_to 'up'.html_safe, priority_path( id: @word.id, increment: 1 ) %>
+    <% end %>    
+    <br >
+    <%= link_to 'archive', archive_word_path( id: @word.id ) %> /
+    <%= link_to 'undo last archive', undo_archive_word_path( ) %>
+  </div>
+  <% @okaapis.each do |okaapi| %>
+    <%= link_to okaapi.subject, show_okaapi_content_path( id: okaapi.id ), :target => "_blank" %><br >
+    <div class="okaapi_modifiers">
+      <%= link_to 'archive', archive_okaapi_path( id: okaapi.id ) %> / 
+      <%= link_to 'undo last archive', undo_archive_okaapi_path( ) %>
+    </div>
+  <% end %>
+</fieldset>

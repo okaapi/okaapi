@@ -1,4 +1,6 @@
 class DiaryEntry < ActiveRecord::Base
+  validates :user_id, :presence => true
+  validate :id_valid  
   
   def self.last_entry( user_id )
     # first get the last day
@@ -21,5 +23,16 @@ class DiaryEntry < ActiveRecord::Base
     entry = nil if entry.size == 0 
     return entry
   end
-  
+
+  private
+
+  def id_valid
+    begin
+      Auth::User.find(user_id)
+    rescue
+      errors.add( :user_id, "has to be valid")
+      false
+    end
+  end
+
 end

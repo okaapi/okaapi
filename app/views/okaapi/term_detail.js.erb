@@ -1,0 +1,9 @@
+$('#term_detail_dialogue').fadeIn('slow');
+$('#term_detail_dialogue').html("<%= escape_javascript render partial: 'term_detail' %>");
+
+$("#term_detail_dialogue").delay(300).position({
+    my:        "left top",
+    at:        "left bottom",
+    of:        "#<%= @span_id %>"  });
+    
+$('#term_detail_dialogue').click( function() {  $('#term_detail_dialogue').fadeOut('slow'); });

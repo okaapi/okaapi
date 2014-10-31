@@ -1,0 +1,22 @@
+
+<div id="people" >
+
+  <%= render "header" %>
+  
+  <% if @people %>
+  
+    <% @people.each do |person| %>
+      <span id="<%= 'term_'+person[0].id.to_s %>" class="person" >            
+        <%= link_to person[0].term.capitalize, term_detail_path( word_id: person[0].id ), remote: js? %> &nbsp;
+      </span>
+    <% end %>
+    <div id="term_detail_dialogue"></div>
+    
+  <% else %>
+    <div class="whitetext">
+      Here is where the list of people goes if you're logged in!
+    </div>
+  <% end %>
+  
+</div>
+

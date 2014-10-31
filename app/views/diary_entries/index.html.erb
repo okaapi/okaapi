@@ -3,7 +3,7 @@
 <table>
   <thead>
     <tr>
-      <th>Entry</th>
+      <th>Content</th>
       <th>Day</th>
       <th>Month</th>
       <th>Year</th>
@@ -30,6 +30,12 @@
   </tbody>
 </table>
 
-<br>
+<br >
 
 <%= link_to 'New Diary entry', new_diary_entry_path %>
+
+<p ></p>
+<%= form_tag({action: :upload}, multipart: true) do %>
+  <%= file_field_tag 'file' %>
+  <%= submit_tag 'upload' %>
+<% end %>

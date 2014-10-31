@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subject: MyString
+  content: MyText
+  time: 2014-10-27 13:29:01
+  from: MyString
+  reminder: MyString
+  archived: MyString
+  user_id: 1
+
+two:
+  subject: MyString
+  content: MyText
+  time: 2014-10-27 13:29:01
+  from: MyString
+  reminder: MyString
+  archived: MyString
+  user_id: 1

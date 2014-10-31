@@ -1,17 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  entry: MyText
+  content: entry one
   day: 1
   month: 1
   year: 1
-  archived: MyString
+  archived: false
   user_id: 1
 
 two:
-  entry: MyText
+  content: entry two
   day: 1
   month: 1
   year: 1
-  archived: MyString
+  archived: false
   user_id: 1
