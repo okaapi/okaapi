@@ -19,8 +19,7 @@ class Okaapi < ActiveRecord::Base
     okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
     matching_okaapis = []
     okaapis.each do |o|
-      o.subject.downcase!
-      if o.subject.index( term )
+      if o.subject.downcase.index( term )
         matching_okaapis << o
       end
     end
@@ -30,8 +29,7 @@ class Okaapi < ActiveRecord::Base
     okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
     matching_okaapis = []
     okaapis.each do |o|
-      o.subject.downcase!
-      ppls = o.subject.split(' ')
+      ppls = o.subject.downcase.split(' ')
       ppls.each do |p|
         if p == person
           matching_okaapis << o

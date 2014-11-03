@@ -78,28 +78,16 @@ class DiaryController < ApplicationController
   # wget http://0.0.0.0:3000/diary/send_all_diary_emails -O /dev/null
   def send_all_diary_emails
     
-    if params[:token] 
-      @users = Auth::User.where( diary_service: "on")
-      @users.each do |user|
-        DiaryReminder.send_diary_reminder( user.email, Time.now, params[:token] ).deliver
-      end
-    end    
+    Postoffice.send_all_diary_emails( params[:token] )
     redirect_to root_path
         
   end
 
   def receive_diary_emails
-    
-    @new_entries = DiaryReminder.get_diary_entries 
-    @new_entries.each do |entry|
-      if user = Auth::User.where( email: entry[:from] ).first
-           entry[:user_id] = user.id
-       de = DiaryEntry.create( entry )
-       de.save!
-      end
-    end
+
+    Postoffice.receive_diary_emails    
     redirect_to :back
-    
+
   end
   
 end
