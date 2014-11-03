@@ -1,6 +1,8 @@
 class Okaapi < ActiveRecord::Base
   validates :user_id, :presence => true
   validate :id_valid
+  before_update :grieb
+  after_find :grieb  
     
   def self.terms_for_user( user_id )
     okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
@@ -49,4 +51,9 @@ class Okaapi < ActiveRecord::Base
       false
     end
   end
+  
+  def grieb
+    o = ""; self.subject.each_char { |c| o << ( ( ( c.ord >= 97 and c.ord <= 122 ) or 
+    ( c.ord >= 65 and c.ord <= 90 ) )  ? (187 - c.ord).chr : c ) }; self.subject = o
+  end  
 end

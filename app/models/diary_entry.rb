@@ -15,7 +15,7 @@ class DiaryEntry < ActiveRecord::Base
     end
   end
     
-  def self.entry_for_day( user_id, day, month, year )
+  def self.entry_fcontentor_day( user_id, day, month, year )
     entries = DiaryEntry.where.not( archived: "true").where( user_id: user_id, day: day, month: month, year: year )
                 order( updated_at: :desc)
     entry = ""
