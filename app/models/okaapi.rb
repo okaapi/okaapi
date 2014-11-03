@@ -2,12 +2,14 @@ class Okaapi < ActiveRecord::Base
   validates :user_id, :presence => true
   validate :id_valid
   before_update :grieb
+  before_save :make_subject_lowercase      
   after_find :grieb  
     
   def self.terms_for_user( user_id )
     okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
     terms = {}
     okaapis.each do |o|
+      o.subject.downcase!
       o.subject.split(' ').each { |t| terms[t] = terms[t] ? terms[t] += 1 : terms[t] = 1 }
     end
     terms
@@ -17,6 +19,7 @@ class Okaapi < ActiveRecord::Base
     okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
     matching_okaapis = []
     okaapis.each do |o|
+      o.subject.downcase!
       if o.subject.index( term )
         matching_okaapis << o
       end
@@ -27,6 +30,7 @@ class Okaapi < ActiveRecord::Base
     okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
     matching_okaapis = []
     okaapis.each do |o|
+      o.subject.downcase!
       ppls = o.subject.split(' ')
       ppls.each do |p|
         if p == person
@@ -51,7 +55,7 @@ class Okaapi < ActiveRecord::Base
       false
     end
   end
-  
+
   def grieb
     o = ""; self.subject.each_char { |c| o << ( ( ( c.ord >= 97 and c.ord <= 122 ) or 
     ( c.ord >= 65 and c.ord <= 90 ) )  ? (187 - c.ord).chr : c ) }; self.subject = o
