@@ -9,8 +9,9 @@ class Word < ActiveRecord::Base
     words = Word.where( user_id: user_id )
     
     return_terms = {}
-    additional_terms.each do |term,count|
+    additional_terms.each do |t,count|
 
+      term = t.downcase
       word = words.where( term: term ).first
       if !word
         word = Word.create( user_id: user_id, term: term )        

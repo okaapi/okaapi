@@ -68,24 +68,14 @@ class DiaryEntriesController < ApplicationController
       file_content = uploaded_file.read
       lines = file_content.split("\n")
 
-      lines.each do |line|
-
-        # replace the : between digits with - ...for time stamps
-        line.gsub(/(\d):(\d)/,'\1-\2')
-        # remove the annoying additions from before
-        line.gsub!(/added(?:(?!added).)*?UTC\s?:/m, '')
-        # sometimes mailers add this
-        line.gsub!(/This message has no content./,'')    
-         
+      lines.each do |line|        
         # split line in key/value pairs
         values = line.strip.split(";")        
         parameters = {}
         values.each do |v|
           key = v.split(': ')[0].strip
           value = v.split(': ')[1]
-          # strip leading or trailing "
-          value.gsub!(/^\"/,'')
-          value.gsub!(/\"$/,'')
+          value.gsub!(/\"/,'')
           parameters[key] = value;       
         end
         # prepare symbols for DiaryEntry create call   
@@ -99,17 +89,6 @@ class DiaryEntriesController < ApplicationController
       format.html { redirect_to diary_entries_url, notice: 'File was successfully parsed...' }
       format.json { head :no_content }
     end   
-    
-=begin
-<% @diary_entries.each do |diary_entry| %>
-  day: <%= diary_entry.day %>; month: <%= diary_entry.month %>;
-  year: <%= diary_entry.year %>;
-  content: "<%= diary_entry.content.gsub(/\n/,'<br >') %>";
-  from: <%= diary_entry.from %>;
-  date: <%= diary_entry.date %>; <br >
-<% end %>
-
-=end
      
   end
   
