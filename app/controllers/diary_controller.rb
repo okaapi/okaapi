@@ -57,7 +57,7 @@ class DiaryController < ApplicationController
     if @user
       @user.diary_service = "off"
       @user.save!(validate: false)
-      redirect_to root_path, notice: "daily reminders turned off"
+      redirect_to :back, notice: "daily reminders turned off"
     end
     
   end
@@ -70,7 +70,7 @@ class DiaryController < ApplicationController
         @user.save!(validate: false)
       end
       DiaryReminder.send_diary_reminder( @user.email, Time.now ).deliver
-      redirect_to root_path, notice: "daily reminders sent to  #{@user.email}"
+      redirect_to :back, notice: "daily reminders sent to  #{@user.email}"
     end
     
   end
@@ -81,7 +81,7 @@ class DiaryController < ApplicationController
     if params[:token] 
       @users = Auth::User.where( diary_service: "on")
       @users.each do |user|
-        DiaryReminder.send_diary_reminder_with_token( user.email, Time.now, params[:token] ).deliver
+        DiaryReminder.send_diary_reminder( user.email, Time.now, params[:token] ).deliver
       end
     end    
     redirect_to root_path
@@ -98,7 +98,7 @@ class DiaryController < ApplicationController
         de.save!
       end
     end
-    redirect_to root_path
+    redirect_to :back
     
   end
   

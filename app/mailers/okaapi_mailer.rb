@@ -38,7 +38,7 @@ class OkaapiMailer < ActionMailer::Base
         t_r = t_r.utc.to_s
       end        
       
-      entry = { date: t, from: from, content: ( body || "" ),
+      entry = { time: t, from: from, content: ( body || "" ),
                 subject: subject, reminder: t_r }    
             
       entries << entry

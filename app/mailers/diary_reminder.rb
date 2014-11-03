@@ -15,10 +15,10 @@ class DiaryReminder < ActionMailer::Base
   def send_diary_reminder( user_email, date = Time.now, token = nil )
     subj = 'What did you do on ' + Date::DAYNAMES[ date.wday] +  
             date.strftime(" %d ") + 
-             Date::MONTHNAMES[ Time.now.month ] + " ?"    
-    if !token or token == smtp_settings[:token]
+             Date::MONTHNAMES[ Time.now.month ] + " ?"   
+    if !token or token.to_s == smtp_settings[:token].to_s
       mail from: smtp_settings[:sender_email], to: user_email, subject: subj
-    else      
+    end
   end
     
   # 
