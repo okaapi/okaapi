@@ -82,8 +82,7 @@ class OkaapiController < ApplicationController
     @new_entries = OkaapiMailer.get_okaapis
     @new_entries.each do |entry|
       if user = Auth::User.where( email: entry[:from] ).first
-        ok = Okaapi.new( entry )
-        ok.user_id = user.id
+        entry[:user_id] = user.id
         ok.save!
       end
     end

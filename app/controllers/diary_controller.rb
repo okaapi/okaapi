@@ -93,9 +93,9 @@ class DiaryController < ApplicationController
     @new_entries = DiaryReminder.get_diary_entries 
     @new_entries.each do |entry|
       if user = Auth::User.where( email: entry[:from] ).first
-        de = DiaryEntry.new( entry )
-        de.user_id = user.id
-        de.save!
+           entry[:user_id] = user.id
+       de = DiaryEntry.create( entry )
+       de.save!
       end
     end
     redirect_to :back
