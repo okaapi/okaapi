@@ -79,14 +79,17 @@ class DiaryController < ApplicationController
   def send_all_diary_emails
     
     Postoffice.send_all_diary_emails( params[:token] )
-    redirect_to root_path
+    redirect_to root_path, notice: "sent all diary emails"
         
   end
 
   def receive_diary_emails
 
-    Postoffice.receive_diary_emails    
-    redirect_to :back
+    n = Postoffice.receive_diary_emails    
+    puts "#############################"
+    puts n
+    puts "received #{n} diary emails"
+    redirect_to :back, notice: "received #{n} diary emails"
 
   end
   

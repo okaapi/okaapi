@@ -1,0 +1,7 @@
+#!/bin/bash          
+echo "background script in okaapi/lib"
+cd /var/rails/okaapi/lib
+pwd
+/usr/local/rvm/rubies/ruby-2.1.1/bin/ruby background.rb
+echo " "
+

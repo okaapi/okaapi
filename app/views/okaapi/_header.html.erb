@@ -8,8 +8,8 @@
 	 </div>
 	 <div class="header_right">
 	   <% if @user  %>	         
-	     <%= link_to '&#9993;'.html_safe , send_okaapi_emails_path, title: "Send daily reminder email" %>
-	     <%= link_to '&#9775;'.html_safe , receive_okaapi_emails_path, title: "Check emails"  %>
+	     <%= link_to '&#9993;'.html_safe , send_okaapi_emails_path, title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" %>
+	     <%= link_to '&#9775;'.html_safe , receive_okaapi_emails_path, title: "Check emails", onclick: "$('#spinner').fadeIn('slow');"  %>
        <% end %>
        <%= link_to '&#9166;'.html_safe , root_path, title: "Back"  %>
      </div>

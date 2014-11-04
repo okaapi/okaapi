@@ -11,11 +11,11 @@
 	    <div class="header_right">
 	      <% if @user and @user.diary_service == 'on' %>	      
 	        <%= link_to '&#9728;'.html_safe , calendar_path, title: "Jump to last entry" %>	      
-	        <%= link_to '&#9993;'.html_safe , send_diary_email_path, title: "Send daily reminder email" %>
-	        <%= link_to '&#9775;'.html_safe , receive_diary_emails_path, title: "Check emails"  %>
+	        <%= link_to '&#9993;'.html_safe , send_diary_email_path, title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" %>
+	        <%= link_to '&#9775;'.html_safe , receive_diary_emails_path, title: "Check emails", onclick: "$('#spinner').fadeIn('slow');"  %>
 	        <%= link_to '&#920;'.html_safe , turn_off_diary_emails_path, title: "Turn off reminder emails"  %>
 	      <% elsif @user %>
-	        <%= link_to '&#9993;'.html_safe , send_diary_email_path, title: "Send daily reminder email" %>
+	        <%= link_to '&#9993;'.html_safe , send_diary_email_path, title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" %>
           <% end %>
           <%= link_to '&#9166;'.html_safe , root_path, title: "Back"  %>
         </div>

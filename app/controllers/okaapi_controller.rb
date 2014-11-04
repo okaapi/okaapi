@@ -79,8 +79,8 @@ class OkaapiController < ApplicationController
   
   def receive_okaapi_emails
     
-    Postoffice.receive_okaapi_emails
-    redirect_to :back
+    n = Postoffice.receive_okaapi_emails
+    redirect_to :back, notice: "received #{n} okaapis"
      
   end
   

@@ -2,7 +2,6 @@ class Okaapi < ActiveRecord::Base
   validates :user_id, :presence => true
   validate :id_valid
   before_update :grieb
-  before_save :make_subject_lowercase      
   after_find :grieb  
     
   def self.terms_for_user( user_id )
