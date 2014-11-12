@@ -1,7 +1,7 @@
 
-admin access for Okaapi etc
-changing routenames for diary etc
-mindmap
+grieb in diary_entries
+tests
 
-sending reminders
+sending okaapi reminders
 remembering diary/okaapi mode
+moving assets back to auth (including for zite!)

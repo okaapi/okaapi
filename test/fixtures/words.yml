@@ -1,15 +1,36 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+blue:
   term: blue
-  priority: 
-  person: MyString
-  archived: false
-  user_id: 1
+  priority: 0
+  person: "false"
+  archived: "false"
+  user_id: 11
 
-two:
+green:
   term: green
   priority: 
-  person: MyString
-  archived: false
-  user_id: 1
+  person: "false"
+  archived: "false"
+  user_id: 11
+  
+peter:
+  term: peter
+  priority: 
+  person: "true"
+  archived: "false"
+  user_id: 11
+  
+john:
+  term: john
+  priority: 
+  person: "true"
+  archived: "false"
+  user_id: 11
+  
+archived:
+  term: archived
+  priority: 
+  person: "false"
+  archived: "true"
+  user_id: 11  

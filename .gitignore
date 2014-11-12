@@ -13,11 +13,7 @@
 
 # Ignore config files
 /config/yml
-/config/auth_mail.yml
-/config/diary_mail.yml
-/config/okaapi_mail.yml
-/config/database.yml
-/config/secrets.yml
+/config/*.yml
 
 # Ignore all logfiles and tempfiles.
 /log/*.log

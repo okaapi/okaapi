@@ -14,7 +14,7 @@
  *= require_self
  */
 
-@import "mixins";
+@import "mixins.css.scss";
 
 // this is the background if not logged in
 .background_decoration {
@@ -81,13 +81,16 @@ body {
 
   // the main application
   #application {
-    //border: 3px dotted red;
-    width: 90%;  
-    min-height: 600px;
+    //border: 1px dotted red;
+    width: 98%;  
     margin-top: 20px;
-    margin-left: 5%;
+    margin-left: 1%;
     float: left;
-    @include header-block;  
+    @include header-block; 
+  }
+  
+  #version {
+    padding-top: 50px;
   }
 }
 

@@ -1,19 +1,48 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  subject: MyString
-  content: MyText
+okaapi_one:
+  subject: red green blue
+  content: text one
   time: 2014-10-27 13:29:01
-  from: MyString
+  from: wido@menhardt.com
   reminder: MyString
-  archived: MyString
-  user_id: 1
+  archived: "false"
+  user_id: 11
 
-two:
-  subject: MyString
-  content: MyText
-  time: 2014-10-27 13:29:01
-  from: MyString
+okaapi_two:
+  subject: Red blue purple
+  content: text two
+  time: 2014-10-27 14:29:01
+  from: wido@menhardt.com
   reminder: MyString
-  archived: MyString
-  user_id: 1
+  archived: "false"
+  user_id: 11
+  
+okaapi_three:
+  subject: yellow gray petrol
+  content: text three
+  time: 2014-10-27 15:29:01
+  from: wido@menhardt.com
+  reminder: MyString
+  archived: "false"
+  user_id: 11
+    
+okaapi_four:
+  subject: fox hen deer
+  content: text four
+  time: 2014-10-27 15:29:01
+  from: wido@menhardt.com
+  reminder: MyString
+  archived: 2014-10-29 15:29:01
+  user_id: 11
+  
+okaapi_five:
+  subject: for cow horse john
+  content: text five
+  time: 2014-10-27 16:29:01
+  from: wido@menhardt.com
+  reminder: MyString
+  archived: 2014-10-29 15:30:01
+  user_id: 11
+
+  

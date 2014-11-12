@@ -1,8 +1,9 @@
-  <div class="header">
+  <div class="the_header">
      <div>
 	   <%= link_to 'cloud', termcloud_path, title: "Term Cloud", 
 	            class: ( controller.action_name == 'termcloud' ) ? 'emphasis' : ''  %>
-	   <%= link_to 'map', mindmap_path, title: "Mind Map"  %>
+	   <%= link_to 'map', mindmap_path, title: "Mind Map", 
+	            class: ( controller.action_name == 'mindmap' ) ? 'emphasis' : ''  %>	            
 	   <%= link_to 'people', people_path, title: "People"  , 
 	          class: ( controller.action_name == 'people' ) ? 'emphasis' : ''  %>
 	 </div>

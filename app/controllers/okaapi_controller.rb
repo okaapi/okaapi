@@ -2,7 +2,7 @@ class OkaapiController < ApplicationController
   
   def termcloud    
     if @user      
-      new_terms = Okaapi.terms_for_user( @user.id )
+      new_terms = Okaapi.terms_for_user( @user.id )      
       terms = Word.unarchived_not_person_for_user( @user.id, new_terms ) || {}
       @termcloud = terms.sort        
     end    
@@ -15,7 +15,9 @@ class OkaapiController < ApplicationController
     end
   end
   def show_okaapi_content
-    @okaapi = Okaapi.find( params[:id] )
+    if @user
+      @okaapi = Okaapi.find( params[:id] )
+    end
   end
 
   def people
@@ -28,6 +30,34 @@ class OkaapiController < ApplicationController
       @people.sort! { |a,b| a[0].term <=> b[0].term }
     end
   end  
+  
+  def mindmap
+    if @user 
+      new_terms = Okaapi.terms_for_user( @user.id )
+      terms = Word.unarchived_not_person_for_user( @user.id, new_terms ) || {}
+      terms = terms.sort {|x, y| y[1][:count] <=> x[1][:count] }
+      @okaapis = Okaapi.lowercase_subjects_for_user( @user.id )
+      
+      @mindmap = {}
+      while terms.count > 0 do
+        first_term = terms.shift
+        term = first_term[0]
+        @mindmap[ term ] = []
+        @okaapis.each do |o|
+          if o.subject.downcase.index( term )
+            subject_terms = o.subject.downcase.split(' ')
+            subject_terms.each do |t|
+              if terms.any? { |x| x[0] == t }
+                @mindmap[ term ] << terms.select {|x| x[0] == t }.first               
+                terms.delete_if { |x| x[0] == t }
+              end
+            end
+          end
+        end        
+        @mindmap[ term ].insert( @mindmap[term].size/2, first_term )     
+      end   
+    end
+  end
   
   def toggle_person
     if @word = Word.find( params[:id] )
@@ -80,7 +110,7 @@ class OkaapiController < ApplicationController
   def receive_okaapi_emails
     
     n = Postoffice.receive_okaapi_emails
-    redirect_to :back, notice: "received #{n} okaapis"
+    redirect_to '/', notice: "received #{n} okaapis"
      
   end
   

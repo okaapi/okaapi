@@ -1,8 +1,12 @@
 class Okaapi < ActiveRecord::Base
   validates :user_id, :presence => true
   validate :id_valid
-  before_update :grieb
-  after_find :grieb  
+  before_update :garble
+  after_find :ungarble 
+    
+  def self.lowercase_subjects_for_user( user_id )
+    okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
+  end
     
   def self.terms_for_user( user_id )
     okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
@@ -53,6 +57,19 @@ class Okaapi < ActiveRecord::Base
     end
   end
 
+  def garble
+    if self.g != 'false'
+      grieb
+      self.g = 'true'
+    end
+  end
+  def ungarble
+    if self.g == 'true'
+      grieb
+      self.g = 'false'
+    end
+  end
+  
   def grieb
     o = ""; self.subject.each_char { |c| o << ( ( ( c.ord >= 97 and c.ord <= 122 ) or 
     ( c.ord >= 65 and c.ord <= 90 ) )  ? (187 - c.ord).chr : c ) }; self.subject = o

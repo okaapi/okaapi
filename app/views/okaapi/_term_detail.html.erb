@@ -2,6 +2,7 @@
 <fieldset>
   <legend><%= @word.term %></legend>
   <div class="term_modifiers">
+    <i>
     <%= link_to ( @word.person == 'false' ? 'is a person' : 'is not a person' ), 
               toggle_person_path( id: @word.id ) %> &nbsp;
     <% if @word.person == 'false' %>
@@ -12,6 +13,7 @@
     <br >
     <%= link_to 'archive', archive_word_path( id: @word.id ) %> /
     <%= link_to 'undo last archive', undo_archive_word_path( ) %>
+    </i>
   </div>
   <% @okaapis.each do |okaapi| %>
     <%= link_to okaapi.subject, show_okaapi_content_path( id: okaapi.id ), :target => "_blank" %><br >

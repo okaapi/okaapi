@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141027202901) do
+ActiveRecord::Schema.define(version: 20141111214925) do
 
   create_table "auth_user_actions", force: true do |t|
     t.integer  "user_session_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20141027202901) do
     t.string   "action"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "params"
   end
 
   add_index "auth_user_actions", ["user_session_id"], name: "index_auth_user_actions_on_user_session_id", using: :btree
@@ -56,6 +57,7 @@ ActiveRecord::Schema.define(version: 20141027202901) do
     t.integer  "user_id",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "g",          default: "false"
   end
 
   create_table "okaapis", force: true do |t|
@@ -68,6 +70,7 @@ ActiveRecord::Schema.define(version: 20141027202901) do
     t.integer  "user_id",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "g",          default: "false"
   end
 
   create_table "words", force: true do |t|

@@ -1,6 +1,7 @@
 class DiaryEntriesController < ApplicationController
   before_action :set_diary_entry, only: [:show, :edit, :update, :destroy]
-
+  before_action :only_if_admin
+  
   # GET /diary_entries
   # GET /diary_entries.json
   def index

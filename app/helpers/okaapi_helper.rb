@@ -18,7 +18,9 @@ module OkaapiHelper
   
   def term_color( p )
     
-    if p < 1
+    if !p
+      "1"
+    elsif p < 1
       "1"
     elsif p < 2
       "2"
@@ -27,5 +29,9 @@ module OkaapiHelper
     end
  
   end  
+  
+  def side( a ) 
+    Math.sqrt( a.size / 2 ).to_i + 1
+  end
   
 end

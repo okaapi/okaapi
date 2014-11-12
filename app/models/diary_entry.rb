@@ -1,8 +1,8 @@
 class DiaryEntry < ActiveRecord::Base
   validates :user_id, :presence => true
   validate :id_valid  
-  before_update :grieb
-  after_find :grieb
+  before_update :garble
+  after_find :ungarble 
   
   def self.last_entry( user_id )
     # first get the last day
@@ -28,10 +28,22 @@ class DiaryEntry < ActiveRecord::Base
 
   private
 
+  def garble
+    if self.g != 'false'
+      grieb
+      self.g = 'true'
+    end
+  end
+  def ungarble
+    if self.g == 'true'
+      grieb
+      self.g = 'false'
+    end
+  end
   def grieb
     o = ""; self.content.each_char { |c| o << ( ( ( c.ord >= 97 and c.ord <= 122 ) or 
     ( c.ord >= 65 and c.ord <= 90 ) )  ? (187 - c.ord).chr : c ) }; self.content = o
-  end
+  end    
   
   def id_valid
     begin

@@ -1,6 +1,7 @@
 class OkaapisController < ApplicationController
   before_action :set_okaapi, only: [:show, :edit, :update, :destroy]
-
+  before_action :only_if_admin
+  
   # GET /okaapis
   # GET /okaapis.json
   def index

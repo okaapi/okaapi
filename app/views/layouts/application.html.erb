@@ -21,8 +21,17 @@
     <%= yield %>
   </div>
 
-  <div class="cleardiv">
-    Application <%= controller.controller_name %> / <%= controller.action_name %> Ruby <%= RUBY_VERSION%> Rails <%= Rails.version %> <%= Rails.env %>
-  </div>
+  <% if ( @user and @user.admin? ) %>
+	  <div class="cleardiv" id="version"> <small>
+	    Application <%= controller.controller_name %> / <%= controller.action_name %> 
+	    Ruby <%= RUBY_VERSION%> Rails <%= Rails.version %> <%= Rails.env %> <br>
+	    user <%= @user.username if @user %> 
+ <br> <br>
+	  </small> </div>
+  <% else %>
+	  <div class="cleardiv" id="version"> <small>
+      <%= RUBY_VERSION%> <%= Rails.version %> <%= Rails.env[0] %> 
+	  </small> </div>  	  
+  <% end %>
 </body>
 </html>

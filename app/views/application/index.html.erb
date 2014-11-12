@@ -1,10 +1,12 @@
 
 
-<div class="header">
+<div class="the_header">
  
-  <div>
-    <%= link_to 'Diary'.html_safe, calendar_path %> &nbsp;
-    <%= link_to 'MindMap'.html_safe, termcloud_path %>
-  </div>
+  <% if @user %>
+    <div>
+      <%= link_to 'Diary'.html_safe, calendar_path %> &nbsp;
+      <%= link_to 'MindMap'.html_safe, termcloud_path %>
+    </div>
+  <% end %>
 
 </div>

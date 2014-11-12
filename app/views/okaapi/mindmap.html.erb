@@ -1,0 +1,44 @@
+
+<div id="mindmap" >
+
+  <%= render "header" %>
+
+  <% if @mindmap %>
+    <% @mindmap.each do | leadword, cluster | %>
+      
+      <div class="mindmap_cluster">
+        <% cluster.each_index do |i| %>
+          <span id="<%= 'term_'+cluster[i][1][:word_id].to_s %>" 
+            class="termcloud_term <%='term_size_'+term_size(cluster[i][1][:count]) %> 
+                   <%='term_color_'+term_color(cluster[i][1][:priority]) %>">
+            <%= link_to truncate( cluster[i][0], length: 12 ), 
+                         term_detail_path( word_id: cluster[i][1][:word_id] ), remote: js? %>
+          </span>          
+          
+          <% if (i+1).modulo( side( cluster ) ) == 0 %>
+            <br >
+          <% end %>
+        <% end %>
+      </div>
+      
+    <% end %>
+    
+    <% @m = [] %>
+    <% @m.each do |term|  %>
+      <span id="<%= 'term_'+term[1][:word_id].to_s %>" 
+            class="termcloud_term <%='term_size_'+term_size(term[1][:count]) %> 
+                   <%='term_color_'+term_color(term[1][:priority]) %>">
+        <%= link_to term[0], term_detail_path( word_id: term[1][:word_id] ), remote: js? %>
+      </span>
+    <% end %>
+    
+    <div id="term_detail_dialogue"></div>
+    
+  <% else %>
+    <div class="whitetext">
+      Here is where the mindmap goes if you're logged in!
+    </div>
+  <% end %>
+  
+</div>
+

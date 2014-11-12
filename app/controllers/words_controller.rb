@@ -1,8 +1,12 @@
+
+
 class WordsController < ApplicationController
   before_action :set_word, only: [:show, :edit, :update, :destroy]
+  before_action :only_if_admin
 
   # GET /words
   # GET /words.json
+
   def index
     @words = Word.all
   end
@@ -25,7 +29,6 @@ class WordsController < ApplicationController
   # POST /words.json
   def create
     @word = Word.new(word_params)
-
     respond_to do |format|
       if @word.save
         format.html { redirect_to @word, notice: 'Word was successfully created.' }

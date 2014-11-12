@@ -2,7 +2,7 @@ class Word < ActiveRecord::Base
   validates :user_id, :presence => true
   validate :id_valid  
    
-  def self.unarchived_not_person_for_user( user_id, additional_terms  )
+  def self.unarchived_not_person_for_user( user_id, additional_terms = nil  )
     
     return if not additional_terms
     

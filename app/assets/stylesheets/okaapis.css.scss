@@ -5,7 +5,7 @@
 
 @import "mixins";
   
-#termcloud, #people {
+#termcloud, #people, #mindmap {
   //border: 1px solid green;
   float: left;
   width: 100%;  
@@ -60,4 +60,15 @@
 	  } 
 	}
   }  
+  .mindmap_cluster {
+	//border: 1px solid red; 
+	float: left; 
+	padding: 0px;
+	margin: 10px;
+	text-align: center;
+    background: rgba(230,230,230,1.0);
+    box-shadow: 0px 0px 20px 5px rgba(230,230,230,1.0);
+	background: #EEEEEE;	 
+	border-radius: 10px;
+  }
 }
