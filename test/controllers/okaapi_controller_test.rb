@@ -59,7 +59,15 @@ class OkaapiControllerTest < ActionController::TestCase
     assert_response :success    
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:termcloud)
-    assert_select ".termcloud_term", 7 
+    
+    #new_terms = Okaapi.terms_for_user( @wido.id )      
+    #terms = Word.unarchived_not_person_for_user( @wido.id, new_terms ) 
+    #new_terms.each {|t| p t}
+    #terms.each {|t| p t}
+    #assigns(:termcloud).each {|t| p t[0]}
+
+    assert_select ".termcloud_term", 6
+
   end
   
   test "should get termdetail" do
@@ -93,7 +101,7 @@ class OkaapiControllerTest < ActionController::TestCase
     get :mindmap
     assert_select ".mindmap_cluster span a", /blue/ 
     assert_select ".mindmap_cluster span a", /petrol/
-    assert_select ".mindmap_cluster span a", 7  
+    assert_select ".mindmap_cluster span a", 6
     assert_select ".mindmap_cluster", 2 
   end
   

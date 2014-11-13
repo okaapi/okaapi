@@ -14,6 +14,13 @@ green:
   archived: "false"
   user_id: 11
   
+purple:
+  term: purple
+  priority: 
+  person: "false"
+  archived: <%= Time.now %>
+  user_id: 11
+
 peter:
   term: peter
   priority: 
@@ -27,10 +34,33 @@ john:
   person: "true"
   archived: "false"
   user_id: 11
+
+gale:
+  term: gale
+  priority: 
+  person: "true"
+  archived: <%= Time.now %>
+  user_id: 11
   
+
 archived:
   term: archived
   priority: 
   person: "false"
   archived: "true"
   user_id: 11  
+
+archived_last:
+  term: archived_last
+  priority: 
+  person: "false"
+  archived: <%= Time.now %>
+  user_id: 11 
+
+archived_earlier:
+  term: archived_earlier
+  priority: 
+  person: "false"
+  archived: <%= Time.now() - 1 %>
+  user_id: 11  
+

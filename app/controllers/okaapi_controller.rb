@@ -36,7 +36,7 @@ class OkaapiController < ApplicationController
       new_terms = Okaapi.terms_for_user( @user.id )
       terms = Word.unarchived_not_person_for_user( @user.id, new_terms ) || {}
       terms = terms.sort {|x, y| y[1][:count] <=> x[1][:count] }
-      @okaapis = Okaapi.lowercase_subjects_for_user( @user.id )
+      @okaapis = Okaapi.unarchived_for_user( @user.id )
       
       @mindmap = {}
       while terms.count > 0 do

@@ -4,7 +4,7 @@ class Okaapi < ActiveRecord::Base
   before_update :garble
   after_find :ungarble 
     
-  def self.lowercase_subjects_for_user( user_id )
+  def self.unarchived_for_user( user_id )
     okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
   end
     
