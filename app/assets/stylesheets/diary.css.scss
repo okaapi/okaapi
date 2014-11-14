@@ -11,14 +11,16 @@
   margin: 3px;  
   @include header-block;   
   .diary_entry {
-    //border: 1px dotted purple;
+    @include box-with-legend;  
+    //border: 2px dotted purple;
     float: left;
-	padding: 1%; 
+    margin: 0.5%;
+	padding: 0.5%; 
 	width: 12%;	
-	overflow-x: auto;
-    @include box-with-legend;
+	overflow-x: auto;	
     fieldset {
       div {
+        & p { font-size: $small-text-size; }
         min-height: 100px; 
         max-height: 200px; 
         overflow-y: hidden; 
@@ -27,8 +29,11 @@
   }
   .empty_diary_entry {
     @extend .diary_entry;
+    background:none;
+    border: 2px solid rgba(255,255,255,0.0);
     fieldset {
-      background: rgba(255,255,255,0.5);
+      //background: rgba(255,255,255,0.5);
+      border:none;
       height: 100px;
     }
   }
