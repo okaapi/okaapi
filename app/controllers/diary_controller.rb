@@ -86,9 +86,7 @@ class DiaryController < ApplicationController
   def receive_diary_emails
 
     n = Postoffice.receive_diary_emails    
-    puts "#############################"
-    puts n
-    puts "received #{n} diary emails"
+
     redirect_to :back, notice: "received #{n} diary emails"
 
   end

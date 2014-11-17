@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141111214925) do
+ActiveRecord::Schema.define(version: 20141117185026) do
 
   create_table "auth_user_actions", force: true do |t|
     t.integer  "user_session_id"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20141111214925) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "diary_service",   default: "off"
+    t.string   "alternate_email"
   end
 
   create_table "diary_entries", force: true do |t|

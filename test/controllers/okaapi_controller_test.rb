@@ -15,7 +15,7 @@ class OkaapiMailer < ActionMailer::Base
   def self.get_okaapis
     [ { time: Time.now, from: 'wido@menhardt.com', 
           content: 'content 1', subject: 'red green blue' },
-      { time: Time.now + 1000, from: 'john@menhardt.com', 
+      { time: Time.now + 1000, from: 'john_alternate@menhardt.com', 
           content: 'content 2', subject: 'Red blue purple' },
       { time: Time.now + 2000, from: 'arnaud@gmail.com', 
           content: 'content 2', subject: 'yellow gray green' } ]                        

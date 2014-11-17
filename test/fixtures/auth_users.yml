@@ -11,6 +11,7 @@ wido:
 john:
   username: john
   email: john@menhardt.com
+  alternate_email: john_alternate@menhardt.com
   password_digest: <%= BCrypt::Password.create('secret') %>
   role: user
   active: not confirmed

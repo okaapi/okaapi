@@ -3,8 +3,7 @@ require 'test_helper'
 class AuthUserStoriesTest < ActionDispatch::IntegrationTest
   
   setup do
-    @user_arnaud = Auth::User.new( username: 'arnaud', email: 'arnaud@gmail.com', 
-                                 active: 'confirmed',
+    @user_arnaud = Auth::User.new( username: 'arnaud', email: 'arnaud@gmail.com', active: 'confirmed',
                                  password: 'secret', password_confirmation: 'secret')
     @user_arnaud.save!                                 
     @user_francois = Auth::User.new( username: 'francois', email: 'francois@gmail.com',
@@ -126,11 +125,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     # refreshes and confirms that user is shown as logged in
     get "/"
     assert_response :success
-    assert_select '#authentication_launchpad', /jim/     
-      
-    # logs out
-    get "/_see_u"
-    assert_redirected_to root_path      
+    assert_select '#authentication_launchpad', /jim/       
   end
   
   #
@@ -163,10 +158,6 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     get "/"
     assert_response :success
     assert_select '#authentication_launchpad', /francois/
-    
-    # logs out
-    get "/_see_u"
-    assert_redirected_to root_path      
       
   end
   
