@@ -3,7 +3,8 @@
 <table>
   <thead>
     <tr>
-      <th>Subject</th>
+      <th></th>
+      <th>Subject</th>      
       <th>Content</th>
       <th>Time</th>
       <th>From</th>
@@ -17,6 +18,7 @@
   <tbody>
     <% @okaapis.each do |okaapi| %>
       <tr>
+        <td><%= okaapi.id %></td>
         <td><%= okaapi.subject %></td>
         <td><%= okaapi.content %></td>
         <td><%= okaapi.time %></td>

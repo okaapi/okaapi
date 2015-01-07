@@ -16,7 +16,8 @@
     </i>
   </div>
   <% @okaapis.each do |okaapi| %>
-    <%= link_to okaapi.subject, show_okaapi_content_path( id: okaapi.id ), :target => "_blank" %><br >
+    <%= link_to( okaapi.subject, show_okaapi_content_path( id: okaapi.id ), :target => "_blank" ) %><br >
+<!-- 58 59 65 67 68 69 72 -->
     <div class="okaapi_modifiers">
       <%= link_to 'archive', archive_okaapi_path( id: okaapi.id ) %> / 
       <%= link_to 'undo last archive', undo_archive_okaapi_path( ) %>
