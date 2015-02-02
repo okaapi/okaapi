@@ -15,6 +15,16 @@ class OkaapiTest < ActiveSupport::TestCase
       w.user_id = @user_arnaud.id
       w.save!
     end
+    okaapis = Okaapi.unarchived_for_user( @user_arnaud.id )
+    terms = Okaapi.terms( okaapis )      
+    terms = Word.unarchived_terms_not_person_for_user( @user_arnaud.id, terms )
+    w = Word.where( id: terms['peter'][:word_id] ).where( user_id: @user_arnaud.id ).first
+    w.person = 'true'
+    w.save!
+    w = Word.where( id: terms['john'][:word_id] ).where( user_id: @user_arnaud.id ).first
+    w.person = 'true'
+    w.save!   
+     
     o = okaapis( :okaapi_four )
     o.user_id = @user_francois.id
     o.save!
@@ -28,11 +38,10 @@ class OkaapiTest < ActiveSupport::TestCase
     assert_equal okaapis.count, 3
   end
   
-  test "terms for user" do
-    okaapis = Okaapi.terms_for_user( @user_arnaud.id )
-    assert_equal okaapis.count, 7
-    o = Word.find_by_term('purple')
-    assert_not_equal o.archived, 'false'
+  test "terms" do
+    okaapis = Okaapi.unarchived_for_user( @user_arnaud.id )
+    terms = Okaapi.terms( okaapis )
+    assert_equal terms.count, 10
   end 
   
   test "for term" do
@@ -61,5 +70,19 @@ class OkaapiTest < ActiveSupport::TestCase
     last = Okaapi.find_last_archived( @user_francois.id )
   end
 
+  test "mindmap" do
+    mindmap = Okaapi.mindmap( @user_arnaud.id )
+    assert_equal mindmap.count, 2
+    assert mindmap['red']
+    assert mindmap['yellow']
+  end
+  
+  test "mindmap with limits" do
+    okaapis = Okaapi.unarchived_for_user( @user_francois.id )
+    mindmap = Okaapi.mindmap( @user_arnaud.id, ['red'] )
+    assert_equal mindmap.count, 2
+    assert mindmap['purple']
+    assert mindmap['green']
+  end  
   
 end

@@ -27,7 +27,7 @@ class WordTest < ActiveSupport::TestCase
   end
   
   test "the truth" do
-    words = Word.unarchived_not_person_for_user( @user_arnaud.id, 
+    words = Word.unarchived_terms_not_person_for_user( @user_arnaud.id, 
         ['blue','green','purple','petrol'] )
     assert_equal words.count, 3
     assert words['blue']
@@ -39,7 +39,7 @@ class WordTest < ActiveSupport::TestCase
     blue = Word.find_by_term( 'blue')
     blue.user_id = @user_francois.id
     blue.save!
-    words = Word.unarchived_not_person_for_user( @user_francois.id, 
+    words = Word.unarchived_terms_not_person_for_user( @user_francois.id, 
         ['blue','green','purple','petrol'] )
     assert_equal words.count, 4
     assert words['blue']

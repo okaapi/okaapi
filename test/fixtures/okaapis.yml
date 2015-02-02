@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 okaapi_one:
-  subject: red green blue
+  subject: red green violet john
   content: text one
   time: 2014-10-27 13:29:01
   from: wido@menhardt.com
@@ -10,7 +10,7 @@ okaapi_one:
   user_id: 11
 
 okaapi_two:
-  subject: Red blue purple
+  subject: Red blue purple peter
   content: text two
   time: 2014-10-27 14:29:01
   from: wido@menhardt.com

@@ -1,15 +1,5 @@
 require 'test_helper'
 
-module Auth
-
-  # stub to make tests believe that admin user is logged in
-  #module CurrentUserSession
-  #  def set_current_user_session_and_create_action
-  #    @user = Auth::User.find_by_username('wido')
-  #  end  
-  #end
-
-end
 
 class OkaapiMailer < ActionMailer::Base
   def self.get_okaapis
@@ -59,14 +49,9 @@ class OkaapiControllerTest < ActionController::TestCase
     assert_response :success    
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:termcloud)
-    
-    #new_terms = Okaapi.terms_for_user( @wido.id )      
-    #terms = Word.unarchived_not_person_for_user( @wido.id, new_terms ) 
-    #new_terms.each {|t| p t}
-    #terms.each {|t| p t}
-    #assigns(:termcloud).each {|t| p t[0]}
 
-    assert_select ".termcloud_term", 6
+    assert_select ".term_size_1", 6
+    assert_select ".term_size_2", 1    
 
   end
   
@@ -74,7 +59,7 @@ class OkaapiControllerTest < ActionController::TestCase
     login    
     xhr :get, :term_detail, word_id: words(:blue).id
     assert_select_jquery :html, '#term_detail_dialogue' do    
-      assert_select '.okaapi_modifiers', 2
+      assert_select '.okaapi_modifiers', 1
     end 
     
   end
@@ -91,6 +76,7 @@ class OkaapiControllerTest < ActionController::TestCase
   test "show people" do
     login
     get :people
+    
     assert_select ".person", 2 
     assert_select '#people span a', /John/
     assert_select '#people span a', /Peter/
@@ -101,8 +87,17 @@ class OkaapiControllerTest < ActionController::TestCase
     get :mindmap
     assert_select ".mindmap_cluster span a", /blue/ 
     assert_select ".mindmap_cluster span a", /petrol/
-    assert_select ".mindmap_cluster span a", 6
-    assert_select ".mindmap_cluster", 2 
+    assert_select ".mindmap_cluster span a", 7
+    assert_select ".mindmap_cluster", 2
+  end
+  
+  test "show mindmap limits" do
+    login
+    get :mindmap, drilldown: ['red']
+    assert_select ".mindmap_cluster span a", /blue/ 
+    assert_select ".mindmap_cluster span a", /violet/
+    assert_select ".mindmap_cluster span a", 3
+    assert_select ".mindmap_cluster", 2
   end
   
   test "toggle person" do

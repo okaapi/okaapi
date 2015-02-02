@@ -2,9 +2,10 @@ class OkaapiController < ApplicationController
   
   def termcloud    
     if @user      
-      new_terms = Okaapi.terms_for_user( @user.id )      
-      terms = Word.unarchived_not_person_for_user( @user.id, new_terms ) || {}
-      @termcloud = terms.sort        
+      okaapis = Okaapi.unarchived_for_user( @user.id )
+      terms = Okaapi.terms( okaapis )      
+      terms = Word.unarchived_terms_not_person_for_user( @user.id, terms ) || {}
+      @termcloud = terms.sort     
     end    
   end
   def term_detail
@@ -25,37 +26,18 @@ class OkaapiController < ApplicationController
       @persons = Word.unarchived_people( @user.id )
       @people = []
       @persons.each do |person|
-        @people << [ person, Okaapi.for_person( @user.id, person.term ) ]
+        okaapis = Okaapi.for_person( @user.id, person.term )
+        @people << [ person, okaapis ] if okaapis.size > 0
       end
-      @people.sort! { |a,b| a[0].term <=> b[0].term }
+      @people.sort! { |a,b| a[0].term <=> b[0].term } 
     end
   end  
   
   def mindmap
-    if @user 
-      new_terms = Okaapi.terms_for_user( @user.id )
-      terms = Word.unarchived_not_person_for_user( @user.id, new_terms ) || {}
-      terms = terms.sort {|x, y| y[1][:count] <=> x[1][:count] }
-      @okaapis = Okaapi.unarchived_for_user( @user.id )
-      
-      @mindmap = {}
-      while terms.count > 0 do
-        first_term = terms.shift
-        term = first_term[0]
-        @mindmap[ term ] = []
-        @okaapis.each do |o|
-          if o.subject.downcase.index( term )
-            subject_terms = o.subject.downcase.split(' ')
-            subject_terms.each do |t|
-              if terms.any? { |x| x[0] == t }
-                @mindmap[ term ] << terms.select {|x| x[0] == t }.first               
-                terms.delete_if { |x| x[0] == t }
-              end
-            end
-          end
-        end        
-        @mindmap[ term ].insert( @mindmap[term].size/2, first_term )     
-      end   
+    if @user
+      okaapis = Okaapi.unarchived_for_user( @user.id )
+      @drilldown = params[:drilldown] || []
+      @mindmap = Okaapi.mindmap( @user.id, @drilldown || [] )
     end
   end
   

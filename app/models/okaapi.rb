@@ -5,11 +5,12 @@ class Okaapi < ActiveRecord::Base
   after_find :ungarble 
     
   def self.unarchived_for_user( user_id )
-    okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
+    os = Okaapi.where( user_id: user_id ).where( archived: "false" )
+    okaapis = []
+    os.each { |o| okaapis << o }
   end
     
-  def self.terms_for_user( user_id )
-    okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
+  def self.terms( okaapis )
     terms = {}
     okaapis.each do |o|
       o.subject.downcase!
@@ -19,7 +20,7 @@ class Okaapi < ActiveRecord::Base
   end
     
   def self.for_term( user_id, term )
-    okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
+    okaapis = Okaapi.unarchived_for_user( user_id )
     matching_okaapis = []
     okaapis.each do |o|
       if o.subject.downcase.index( term )
@@ -28,8 +29,9 @@ class Okaapi < ActiveRecord::Base
     end
     matching_okaapis
   end  
+  
   def self.for_person( user_id, person )
-    okaapis = Okaapi.where( user_id: user_id ).where( archived: "false" )
+    okaapis = Okaapi.unarchived_for_user( user_id )
     matching_okaapis = []
     okaapis.each do |o|
       ppls = o.subject.downcase.split(' ')
@@ -46,6 +48,42 @@ class Okaapi < ActiveRecord::Base
     Okaapi.where( user_id: user_id).where.not( archived: 'false').order( archived: :desc ).first    
   end
     
+  def self.mindmap( user_id, mindlimits = [] )
+    okaapis = Okaapi.unarchived_for_user( user_id ) 
+       
+    mindlimits.each do |limit|
+      okaapis.delete_if{ |o| ! (o.subject.downcase.index( limit )) }
+    end
+          
+    terms = Okaapi.terms( okaapis )          
+    terms = Word.unarchived_terms_not_person_for_user( user_id, terms ) || {}
+    terms = terms.sort {|x, y| y[1][:count] <=> x[1][:count] } 
+    
+    mindlimits.each do |limit|
+      terms.delete_if{ |t| t[0] == limit }
+    end    
+      
+    mindmap = {}
+    while terms.count > 0 do
+      first_term = terms.shift
+      term = first_term[0]
+      mindmap[ term ] = []
+      okaapis.each do |o|
+        if o.subject.downcase.index( term )
+          subject_terms = o.subject.downcase.split(' ')
+          subject_terms.each do |t|
+            if terms.any? { |x| x[0] == t }
+              mindmap[ term ] << terms.select {|x| x[0] == t }.first               
+              terms.delete_if { |x| x[0] == t }
+            end
+          end
+        end
+      end      
+      mindmap[ term ].insert( mindmap[term].size/2, first_term )
+    end 
+    return mindmap
+  end
+  
   private
 
   def id_valid

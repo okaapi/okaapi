@@ -60,6 +60,13 @@
 	  } 
 	}
   }  
+  .mindmap_drilldown_term a {
+    float: left;
+    padding: 0px;
+	margin: 10px;
+	font-weight: bold; color: grey; font-size: 20px;
+  }
+	
   .mindmap_cluster {
 	//border: 1px solid red; 
 	float: left; 

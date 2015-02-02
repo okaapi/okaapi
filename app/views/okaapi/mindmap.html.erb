@@ -1,18 +1,36 @@
 
 <div id="mindmap" >
 
+  
   <%= render "header" %>
 
+  <% @drilldown.each do | d| %>
+    <div class="mindmap_drilldown_term">  
+      <% @drilldown_link = ( @drilldown_link || [] ) + [d] %>
+      <%= link_to truncate( d, length: 12 ), 
+          mindmap_path( drilldown: @drilldown_link ) %> 
+    </div>   
+  <% end %>
+ 
   <% if @mindmap %>
     <% @mindmap.each do | leadword, cluster | %>
       
       <div class="mindmap_cluster">
         <% cluster.each_index do |i| %>
           <span id="<%= 'term_'+cluster[i][1][:word_id].to_s %>" 
-            class="termcloud_term <%='term_size_'+term_size(cluster[i][1][:count]) %> 
+            class="<%='term_size_'+term_size(cluster[i][1][:count]) %> 
                    <%='term_color_'+term_color(cluster[i][1][:priority]) %>">
-            <%= link_to truncate( cluster[i][0], length: 12 ), 
-                         term_detail_path( word_id: cluster[i][1][:word_id] ), remote: js? %>
+            <% if( i == ((cluster.size-1)/2) ) %>
+              <%= '<u>'.html_safe if cluster.size > 1 %><%= 
+              link_to truncate( cluster[i][0], length: 12 ), 
+                         mindmap_path( drilldown: (@drilldown || []) + [cluster[i][0]] ), 
+                         title: cluster[i][0] + ' Drilldown' %><%= 
+              '</u>'.html_safe if cluster.size > 1 %>
+            <% else %>
+              <%= link_to truncate( cluster[i][0], length: 12 ), 
+                         term_detail_path( word_id: cluster[i][1][:word_id] ), 
+                         title: cluster[i][0] + ' Okaapis', remote: js? %>
+            <% end %>
           </span>          
           
           <% if (i+1).modulo( side( cluster ) ) == 0 %>
@@ -24,9 +42,11 @@
     <% end %>
     
     <% @m = [] %>
+    BLA BLA
     <% @m.each do |term|  %>
+      BLU BLU
       <span id="<%= 'term_'+term[1][:word_id].to_s %>" 
-            class="termcloud_term <%='term_size_'+term_size(term[1][:count]) %> 
+            class="<%='term_size_'+term_size(term[1][:count]) %> 
                    <%='term_color_'+term_color(term[1][:priority]) %>">
         <%= link_to term[0], term_detail_path( word_id: term[1][:word_id] ), remote: js? %>
       </span>

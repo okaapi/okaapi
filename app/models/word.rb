@@ -2,15 +2,14 @@ class Word < ActiveRecord::Base
   validates :user_id, :presence => true
   validate :id_valid  
    
-  def self.unarchived_not_person_for_user( user_id, additional_terms = nil  )
+  def self.unarchived_terms_not_person_for_user( user_id, terms = nil  )
     
-    return if not additional_terms
+    return if not terms
     
     words = Word.where( user_id: user_id )
     
     return_terms = {}
-    additional_terms.each do |t,count|
-
+    terms.each do |t,count|
       term = t.downcase
       word = words.where( term: term ).first
       if !word
@@ -21,7 +20,6 @@ class Word < ActiveRecord::Base
           return_terms[ term ] = { count: count, priority: word.priority, word_id: word.id }
         end
       end
-      
     end
     return return_terms
     
