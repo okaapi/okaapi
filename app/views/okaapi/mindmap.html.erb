@@ -41,17 +41,7 @@
       
     <% end %>
     
-    <% @m = [] %>
-    BLA BLA
-    <% @m.each do |term|  %>
-      BLU BLU
-      <span id="<%= 'term_'+term[1][:word_id].to_s %>" 
-            class="<%='term_size_'+term_size(term[1][:count]) %> 
-                   <%='term_color_'+term_color(term[1][:priority]) %>">
-        <%= link_to term[0], term_detail_path( word_id: term[1][:word_id] ), remote: js? %>
-      </span>
-    <% end %>
-    
+   
     <div id="term_detail_dialogue"></div>
     
   <% else %>

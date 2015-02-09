@@ -25,11 +25,20 @@ class DiaryController < ApplicationController
     end
       
     # a super-smart calendar generator!
+    # this is the week day of the first day of the month
     first_day = Time.parse("1-#{@month}-#{@year}").wday
+    first_day = 7 if first_day == 0 # don't want sunday to be zero
+    # this is the last day of the month
     last_day = Time.days_in_month( @month, @year )
+    # this is the monday of the first week, usually a negative number:
+    #   first_day = monday(1) -> first week monday = 1
+    #   first_day = tuesday(2) -> first week monday = 0
+    #   first_day = wednesday(3) -> first week monday = -1
+    #   first_day = saturday(6) -> first week monday = -4
+    #   first_day = sunday(0) -> first week monday = -5
     day_in_month = 2 - first_day
     @calendar = {}
-    (1..5).each do |week|
+    (1..6).each do |week|
       thisweek = {}
       (1..7).each do |day|
         if day_in_month < 1 or day_in_month > last_day

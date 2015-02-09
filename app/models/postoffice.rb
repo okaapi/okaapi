@@ -6,6 +6,7 @@ class Postoffice
     new_entries.each do |entry|
       #if user = Auth::User.where( email: entry[:from] ).first
       if user = Auth::User.find_by_email_or_alternate( entry[:from] )
+        p user
         ok = Okaapi.new( entry )
         ok.user_id = user.id
         ok.save!

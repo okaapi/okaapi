@@ -24,7 +24,7 @@
   <% if ( @user and @user.admin? ) %>
 	  <div class="cleardiv" id="version"> <small>
 	    Application <%= controller.controller_name %> / <%= controller.action_name %> 
-	    Ruby <%= RUBY_VERSION%> Rails <%= Rails.version %> <%= Rails.env %> <br>
+	    Ruby <%= RUBY_VERSION%> Rails <%= Rails.version %> <%= Rails.env %> 
 	    user <%= @user.username if @user %> 
  <br> <br>
 	  </small> </div>
