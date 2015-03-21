@@ -6,7 +6,7 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body <%= ("class=\"background_decoration\"".html_safe unless @user) %> >
+<body <%= ("class=\"background_decoration\"".html_safe unless @current_user) %> >
 
   <%= render "auth/authenticate/layout_insert" %>
   
@@ -21,11 +21,11 @@
     <%= yield %>
   </div>
 
-  <% if ( @user and @user.admin? ) %>
+  <% if ( @current_user and @current_user.admin? ) %>
 	  <div class="cleardiv" id="version"> <small>
 	    Application <%= controller.controller_name %> / <%= controller.action_name %> 
 	    Ruby <%= RUBY_VERSION%> Rails <%= Rails.version %> <%= Rails.env %> 
-	    user <%= @user.username if @user %> 
+	    user <%= @current_user.username if @current_user %> 
  <br> <br>
 	  </small> </div>
   <% else %>

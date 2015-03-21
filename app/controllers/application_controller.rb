@@ -8,10 +8,4 @@ class ApplicationController < ActionController::Base
   def index
   end
   
-  def only_if_admin
-    unless (@user and @user.admin?)
-      redirect_to '/', notice: "must be admin"
-    end
-  end 
-    
 end

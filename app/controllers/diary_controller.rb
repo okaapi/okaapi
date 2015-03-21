@@ -7,8 +7,8 @@ class DiaryController < ApplicationController
     @year = params[:year].to_i if params[:year]
     # set the date to the last available diary entry for this user
     if !@month or !@year 
-      if @user
-        @day, @month, @year = DiaryEntry.last_entry( @user.id)
+      if @current_user
+        @day, @month, @year = DiaryEntry.last_entry( @current_user.id)
       else
         t = Time.new; @day = t.day; @month = t.month; @year = t.year
       end
@@ -44,9 +44,9 @@ class DiaryController < ApplicationController
         if day_in_month < 1 or day_in_month > last_day
           thisweek[day] = nil
         else 
-          if @user 
+          if @current_user 
             thisweek[day] = { day: day_in_month, 
-                              content: DiaryEntry.entry_for_day( @user.id, day_in_month, @month, @year ) }
+                              content: DiaryEntry.entry_for_day( @current_user.id, day_in_month, @month, @year ) }
           elsif rand > 0.5
             thisweek[day] = { day: day_in_month, 
                    content: "your diary entry here!" }
@@ -63,9 +63,9 @@ class DiaryController < ApplicationController
   
   def turn_off_diary_emails
     
-    if @user
-      @user.diary_service = "off"
-      @user.save!(validate: false)
+    if @current_user
+      @current_user.diary_service = "off"
+      @current_user.save!(validate: false)
       redirect_to :back, notice: "daily reminders turned off"
     end
     
@@ -73,13 +73,13 @@ class DiaryController < ApplicationController
 
   def send_diary_email
     
-    if @user
-      if @user.diary_service == "off"
-        @user.diary_service = "on"
-        @user.save!(validate: false)
+    if @current_user
+      if @current_user.diary_service == "off"
+        @current_user.diary_service = "on"
+        @current_user.save!(validate: false)
       end
-      DiaryReminder.send_diary_reminder( @user.email, Time.now ).deliver
-      redirect_to :back, notice: "daily reminders sent to  #{@user.email}"
+      DiaryReminder.send_diary_reminder( @current_user.email, Time.now ).deliver
+      redirect_to :back, notice: "daily reminders sent to  #{@current_user.email}"
     end
     
   end

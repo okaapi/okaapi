@@ -64,7 +64,7 @@ class OkaapisController < ApplicationController
   
   def upload
     
-    if @user
+    if @current_user
       uploaded_file = params[:file]
       file_content = uploaded_file.read
       lines = file_content.split("\n")
@@ -77,7 +77,7 @@ class OkaapisController < ApplicationController
           parameters[key] = value;        
         end
         parameters.symbolize_keys!
-        parameters[:user_id] = @user.id
+        parameters[:user_id] = @current_user.id
         okaapi = Okaapi.create( parameters.symbolize_keys )   
         okaapi.save!
       end

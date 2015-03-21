@@ -1,32 +1,32 @@
 class OkaapiController < ApplicationController
   
   def termcloud    
-    if @user      
-      okaapis = Okaapi.unarchived_for_user( @user.id )
+    if @current_user      
+      okaapis = Okaapi.unarchived_for_user( @current_user.id )
       terms = Okaapi.terms( okaapis )      
-      terms = Word.unarchived_terms_not_person_for_user( @user.id, terms ) || {}
+      terms = Word.unarchived_terms_not_person_for_user( @current_user.id, terms ) || {}
       @termcloud = terms.sort     
     end    
   end
   def term_detail
-    if @user 
+    if @current_user 
       @word = Word.find_by_id( params[:word_id] )      
       @span_id = 'term_'+@word.id.to_s if @word
-      @okaapis = Okaapi.for_term( @user.id, @word.term )
+      @okaapis = Okaapi.for_term( @current_user.id, @word.term )
     end
   end
   def show_okaapi_content
-    if @user
+    if @current_user
       @okaapi = Okaapi.find( params[:id] )
     end
   end
 
   def people
-    if @user 
-      @persons = Word.unarchived_people( @user.id )
+    if @current_user 
+      @persons = Word.unarchived_people( @current_user.id )
       @people = []
       @persons.each do |person|
-        okaapis = Okaapi.for_person( @user.id, person.term )
+        okaapis = Okaapi.for_person( @current_user.id, person.term )
         @people << [ person, okaapis ] if okaapis.size > 0
       end
       @people.sort! { |a,b| a[0].term <=> b[0].term } 
@@ -34,10 +34,10 @@ class OkaapiController < ApplicationController
   end  
   
   def mindmap
-    if @user
-      okaapis = Okaapi.unarchived_for_user( @user.id )
+    if @current_user
+      okaapis = Okaapi.unarchived_for_user( @current_user.id )
       @drilldown = params[:drilldown] || []
-      @mindmap = Okaapi.mindmap( @user.id, @drilldown || [] )
+      @mindmap = Okaapi.mindmap( @current_user.id, @drilldown || [] )
     end
   end
   
@@ -64,8 +64,8 @@ class OkaapiController < ApplicationController
     redirect_to :back   
   end
   def undo_archive_word
-    if @user
-      if @word = Word.find_last_archived( @user.id )
+    if @current_user
+      if @word = Word.find_last_archived( @current_user.id )
         @word.archived = 'false'
         @word.save
       end
@@ -80,8 +80,8 @@ class OkaapiController < ApplicationController
     redirect_to :back   
   end
   def undo_archive_okaapi
-    if @user
-      if @okaapi = Okaapi.find_last_archived( @user.id )
+    if @current_user
+      if @okaapi = Okaapi.find_last_archived( @current_user.id )
         @okaapi.archived = 'false'
         @okaapi.save
       end
