@@ -3,18 +3,12 @@ require 'test_helper'
 class OkaapiTest < ActiveSupport::TestCase
   
   setup do
-    @user_arnaud = Auth::User.new( username: 'arnaud', email: 'arnaud@gmail.com', 
-                               active: 'confirmed',
-                               password: 'secret', password_confirmation: 'secret')
-    @user_arnaud.save!  
-    @user_francois = Auth::User.new( username: 'francois', email: 'francois@gmail.com',
-                               password: 'secret', password_confirmation: 'secret',
-                               token: 'francois_token' )
-    @user_francois.save!        
+    @user_arnaud = users( :arnaud )
+    @user_francois = users( :francois )
     Okaapi.all.each do |w|
       w.user_id = @user_arnaud.id
       w.save!
-    end
+    end    
     okaapis = Okaapi.unarchived_for_user( @user_arnaud.id )
     terms = Okaapi.terms( okaapis )      
     terms = Word.unarchived_terms_not_person_for_user( @user_arnaud.id, terms )

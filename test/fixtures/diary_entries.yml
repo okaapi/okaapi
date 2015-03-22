@@ -2,16 +2,16 @@
 
 one:
   content: entry one
-  day: 1
-  month: 1
-  year: 1
+  day: 28
+  month: 2
+  year: 2015
   archived: false
   user_id: 1
 
 two:
   content: entry two
-  day: 1
-  month: 1
-  year: 1
+  day: 2
+  month: 3
+  year: 2015
   archived: false
   user_id: 1

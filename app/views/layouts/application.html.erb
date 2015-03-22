@@ -8,7 +8,7 @@
 </head>
 <body <%= ("class=\"background_decoration\"".html_safe unless @current_user) %> >
 
-  <%= render "auth/authenticate/layout_insert" %>
+  <%= render "authenticate/layout_insert" %>
   
   <% if flash[:alert] %>
     <p id="alert"><%= flash[:alert] %></p>

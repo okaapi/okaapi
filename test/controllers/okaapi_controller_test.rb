@@ -15,8 +15,8 @@ end
 class OkaapiControllerTest < ActionController::TestCase
   
   setup do
-    @wido = Auth::User.find_by_username('wido')
-    @user_session = Auth::UserSession.find_by_client('MyClient')
+    @wido = User.find_by_username('wido')
+    @user_session = UserSession.find_by_client('MyClient')
     @user_session.user_id = @wido.id
     @user_session.save!
     
@@ -47,7 +47,7 @@ class OkaapiControllerTest < ActionController::TestCase
     login
     get :termcloud
     assert_response :success    
-    assert_not_nil assigns(:user)
+    assert_not_nil assigns(:current_user)
     assert_not_nil assigns(:termcloud)
 
     assert_select ".term_size_1", 6

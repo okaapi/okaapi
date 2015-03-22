@@ -22,7 +22,10 @@
   background-color: #004455; 
   background-size: cover; 
   a {
-    color: white
+    color: white;
+    &:visited {
+      color: white;
+    }    
   }
 
 }
@@ -93,7 +96,6 @@ body {
   }
   
   #version {
-    font-size: 10px;
     padding-top: 50px;
   }
 }

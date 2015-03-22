@@ -21,7 +21,11 @@ module Okaapi2
     # config.i18n.default_locale = :de
     
     # auth
-    config.use_javascript = true
+    config.use_javascript = false
+    mail_config = (YAML::load( File.open(config.root + 'config/auth_mail.yml') ))
+    config.action_mailer.smtp_settings = 
+      mail_config["server"].merge(mail_config["credentials"]).symbolize_keys
+    config.action_mailer.raise_delivery_errors = true
     
   end
 end

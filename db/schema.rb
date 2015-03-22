@@ -13,40 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20141117185026) do
 
-  create_table "auth_user_actions", force: true do |t|
-    t.integer  "user_session_id"
-    t.string   "controller"
-    t.string   "action"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "params"
-  end
-
-  add_index "auth_user_actions", ["user_session_id"], name: "index_auth_user_actions_on_user_session_id", using: :btree
-
-  create_table "auth_user_sessions", force: true do |t|
-    t.integer  "user_id"
-    t.string   "client"
-    t.string   "ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "auth_user_sessions", ["user_id"], name: "index_auth_user_sessions_on_user_id", using: :btree
-
-  create_table "auth_users", force: true do |t|
-    t.string   "username"
-    t.string   "email"
-    t.string   "password_digest"
-    t.string   "token"
-    t.string   "role",            default: "user"
-    t.string   "active",          default: "unconfirmed"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "diary_service",   default: "off"
-    t.string   "alternate_email"
-  end
-
   create_table "diary_entries", force: true do |t|
     t.datetime "date"
     t.integer  "day",        default: 0
@@ -72,6 +38,40 @@ ActiveRecord::Schema.define(version: 20141117185026) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "g",          default: "false"
+  end
+
+  create_table "user_actions", force: true do |t|
+    t.integer  "user_session_id"
+    t.string   "controller"
+    t.string   "action"
+    t.string   "params"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_actions", ["user_session_id"], name: "index_user_actions_on_user_session_id", using: :btree
+
+  create_table "user_sessions", force: true do |t|
+    t.integer  "user_id"
+    t.string   "client"
+    t.string   "ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_sessions", ["user_id"], name: "index_user_sessions_on_user_id", using: :btree
+
+  create_table "users", force: true do |t|
+    t.string   "username"
+    t.string   "email"
+    t.string   "alternate_email", default: ""
+    t.string   "password_digest"
+    t.string   "token"
+    t.string   "role",            default: "user"
+    t.string   "active",          default: "unconfirmed"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "diary_service",   default: "off"
   end
 
   create_table "words", force: true do |t|

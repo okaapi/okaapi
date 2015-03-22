@@ -3,23 +3,19 @@ require 'test_helper'
 class AuthUserStoriesTest < ActionDispatch::IntegrationTest
   
   setup do
-    @user_arnaud = Auth::User.new( username: 'arnaud', email: 'arnaud@gmail.com', active: 'confirmed',
-                                 password: 'secret', password_confirmation: 'secret')
-    @user_arnaud.save!                                 
-    @user_francois = Auth::User.new( username: 'francois', email: 'francois@gmail.com',
-                                 password: 'secret', password_confirmation: 'secret',
-                                 token: 'francois_token' )
-    @user_francois.save!      
+    @user_arnaud = users(:arnaud)                              
+    @user_francois = users(:francois)     
     @not_java = ! Rails.configuration.use_javascript
   end
   
+ 
   #
   #   these tests are all set up to NOT examine internals of the app (session 
   #   object, models etc...  only testing flash, notice, and HTML
   #
   test "root path" do
     assert_equal root_path, '/'
-    puts "[ javascript is " + ( @not_java ? "off ]" : "on ]" ) 
+
   end
   
   #
@@ -29,7 +25,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
   test "logging in and out" do
   
     # user comes to the website and sees the "login" link
-    get "/"
+    get_via_redirect "/"
     assert_response :success
     assert_select '#authentication_launchpad a', 'login'
 
@@ -41,7 +37,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     else
       xhr :get, "/_who_are_u"
       assert_response :success
-      assert_select_jquery :html, '#authentication_dialogue' do
+      assert_select_jquery :html, '#authentication_dialogue_js' do
         assert_select 'fieldset div label', /username\/email/ 
       end
     end
@@ -55,7 +51,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     else
       xhr :post, "/_prove_it", claim: "arnaud"
       assert_response :success       
-      assert_select_jquery :html, '#authentication_dialogue' do    
+      assert_select_jquery :html, '#authentication_dialogue_js' do    
         assert_select '.authenticate fieldset legend', /arnaud/
         assert_select '.authenticate fieldset div label', /password/
       end      
@@ -80,7 +76,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
       
     # refreshes and confirms that user is not shown as logged in
-    get "/"
+    get_via_redirect "/"
     assert_response :success
     assert_select '#authentication_launchpad', /login/ 
                  
@@ -101,7 +97,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     else  
       xhr :post, "/_about_urself"
       assert_response :success
-      assert_select_jquery :html, '#authentication_dialogue' do
+      assert_select_jquery :html, '#authentication_dialogue_js' do
         assert_select '.authenticate fieldset div label', /username/
         assert_select '.authenticate fieldset div label', /email/           
       end
@@ -139,7 +135,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     
     # refreshes and still gets the correct user displayed
-    get "/"
+    get_via_redirect "/"
     assert_response :success
     assert_select '.authenticate fieldset legend', /francois/
     assert_select '.authenticate fieldset div label', /password/     
@@ -160,6 +156,9 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     assert_select '#authentication_launchpad', /francois/
       
   end
+
+
+
   
   private
      

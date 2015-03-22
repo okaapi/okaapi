@@ -4,8 +4,8 @@ require 'test_helper'
 
 class OkaapisControllerTest < ActionController::TestCase
   setup do
-    @wido = Auth::User.find_by_username('wido')
-    @user_session = Auth::UserSession.find_by_client('MyClient')
+    @wido = User.find_by_username('wido')
+    @user_session = UserSession.find_by_client('MyClient')
     @user_session.user_id = @wido.id
     @user_session.save!
     
