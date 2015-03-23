@@ -12,6 +12,9 @@
 /db/*.sql
 /db/*.sqlite3-journal
 
+# Ignore coverage files
+/coverage
+
 # Ignore config files
 /config/yml
 /config/*.yml
