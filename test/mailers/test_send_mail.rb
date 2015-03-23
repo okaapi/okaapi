@@ -25,7 +25,7 @@ end
 
 (1..3).each {puts "."}
 puts "Sending diary reminder"
-mail = DiaryReminder.send_diary_reminder( "wido@menhardt.com" ).deliver
+mail = DiaryReminder.send_diary_reminder( "wido@menhardt.com", "towards my goal" ).deliver
 
 (1..3).each {puts "."}
 puts "Sending okaapi reminder"

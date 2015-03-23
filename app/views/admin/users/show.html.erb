@@ -25,6 +25,16 @@
   <%= @user.active %>
 </p>
 
+<p>
+  <strong>Goal:</strong>
+  <%= @user.goal %>
+</p>
+
+<p>
+  <strong>Goal in subject:</strong>
+  <%= @user.goal_in_subject %>
+</p>
+
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
 

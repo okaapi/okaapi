@@ -47,7 +47,8 @@ module Admin
 	  # PATCH/PUT /users/1.json
 	  def update
 	    respond_to do |format|
-	      if @user.update(user_params)
+	      @user.attributes = user_params
+	      if @user.save( validate: false)
 	        format.html { redirect_to @user, notice: 'User was successfully updated.' }
 	        format.json { head :no_content }
 	      else
@@ -75,7 +76,8 @@ module Admin
 	
 	    # Never trust parameters from the scary internet, only allow the white list through.
 	    def user_params
-	      params.require(:user).permit(:username, :email, :alternate_email, :password, :password_confirmation, :role, :active)
+	      params.require(:user).permit(:username, :email, :alternate_email, :password, 
+	               :password_confirmation, :role, :active, :goal, :goal_in_subject )
 	    end
 	    
 	end

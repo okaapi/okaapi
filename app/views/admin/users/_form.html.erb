@@ -11,7 +11,7 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="field">Active
     <%= f.label :username %><br>
     <%= f.text_field :username %>
   </div>
@@ -23,14 +23,7 @@
     <%= f.label :alternate_email %><br>
     <%= f.text_field :alternate_email %>
   </div>  
-  <div class="field">
-    <%= f.label :password %><br>
-    <%= f.password_field :password %>
-  </div>
-  <div>
-    <%= f.label :password_confirmation %><br>
-    <%= f.password_field :password_confirmation %>
-  </div>
+
   <div class="field">
     <%= f.label :role %><br>
     <%= f.text_field :role %>
@@ -39,6 +32,14 @@
     <%= f.label :active %><br>
     <%= f.text_field :active %>
   </div>
+  <div class="field">
+    <%= f.label :goal %><br>
+    <%= f.text_field :goal %>
+  </div>
+  <div class="field">
+    <%= f.label :goal_in_subject %><br>
+    <%= f.text_field :goal_in_subject %>
+  </div>    
   <div class="actions">
     <%= f.submit %>
   </div>

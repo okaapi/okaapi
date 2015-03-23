@@ -33,7 +33,7 @@ class Postoffice
     if token
       users = User.where( diary_service: "on")
       users.each do |user|
-        DiaryReminder.send_diary_reminder( user.email, Time.now, token ).deliver
+        DiaryReminder.send_diary_reminder( user.email, user.goal_in_subject, Time.now, token ).deliver
     n = n + 1
       end
     end  

@@ -14,6 +14,11 @@ Rails.application.routes.draw do
     resources :users
     resources :user_actions
     resources :user_sessions   
+    resources :words
+    resources :okaapis  
+    resources :diary_entries      
+    post 'okaapis/upload'
+    post 'diary_entries/upload'      
   end  
   
 
@@ -38,12 +43,8 @@ Rails.application.routes.draw do
   get 'okaapi/send_okaapi_emails', as: "send_okaapi_emails"
   get 'okaapi/receive_okaapi_emails', as: "receive_okaapi_emails"
   
-  resources :okaapis
-  post 'okaapis/upload'
-  resources :words
-  resources :reminders
-  resources :diary_entries  
-  post 'diary_entries/upload'  
+
+
   
   root "application#index", as: "root"
 

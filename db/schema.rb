@@ -72,6 +72,8 @@ ActiveRecord::Schema.define(version: 20141117185026) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "diary_service",   default: "off"
+    t.string   "goal",            default: ""
+    t.string   "goal_in_subject", default: ""
   end
 
   create_table "words", force: true do |t|

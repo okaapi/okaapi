@@ -3,8 +3,10 @@ require 'test_helper'
 class AuthUserStoriesTest < ActionDispatch::IntegrationTest
   
   setup do
-    @user_arnaud = users(:arnaud)                              
-    @user_francois = users(:francois)     
+    @user_arnaud = users(:arnaud)      
+    Okaapi.create( user_id: @user_arnaud.id, archived: "false" )                    
+    @user_francois = users(:francois)    
+    Okaapi.create( user_id: @user_francois.id, archived: "false" )     
     @not_java = ! Rails.configuration.use_javascript
   end
   
@@ -66,6 +68,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     assert_root_path_redirect    
     assert_equal flash[:notice], 'arnaud logged in'
           
+    
     # user refreshes and username is displayed
     get "/"
     assert_response :success
@@ -112,6 +115,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     assert_root_path_redirect    
     assert_equal flash[:notice], 
       "you are logged in, we sent an activation email for the next time!" 
+    Okaapi.create( user_id: assigns(:current_user).id, archived: "false" )  
     
     # has email been sent?
     assert_equal Rails.configuration.action_mailer.delivery_method, :test

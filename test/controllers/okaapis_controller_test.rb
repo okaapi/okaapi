@@ -1,7 +1,7 @@
 require 'test_helper'
 
 
-
+module Admin
 class OkaapisControllerTest < ActionController::TestCase
   setup do
     @wido = User.find_by_username('wido')
@@ -69,4 +69,5 @@ class OkaapisControllerTest < ActionController::TestCase
 
     assert_redirected_to okaapis_path
   end
+end
 end

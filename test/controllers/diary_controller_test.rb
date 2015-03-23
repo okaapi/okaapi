@@ -16,7 +16,7 @@ class DiaryReminder < ActionMailer::Base
             from: 'arnaud@gmail.com', content: "day 3"}
     entries                    
   end
-  def self.send_diary_reminder( email, time )
+  def self.send_diary_reminder( email, goal, time )
     DummyDiaryDeliverer.new
   end
 end

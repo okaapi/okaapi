@@ -1,4 +1,5 @@
 
+module Admin
 
 class WordsControllerTest < ActionController::TestCase
 
@@ -70,4 +71,6 @@ class WordsControllerTest < ActionController::TestCase
     assert_redirected_to words_path
   end
   
+end
+
 end

@@ -5,7 +5,11 @@
 	  <div class="the_header">
 	    <div>
 	      <%= link_to '&laquo;'.html_safe, calendar_path( month: @month-1, year: @year ), title: "One month back"  %>
-	      &nbsp;<%= monthname( @month ) %> <%= @year %>&nbsp;
+	      &nbsp;
+	      <% if @current_user.goal.size > 0 %>
+	        <%= @current_user.goal %> in 
+	      <% end %>	      
+	      <%= monthname( @month ) %> <%= @year %>&nbsp;
 	      <%= link_to '&raquo;'.html_safe, calendar_path( month: @month+1, year: @year ), title: "One month forward"  %>
 	    </div>
 	    <div class="header_right">

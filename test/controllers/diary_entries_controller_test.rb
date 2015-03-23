@@ -1,5 +1,6 @@
 require 'test_helper'
 
+module Admin
 class DiaryEntriesControllerTest < ActionController::TestCase
   setup do
     @wido = User.find_by_username('wido')
@@ -67,4 +68,5 @@ class DiaryEntriesControllerTest < ActionController::TestCase
 
     assert_redirected_to diary_entries_path
   end
+end
 end

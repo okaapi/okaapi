@@ -9,6 +9,13 @@ class ApplicationController < ActionController::Base
       redirect_to '/', notice: "must be admin"
     end
   end 
+  
+  def index
+    if @current_user and
+       Okaapi.unarchived_for_user( @current_user.id ).count == 0
+      redirect_to calendar_path
+    end  
+  end
  
   private
   
