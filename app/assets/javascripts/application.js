@@ -11,9 +11,13 @@
 // about supported directives.
 //
 //= require_tree .
+
 //= require jquery
 //= require jquery_ujs
-
-//= require turbolinks
-
 //= require jquery-ui/position
+
+// removed the equal sign to make it work on Windows.... 3/26/2015... no idea why that makes it work
+// require turbolinks
+
+
+

@@ -28,6 +28,7 @@ class OkaapiControllerTest < ActionController::TestCase
       o.user_id = @wido.id
       o.save!
     end     
+    @not_java = ! Rails.configuration.use_javascript
   end
   def login
     @controller.session[:user_session_id] = @user_session.id
@@ -57,10 +58,19 @@ class OkaapiControllerTest < ActionController::TestCase
   
   test "should get termdetail" do
     login    
-    xhr :get, :term_detail, word_id: words(:blue).id
-    assert_select_jquery :html, '#term_detail_dialogue' do    
-      assert_select '.okaapi_modifiers', 1
-    end 
+    if ! @not_java
+      xhr :get, :term_detail, word_id: words(:blue).id
+      assert_select_jquery :html, '#term_detail_dialogue' do    
+        assert_select '.okaapi_modifiers', 1
+      end 
+    else
+      get :term_detail, word_id: words(:blue).id
+      puts "@@@@@@@@@@@"
+      assert_response :success
+      assert_select '#term_detail_dialogue' do    
+        assert_select '.okaapi_modifiers', 1
+      end 
+    end
     
   end
   

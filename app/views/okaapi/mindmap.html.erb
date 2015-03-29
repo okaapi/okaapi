@@ -15,30 +15,23 @@
   <% if @mindmap %>
     <% @mindmap.each do | leadword, cluster | %>
       
-      <div class="mindmap_cluster">
-        <% cluster.each_index do |i| %>
-          <span id="<%= 'term_'+cluster[i][1][:word_id].to_s %>" 
-            class="<%='term_size_'+term_size(cluster[i][1][:count]) %> 
-                   <%='term_color_'+term_color(cluster[i][1][:priority]) %>">
-            <% if( i == ((cluster.size-1)/2) ) %>
-              <%= '<u>'.html_safe if cluster.size > 1 %><%= 
-              link_to truncate( cluster[i][0], length: 12 ), 
-                         mindmap_path( drilldown: (@drilldown || []) + [cluster[i][0]] ), 
-                         title: cluster[i][0] + ' Drilldown' %><%= 
-              '</u>'.html_safe if cluster.size > 1 %>
-            <% else %>
-              <%= link_to truncate( cluster[i][0], length: 12 ), 
-                         term_detail_path( word_id: cluster[i][1][:word_id] ), 
-                         title: cluster[i][0] + ' Okaapis', remote: js? %>
+        <div class="mindmap_cluster" onclick="document.location.href = 'http://www.menhardt.com'"
+             onmouseover="" style="cursor: pointer;" >
+          <% cluster.each_index do |i| %>
+	          <span id="<%= 'term_'+cluster[i][1][:word_id].to_s %>" 
+	            class="<%='term_size_'+term_size(cluster[i][1][:count]) %> 
+	                   <%='term_color_'+term_color(cluster[i][1][:priority]) %>">
+	              <%= link_to truncate( cluster[i][0], length: 12 ), 
+	                         term_detail_path( word_id: cluster[i][1][:word_id] ), 
+	                         title: cluster[i][0] + ' Okaapis', remote: js?,
+	                         target: ( ( js? == 'true' ) ? '_self' : '_blank' )  %>
+	          </span>          
+            <% if (i+1).modulo( side( cluster ) ) == 0 %>
+              <br >
             <% end %>
-          </span>          
-          
-          <% if (i+1).modulo( side( cluster ) ) == 0 %>
-            <br >
           <% end %>
-        <% end %>
-      </div>
-      
+        </div>
+    
     <% end %>
     
    

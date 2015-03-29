@@ -7,7 +7,8 @@
   
     <% @people.each do |person| %>
       <span id="<%= 'term_'+person[0].id.to_s %>" class="person" >            
-        <%= link_to person[0].term.capitalize, term_detail_path( word_id: person[0].id ), remote: js? %> &nbsp;
+        <%= link_to person[0].term.capitalize, term_detail_path( word_id: person[0].id ), 
+        remote: js?, target: ( ( js? == 'true' ) ? '_self' : '_blank' )  %> &nbsp;
       </span>
     <% end %>
     <div id="term_detail_dialogue"></div>
