@@ -6,17 +6,23 @@
 
   <% @drilldown.each do | d| %>
     <div class="mindmap_drilldown_term">  
-      <% @drilldown_link = ( @drilldown_link || [] ) + [d] %>
+      <% @drilldown_link = ( @drilldown_link || [] ) + [d] unless ( d == @drilldown.last )%>
       <%= link_to truncate( d, length: 12 ), 
-          mindmap_path( drilldown: @drilldown_link ) %> 
+          mindmap_path( drilldown: @drilldown_link ), 
+          title:( d == @drilldown.last ) ? 'back' : ( d + ' Drilldown' ) %> 
     </div>   
   <% end %>
  
   <% if @mindmap %>
     <% @mindmap.each do | leadword, cluster | %>
       
-        <div class="mindmap_cluster" onclick="document.location.href = 'http://www.menhardt.com'"
-             onmouseover="" style="cursor: pointer;" >
+        <div class="mindmap_cluster" >
+             <span style="float:left;font-size:24px">
+               <%= link_to '&#10174;'.html_safe,
+               mindmap_path( drilldown: (@drilldown || []) + [cluster[((cluster.size-1)/2)][0]] ),
+               title: cluster[((cluster.size-1)/2)][0] + ' Drilldown'
+               %>
+             </span>
           <% cluster.each_index do |i| %>
 	          <span id="<%= 'term_'+cluster[i][1][:word_id].to_s %>" 
 	            class="<%='term_size_'+term_size(cluster[i][1][:count]) %> 
