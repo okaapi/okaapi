@@ -1,10 +1,11 @@
 
+<%= render "header" %>
+  
 <div id="mindmap" >
 
-  
-  <%= render "header" %>
-
-  <% @drilldown.each do | d| %>
+  <div id="term_detail_dialogue" class="jumbotron" ></div>
+    
+  <% (@drilldown || []).each do | d| %>
     <div class="mindmap_drilldown_term">  
       <% @drilldown_link = ( @drilldown_link || [] ) + [d] unless ( d == @drilldown.last )%>
       <%= link_to truncate( d, length: 12 ), 
@@ -17,20 +18,21 @@
     <% @mindmap.each do | leadword, cluster | %>
       
         <div class="mindmap_cluster" >
-             <span style="float:left;font-size:24px">
-               <%= link_to '&#10174;'.html_safe,
-               mindmap_path( drilldown: (@drilldown || []) + [cluster[((cluster.size-1)/2)][0]] ),
-               title: cluster[((cluster.size-1)/2)][0] + ' Drilldown'
-               %>
-             </span>
+          <span style="float:left">
+            <% if cluster.size > 1 %>
+               <%= link_to mindmap_path( drilldown: (@drilldown || []) + [cluster[((cluster.size-1)/2)][0]] ),
+                   title: ( cluster[((cluster.size-1)/2)][0] + ' Drilldown' ) do %>
+                 <i class="glyphicon glyphicon-search"></i>
+               <% end %>
+            <% end %> 
+          </span>
           <% cluster.each_index do |i| %>
 	          <span id="<%= 'term_'+cluster[i][1][:word_id].to_s %>" 
 	            class="<%='term_size_'+term_size(cluster[i][1][:count]) %> 
 	                   <%='term_color_'+term_color(cluster[i][1][:priority]) %>">
 	              <%= link_to truncate( cluster[i][0], length: 12 ), 
 	                         term_detail_path( word_id: cluster[i][1][:word_id] ), 
-	                         title: cluster[i][0] + ' Okaapis', remote: js?,
-	                         target: ( ( js? == 'true' ) ? '_self' : '_blank' )  %>
+	                         title: cluster[i][0] + ' Okaapis', remote: js? %>
 	          </span>          
             <% if (i+1).modulo( side( cluster ) ) == 0 %>
               <br >
@@ -41,7 +43,7 @@
     <% end %>
     
    
-    <div id="term_detail_dialogue"></div>
+
     
   <% else %>
     <div class="whitetext">

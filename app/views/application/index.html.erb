@@ -1,12 +1,11 @@
 
-
-<div class="the_header">
- 
-  <% if @current_user %>
-    <div>
-      <%= link_to 'Diary'.html_safe, calendar_path %> &nbsp;
-      <%= link_to 'MindMap'.html_safe, mindmap_path %>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <%= link_to 'Diary'.html_safe, calendar_path, class: "navbar-brand" %>
     </div>
-  <% end %>
-
-</div>
+    <div class="navbar-header">
+      <%= link_to 'MindMap'.html_safe, mindmap_path, class: "navbar-brand"%>
+    </div>
+  </div>
+</nav>  

@@ -1,18 +1,36 @@
-  <div class="the_header">
-     <div>
-	   <%= link_to 'cloud', termcloud_path, title: "Term Cloud", 
-	            class: ( controller.action_name == 'termcloud' ) ? 'emphasis' : ''  %>
-	   <%= link_to 'map', mindmap_path, title: "Mind Map", 
-	            class: ( controller.action_name == 'mindmap' ) ? 'emphasis' : ''  %>	            
-	   <%= link_to 'people', people_path, title: "People"  , 
-	          class: ( controller.action_name == 'people' ) ? 'emphasis' : ''  %>
-	 </div>
-	 <div class="header_right">
-	   <% if @current_user  %>	         
-	     <%= link_to '&#9993;'.html_safe , send_okaapi_emails_path, title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" %>
-	     <%= link_to '&#9775;'.html_safe , receive_okaapi_emails_path, title: "Check emails", onclick: "$('#spinner').fadeIn('slow');"  %>
-       <% end %>
-       <%= link_to '&#9166;'.html_safe , root_path, title: "Back"  %>
-     </div>
-  </div>
-  <div class="cleardiv"> </div>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li <%= ( controller.action_name == 'termcloud' ) ? 'class="active"'.html_safe : ''  %> >
+    <%= link_to 'cloud', termcloud_path, title: "Term Cloud" %>
+  </li>
+  <li <%= ( controller.action_name == 'mindmap' ) ? 'class="active"'.html_safe : ''  %> >
+    <%= link_to 'map', mindmap_path, title: "Mind Map" %>
+  </li>
+  <li <%= ( controller.action_name == 'people' ) ? 'class="active"'.html_safe : ''  %> >
+     <%= link_to 'people', people_path, title: "People" %>
+  </li>
+  <li style="float:right" >
+    <%= link_to root_path, title: "Back" do %>
+      <i class="glyphicon glyphicon-eject"></i>
+    <% end %>
+  </li>  
+</ul>
+<ul class="nav nav-tabs" role="tablist">
+
+  <% if @current_user  %>	    
+    <li style="float:right" >        
+	  <%= link_to send_okaapi_emails_path, 
+	     title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" do %>
+	    <i class="glyphicon glyphicon-envelope"></i>
+	  <% end %>
+    </li>
+    <li style="float:right" >
+	  <%= link_to receive_okaapi_emails_path,
+	      title: "Check emails", onclick: "$('#spinner').fadeIn('slow');" do %>
+	    <i class="glyphicon glyphicon-inbox"></i>
+	  <% end %>
+	</li>
+  <% end %>  
+</ul>
+
+

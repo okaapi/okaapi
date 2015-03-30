@@ -1,0 +1,54 @@
+	 
+<ul class="nav nav-tabs" role="tablist">
+  <li  >
+    <%= link_to '&laquo;'.html_safe, calendar_path( month: @month-1, year: @year ), title: "One month back"  %>
+  </li>
+  <li class="active">
+      <%= link_to calendar_path( month: @month, year: @year ) do %>
+        <% if @current_user and @current_user.goal.size > 0 %>
+	        <%= @current_user.goal %> in 
+        <% end %>	      
+	    <%= monthname( @month ) %> <%= @year %>
+	  <% end %>
+  </li>
+  <li <%= ( controller.action_name == 'people' ) ? 'class="active"'.html_safe : ''  %> >
+     <%= link_to '&raquo;'.html_safe, calendar_path( month: @month+1, year: @year ), title: "One month forward"  %>
+  </li>	 
+
+  <li style="float:right" >
+    <%= link_to root_path, title: "Back" do %>
+      <i class="glyphicon glyphicon-eject"></i>
+    <% end %>
+  </li>
+</ul>
+<ul class="nav nav-tabs" role="tablist">
+<% if @current_user and @current_user.diary_service == 'on' %>	  
+  <li style="float:right" >      
+    <%= link_to turn_off_diary_emails_path, title: "Turn off reminder emails" do %>
+      <i class="glyphicon glyphicon-remove"></i>
+    <% end %>
+  </li> 
+  <li style="float:right" >      
+    <%= link_to send_diary_email_path, title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" do %>
+      <i class="glyphicon glyphicon-envelope"></i>
+    <% end %>
+  </li>    
+  <li style="float:right" >  
+    <%= link_to receive_diary_emails_path, title: "Check emails", onclick: "$('#spinner').fadeIn('slow');" do  %>
+      <i class="glyphicon glyphicon-inbox"></i>
+    <% end %>
+  </li>    
+  <li style="float:right" >     
+    <%= link_to calendar_path, title: "Jump to last entry" do %>
+      <i class="glyphicon glyphicon-time"></i>
+    <% end %>	 
+  </li>  
+<% elsif @current_user %>
+  <li style="float:right" >  
+    <%= link_to send_diary_email_path, title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" do %>
+      <i class="glyphicon glyphicon-envelope"></i>
+    <% end %>
+  </li>
+<% end %>
+
+</ul>

@@ -1,25 +1,61 @@
 
-<fieldset>
-  <legend><%= @word.term %></legend>
-  <div class="term_modifiers">
-    <i>
-    <%= link_to ( @word.person == 'false' ? 'is a person' : 'is not a person' ), 
-              toggle_person_path( id: @word.id ) %> &nbsp;
-    <% if @word.person == 'false' %>
-      priority <%= @word.priority %> 
-      <%= link_to 'down'.html_safe, priority_path( id: @word.id, increment: -1 ) %> 
-      <%= link_to 'up'.html_safe, priority_path( id: @word.id, increment: 1 ) %>
-    <% end %>    
-    <br >
-    <%= link_to 'archive', archive_word_path( id: @word.id ) %> /
-    <%= link_to 'undo last archive', undo_archive_word_path( ) %>
-    </i>
-  </div>
-  <% @okaapis.each do |okaapi| %>
-    <%= link_to( okaapi.subject, show_okaapi_content_path( id: okaapi.id ), :target => "_blank" ) %><br >
-    <div class="okaapi_modifiers">
-      <%= link_to 'archive', archive_okaapi_path( id: okaapi.id ) %> / 
-      <%= link_to 'undo last archive', undo_archive_okaapi_path( ) %>
-    </div>
-  <% end %>
-</fieldset>
+
+
+<button class="btn btn-primary btn-lg">
+  <%= @word.term %>
+</button>
+<button type="button" class="close">
+  X
+</button>
+
+&nbsp; 
+<%= link_to toggle_person_path( id: @word.id ), title: "Toggle person" do %>
+  <% if @word.person == 'false' %>
+    <i class="glyphicon glyphicon-user"></i>
+  <% else %>
+    <i class="glyphicon glyphicon-bookmark"></i>
+  <% end %> 
+<% end %>
+
+<% if @word.person == 'false' %>
+  &nbsp; 
+  <%= link_to priority_path( id: @word.id, increment: -1 ) do %>
+    <i class="glyphicon glyphicon-arrow-down"></i>
+  <% end %> 
+  <span class="badge badge-important"><%= @word.priority %> </span> 
+  <%= link_to priority_path( id: @word.id, increment: +1 ) do %>
+    <i class="glyphicon glyphicon-arrow-up"></i>
+  <% end %> 
+<% end %>   
+&nbsp;  
+
+<%= link_to archive_word_path( id: @word.id ), title: "Archive" do %> 
+  <i class="glyphicon glyphicon-download-alt"></i>
+<% end %>
+&nbsp; 
+<%= link_to undo_archive_word_path( ) , title: "Undo last archive" do %>
+  <i class="glyphicon glyphicon-open"></i>
+<% end %>
+
+
+<% @okaapis.each do |okaapi| %>
+
+    <p></p>
+    <button class="btn btn-default">
+      <%= link_to( okaapi.subject, show_okaapi_content_path( id: okaapi.id ), :target => "_blank" ) %>
+    </button>
+    &nbsp;
+    <%= link_to archive_okaapi_path( id: okaapi.id ) , title: "Archive" do %> 
+      <i class="glyphicon glyphicon-download-alt"></i>
+    <% end %>
+    &nbsp;    
+    <% if okaapi == @okaapis[0] %>
+      <%= link_to undo_archive_okaapi_path( ) , title: "Undo last archive" do %>
+        <i class="glyphicon glyphicon-open"></i>
+      <% end %> 
+    <% end %> 
+
+
+
+<% end %>
+

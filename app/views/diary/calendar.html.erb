@@ -1,65 +1,33 @@
 
+<%= render "header" %>
  
 <div id="calendar">
-  
-	  <div class="the_header">
-	    <div>
-	      <%= link_to '&laquo;'.html_safe, calendar_path( month: @month-1, year: @year ), title: "One month back"  %>
-	      &nbsp;
-	      <% if @current_user.goal.size > 0 %>
-	        <%= @current_user.goal %> in 
-	      <% end %>	      
-	      <%= monthname( @month ) %> <%= @year %>&nbsp;
-	      <%= link_to '&raquo;'.html_safe, calendar_path( month: @month+1, year: @year ), title: "One month forward"  %>
-	    </div>
-	    <div class="header_right">
-	      <% if @current_user and @current_user.diary_service == 'on' %>	      
-	        <%= link_to '&#9728;'.html_safe , calendar_path, title: "Jump to last entry" %>	      
-	        <%= link_to '&#9993;'.html_safe , send_diary_email_path, title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" %>
-	        <%= link_to '&#9775;'.html_safe , receive_diary_emails_path, title: "Check emails", onclick: "$('#spinner').fadeIn('slow');"  %>
-	        <%= link_to '&#920;'.html_safe , turn_off_diary_emails_path, title: "Turn off reminder emails"  %>
-	      <% elsif @current_user %>
-	        <%= link_to '&#9993;'.html_safe , send_diary_email_path, title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" %>
-          <% end %>
-          <%= link_to '&#9166;'.html_safe , root_path, title: "Back"  %>
-        </div>
-	  </div>
-	  <div class="cleardiv"> </div>
-	  
-	  <div id="setup_diary_emails">
-	  </div>
-	  
-	  <% @calendar.each do |i,week| %>
-	    <% week.each do |j,entry| %>
-		  <% if entry and entry[:content] %>   
-		    <div class="diary_entry" >
-		      <fieldset >
-		        <legend><%= weekday(@month,entry[:day],@year)%>&nbsp;
-		                 <%= entry[:day] %></legend>
-		        <div id="diary_entry_<%=i%>_<%=j%>"  >
-		          <%= simple_format entry[:content].strip  %>
-                  <script>
-		             $("#diary_entry_<%=i%>_<%=j%>").click( 		      
-		                  function() {  $("#diary_entry_<%=i%>_<%=j%>").css("overflow-y","auto"); });
-		          </script>		        
-		        </div> 		    
-		      </fieldset>
-		    </div>
-		  <% elsif entry %>
-		    <div class="empty_diary_entry" >
-		      <fieldset>
-		        <legend><%= weekday(@month,entry[:day],@year)%>&nbsp;
-		                 <%= entry[:day] %></legend>
-		      </fieldset>
-		    </div>		
-		  <% else %>     
-		     <div class="empty_diary_entry" >
-		     </div>
-		  <% end %>		   
-	    <% end %>
-	    <div class="cleardiv">
-	    </div>
-	  <% end %>
-	  
+  <div class="container" >   
       
+    <% @calendar.each do |i,week| %>
+      <div id="show_diary_entry<%=i%>">week <%= i%></div>  
+      <div class="row"> 
+        <div class="col-md-3" style="padding:0px;">     
+          <%= render partial: "two_days", 
+            locals: { day1: "Monday", entry1: week[1], day2: "Tuesday", entry2: week[2], 
+                      week: i, month: @month, year: @year } %>
+        </div>
+        <div class="col-md-3" style="padding:0px;">
+          <%= render partial: "two_days", 
+            locals: { day1: "Wednesday", entry1: week[3], day2: "Thursday", entry2: week[4], 
+                       week: i, month: @month, year: @year } %>
+        </div>      
+        <div class="col-md-3" style="padding:0px;">
+          <%= render partial: "two_days", 
+            locals: { day1: "Friday", entry1: week[5], day2: "Saturday", entry2: week[6], 
+                       week: i, month: @month, year: @year } %>
+        </div> 
+        <div class="col-md-3" style="padding:0px;">
+          <%= render partial: "two_days", 
+            locals: { day1: "Sunday", entry1: week[7], day2: nil, entry2: nil, 
+                       week: i, month: @month, year: @year} %>        
+        </div>  
+      </div>               
+	<% end %>	
+  </div>    
 </div>

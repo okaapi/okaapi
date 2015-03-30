@@ -1,0 +1,20 @@
+
+<% if entry %>
+
+  <div style="padding:2px;">
+	<div class="panel panel-default" >
+	  <div class="panel-heading">	    
+	    <%= link_to show_diary_entry_path( weekday: day, day: entry[:day], month: month, year: year,
+	                                       week: week ),
+	        remote: js? do %>
+	      <%= day %> <%= entry[:day] %>
+	    <% end %>
+	  </div>
+	  <div class="panel-body diary_entry">
+        <%= simple_format entry[:content].strip if entry[:content] %>	        
+	  </div>
+	</div>
+  </div>  
+
+<% end %>
+

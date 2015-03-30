@@ -86,7 +86,7 @@ class AuthenticateController < ApplicationController
     if @current_user = User.find_by_token( @user_token )
       # REMEMBER this user _id for ur_secrets!
       session[:reset_user_id] = @current_user.id
-      redirect_to_root_html  alert: "please set your password"
+      redirect_to_root_html  
     else
       redirect_to_root_html alert: "the activation link is incorrect, please reset..."
     end      

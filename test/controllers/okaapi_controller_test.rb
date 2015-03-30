@@ -61,14 +61,13 @@ class OkaapiControllerTest < ActionController::TestCase
     if ! @not_java
       xhr :get, :term_detail, word_id: words(:blue).id
       assert_select_jquery :html, '#term_detail_dialogue' do    
-        assert_select '.okaapi_modifiers', 1
+        assert_select 'button a', 1
       end 
     else
       get :term_detail, word_id: words(:blue).id
-      puts "@@@@@@@@@@@"
       assert_response :success
       assert_select '#term_detail_dialogue' do    
-        assert_select '.okaapi_modifiers', 1
+        assert_select 'button a', 1
       end 
     end
     
@@ -78,7 +77,7 @@ class OkaapiControllerTest < ActionController::TestCase
     login
     @id = Okaapi.first
     get :show_okaapi_content, id: @id.id
-    assert_response :success
+    assert_response :success 
     assert_select '#application', /text two/
   end
   
@@ -97,7 +96,7 @@ class OkaapiControllerTest < ActionController::TestCase
     get :mindmap
     assert_select ".mindmap_cluster span a", /blue/ 
     assert_select ".mindmap_cluster span a", /petrol/
-    assert_select ".mindmap_cluster span a", 7
+    assert_select ".mindmap_cluster span a", 9
     assert_select ".mindmap_cluster", 2
   end
   
@@ -106,7 +105,7 @@ class OkaapiControllerTest < ActionController::TestCase
     get :mindmap, drilldown: ['red']
     assert_select ".mindmap_cluster span a", /blue/ 
     assert_select ".mindmap_cluster span a", /violet/
-    assert_select ".mindmap_cluster span a", 3
+    assert_select ".mindmap_cluster span a", 4
     assert_select ".mindmap_cluster", 2
   end
   

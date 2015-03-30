@@ -1,0 +1,3 @@
+$('<%=@divid%>').fadeIn('slow');
+$('<%=@divid%>').html("<%= escape_javascript render partial: 'show_entry' %>");
+$('<%=@divid%>').click( function() {  $('<%=@divid%>').fadeOut('slow'); });

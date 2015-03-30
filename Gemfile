@@ -42,3 +42,8 @@ gem 'bcrypt'
 
 # not sure why I need this
 gem 'docile', '1.1.5'
+
+gem 'bootstrap-sass'
+gem 'autoprefixer-rails'
+
+

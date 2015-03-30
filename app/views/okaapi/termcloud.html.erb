@@ -1,7 +1,9 @@
 
+<%= render "header" %>
+  
 <div id="termcloud" >
 
-  <%= render "header" %>
+  <div id="term_detail_dialogue"></div>
 
   <% if @termcloud %>
   
@@ -11,11 +13,10 @@
                    <%='term_color_'+term_color(term[1][:priority]) %>">
         <%= link_to truncate( term[0], length:10 ), 
                     term_detail_path( word_id: term[1][:word_id] ), 
-                    remote: js?,
-                    target: ( ( js? == 'true' ) ? '_self' : '_blank' ) %>
+                    remote: js? %>
       </span>
     <% end %>
-    <div id="term_detail_dialogue"></div>
+
     
   <% else %>
     <div class="whitetext">

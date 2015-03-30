@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   get 'diary/send_all_diary_emails/:token' => 'diary#send_all_diary_emails', as: "send_all_diary_emails"
   get 'diary/receive_diary_emails', as: "receive_diary_emails"  
   get 'diary/turn_off_diary_emails', as: "turn_off_diary_emails"
+  get 'diary/show_entry', as: "show_diary_entry"
   
   get 'okaapi/termcloud', as: "termcloud"
   get 'okaapi/mindmap', as: "mindmap"

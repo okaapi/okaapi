@@ -40,7 +40,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
       xhr :get, "/_who_are_u"
       assert_response :success
       assert_select_jquery :html, '#authentication_dialogue_js' do
-        assert_select 'fieldset div label', /username\/email/ 
+        assert_select '.control-label', /username\/email/ 
       end
     end
         
@@ -54,8 +54,8 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
       xhr :post, "/_prove_it", claim: "arnaud"
       assert_response :success       
       assert_select_jquery :html, '#authentication_dialogue_js' do    
-        assert_select '.authenticate fieldset legend', /arnaud/
-        assert_select '.authenticate fieldset div label', /password/
+        assert_select '.alert-info', /arnaud/
+        assert_select '.control-label', /password/
       end      
     end
       
@@ -101,8 +101,8 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
       xhr :post, "/_about_urself"
       assert_response :success
       assert_select_jquery :html, '#authentication_dialogue_js' do
-        assert_select '.authenticate fieldset div label', /username/
-        assert_select '.authenticate fieldset div label', /email/           
+        assert_select '.control-label', /username/
+        assert_select '.control-label', /email/           
       end
     end
     
@@ -141,8 +141,8 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     # refreshes and still gets the correct user displayed
     get_via_redirect "/"
     assert_response :success
-    assert_select '.authenticate fieldset legend', /francois/
-    assert_select '.authenticate fieldset div label', /password/     
+    assert_select '.alert-info', /francois/
+    assert_select '.control-label', /password/     
     
     # sets the password and gets logged in
     if @not_java

@@ -61,6 +61,16 @@ class DiaryController < ApplicationController
         
   end
   
+  def show_entry
+    @day = params[:day]
+    @weekday = params[:weekday]
+    @month = params[:month]
+    @year = params[:year]    
+    @week = params[:week]
+    @entry = DiaryEntry.entry_for_day( @current_user.id, @day, @month, @year )
+    @divid = '#show_diary_entry' + @week.to_s
+  end
+  
   def turn_off_diary_emails
     
     if @current_user
