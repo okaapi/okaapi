@@ -23,6 +23,25 @@ a {
   }       
 }
 
+.background_decoration {
+  background: url('hatshoes.jpg') no-repeat  ;
+  background-position: center top ;
+  background-size: cover;
+  background-color: white; 
+  a {
+    color: white;
+    &:visited {
+      color: white;
+    }    
+  }
+}
+.login_decor {
+  background-color:white; 
+  padding:10px;
+  box-shadow: 0px 0px 20px 10px rgba(255,255,255,1.0);
+}
+
+
 /* mindmap stuff */
 
 #termcloud, #people, #mindmap {
