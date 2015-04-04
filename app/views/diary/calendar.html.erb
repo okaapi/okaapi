@@ -1,6 +1,7 @@
 
 <%= render "header" %>
  
+<% if @current_user %>
 <div id="calendar">
   <div class="container" >   
       
@@ -31,3 +32,4 @@
 	<% end %>	
   </div>    
 </div>
+	<% end %>	

@@ -67,7 +67,9 @@ class DiaryController < ApplicationController
     @month = params[:month]
     @year = params[:year]    
     @week = params[:week]
-    @entry = DiaryEntry.entry_for_day( @current_user.id, @day, @month, @year )
+    @entry = DiaryEntry.entry_for_day( @current_user.id, 
+                                @day, @month, @year )
+    @entry = @entry.force_encoding("UTF-8") if @entry
     @divid = '#show_diary_entry' + @week.to_s
   end
   
