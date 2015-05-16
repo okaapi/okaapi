@@ -6,6 +6,9 @@
   <li <%= ( controller.action_name == 'mindmap' ) ? 'class="active"'.html_safe : ''  %> >
     <%= link_to 'map', mindmap_path, title: "Mind Map" %>
   </li>
+  <li <%= ( controller.action_name == 'graph' ) ? 'class="active"'.html_safe : ''  %> >
+     <%= link_to 'graph', graph_path, title: "Graph" %>
+  </li>
   <li <%= ( controller.action_name == 'people' ) ? 'class="active"'.html_safe : ''  %> >
      <%= link_to 'people', people_path, title: "People" %>
   </li>

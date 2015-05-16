@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   get 'okaapi/termcloud', as: "termcloud"
   get 'okaapi/mindmap', as: "mindmap"
   get 'okaapi/people', as: "people"
+  get 'okaapi/graph', as: "graph"  
   get 'okaapi/term_detail', as: "term_detail"  
   get 'okaapi/toggle_person', as: "toggle_person"
   get 'okaapi/priority', as: "priority"

@@ -34,4 +34,14 @@ module OkaapiHelper
     Math.sqrt( a.size / 2 ).to_i + 1
   end
   
+  def graph_tooltip( word_id )
+    @word = Word.find_by_id( word_id )   
+    @okaapis = Okaapi.for_term( @current_user.id, @word.term )
+    str = ''
+    @okaapis.each do |okaapi|
+      str << okaapi[:subject] + '<br>'
+    end
+    str
+  end
+  
 end

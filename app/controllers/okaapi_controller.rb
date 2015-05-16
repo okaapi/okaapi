@@ -41,6 +41,14 @@ class OkaapiController < ApplicationController
     end
   end
   
+  def graph
+    if @current_user
+      okaapis = Okaapi.unarchived_for_user( @current_user.id )
+      @drilldown = params[:drilldown] || []
+      @graph = Okaapi.mindmap( @current_user.id, @drilldown || [] )
+    end
+  end  
+  
   def toggle_person
     if @word = Word.find( params[:id] )
       @word.person = ( @word.person == 'false' ? 'true' : 'false' )

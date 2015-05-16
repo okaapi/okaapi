@@ -35,7 +35,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     if @not_java
       get "/_who_are_u"
       assert_response :success
-      assert_select '.authenticate fieldset div label', /username\/email/ 
+      assert_select '.control-label', /username\/email/ 
     else
       xhr :get, "/_who_are_u"
       assert_response :success
@@ -48,8 +48,8 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     if @not_java
       post "/_prove_it", claim: "arnaud"
       assert_response :success
-      assert_select '.authenticate fieldset legend', /arnaud/
-      assert_select '.authenticate fieldset div label', /password/            
+      assert_select '.alert-info', /arnaud/
+      assert_select '.control-label', /password/            
     else
       xhr :post, "/_prove_it", claim: "arnaud"
       assert_response :success       
@@ -95,8 +95,8 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     if @not_java
       post "/_about_urself"
       assert_response :success
-      assert_select '.authenticate fieldset div label', /username/
-      assert_select '.authenticate fieldset div label', /email/        
+      assert_select '.control-label', /username/
+      assert_select '.control-label', /email/        
     else  
       xhr :post, "/_about_urself"
       assert_response :success

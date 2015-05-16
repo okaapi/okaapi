@@ -1,0 +1,55 @@
+
+<%= render "header" %>
+
+<div id="visualization" style="height:600px"></div>
+
+<script type="text/javascript">
+
+var options = {
+  nodes: {
+    /* radius: 20, */
+    fontSize: 30
+  }
+};
+
+var nodes = [
+  <% if @graph %>
+    <% @graph.each do | leadword, cluster | %>
+      <% cluster.each_index do |i| %>
+        {id: '<%= leadword+cluster[i][0].to_s %>', 
+         label: '<%= truncate( cluster[i][0].to_s, length: 10 ) %>',
+         title: 
+            <% @word = Word.find_by_id( cluster[i][1][:word_id] ) %>
+            <% @okaapis = Okaapi.for_term( @current_user.id, @word.term ) %>
+            '<% @okaapis.each do |okaapi| %><%= okaapi[:subject] %><br><% end %>'
+             },
+      <% end %>
+    <% end %>
+  <% end %> 
+];
+  
+var edges = [
+  <% if @graph %>
+    <% @graph.each do | leadword, cluster | %>
+      <% cluster.each_index do |i| %>
+        <% if leadword != cluster[i][0].to_s %>
+          {from: '<%= leadword+leadword %>',
+           to: '<%= leadword+cluster[i][0].to_s %>'},
+         <% end %>
+      <% end %>
+    <% end %>
+  <% end %> 
+];
+
+var container = document.getElementById('visualization');
+var data = {
+  nodes: nodes,
+  edges: edges,
+  options: options
+};
+var network = new vis.Network(container, data, {});
+</script>
+<style>
+  .network-tooltip { position: absolute; padding: -10px }
+</style>
+
