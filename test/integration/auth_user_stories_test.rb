@@ -17,7 +17,6 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
   #
   test "root path" do
     assert_equal root_path, '/'
-
   end
   
   #
