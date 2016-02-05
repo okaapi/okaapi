@@ -21,6 +21,8 @@ if ( Time.now.min < 15 ) && ( Time.now.hour == 18 )
   n = Postoffice.send_all_diary_emails( 1959 ) 
   puts "sent #{n} diary reminder emails"
 end
+  n = Postoffice.send_okaapi_emails 
+  puts "sent #{n} okaapi emails"
 
 puts 
 puts "DONE WITH OKAAPI"

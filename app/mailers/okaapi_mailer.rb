@@ -10,7 +10,8 @@ class OkaapiMailer < ActionMailer::Base
   #
   #
   #
-  def send_okaapi_reminder( user_email, subj )
+  def send_okaapi_reminder( user_email, subj, okaapis )
+    @okaapis = okaapis
     mail from: smtp_settings[:sender_email], to: user_email, subject: subj
   end
     
