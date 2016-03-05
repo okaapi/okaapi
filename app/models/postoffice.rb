@@ -42,6 +42,11 @@ class Postoffice
       if @prio_okaapis.count > 0
         OkaapiMailer.send_okaapi_reminder( user.email, "Okaapi Reminder", 
              @people, @prio_okaapis ).deliver
+        if( user.alternate_email )
+          OkaapiMailer.send_okaapi_reminder( user.alternate_email, 
+	  	"Okaapi Reminder", 
+               @people, @prio_okaapis ).deliver 
+        end
       end
       n = n + 1
     end
