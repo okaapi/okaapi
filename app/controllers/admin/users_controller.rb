@@ -27,6 +27,12 @@ module Admin
 	  def edit
 	  end
 	
+	  def role_change
+	    @user = User.find( params[:id] )
+	    @user.change_role( params[:role] )
+	    redirect_to action: :index
+	  end
+	  
 	  # POST /users
 	  # POST /users.json
 	  def create
@@ -47,10 +53,9 @@ module Admin
 	  # PATCH/PUT /users/1.json
 	  def update
 	    respond_to do |format|
-	      @user.attributes = user_params
-	      if @user.save( validate: false)
+	      if @user.update(user_params)
 	        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-	        format.json { head :no_content }
+	        format.json { render :show, status: :ok, location: @union }
 	      else
 	        format.html { render action: 'edit' }
 	        format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -67,7 +72,7 @@ module Admin
 	      format.json { head :no_content }
 	    end
 	  end
-	
+	  	
 	  private
 	    # Use callbacks to share common setup or constraints between actions.
 	    def set_user
@@ -76,8 +81,7 @@ module Admin
 	
 	    # Never trust parameters from the scary internet, only allow the white list through.
 	    def user_params
-	      params.require(:user).permit(:username, :email, :alternate_email, :password, 
-	               :password_confirmation, :role, :active, :goal, :goal_in_subject )
+	      params.require(:user).permit(:username, :email, :alternate_email, :password, :password_confirmation, :role, :active)
 	    end
 	    
 	end
