@@ -18,6 +18,41 @@ class Postoffice
     n = 0
     users = User.all
     users.each do |user|
+
+      puts "sending email to #{user.email}"
+
+      @persons = Word.unarchived_people( user.id )
+      @people = []
+      @persons.each do |person|
+        okaapis = Okaapi.for_person( user.id, person.term )
+        @people << [ person, okaapis ] if okaapis.size > 0
+      end
+      @people.sort! { |a,b| a[0].term <=> b[0].term } 
+
+      okaapis = Okaapi.unarchived_for_user( user.id )
+      terms = Okaapi.terms( okaapis )      
+      terms = Word.unarchived_terms_not_person_for_user( user.id, terms )|| {}
+      @prio_okaapis = []
+      terms.each do |k,v|
+        if v[:priority].to_int > 1
+          @prio_okaapis += Okaapi.for_term( user.id, k )
+        end
+      end
+
+      if @prio_okaapis.count > 0
+        OkaapiMailer.send_okaapi_reminder( user.email, "Okaapi Reminder", 
+             @people, @prio_okaapis ).deliver
+      end
+      n = n + 1
+    end
+    return n
+  end
+
+=begin
+  def self.send_okaapi_emails
+    n = 0
+    users = User.all
+    users.each do |user|
       okaapis = Okaapi.where( user_id: user.id ).where( archived: false )
       if okaapis.count > 0
         puts "sending email to #{user.email} (this is a test....)"
@@ -27,7 +62,8 @@ class Postoffice
     end
     return n
   end
-  
+=end
+
   def self.receive_diary_emails    
     new_entries = DiaryReminder.get_diary_entries 
     n = 0

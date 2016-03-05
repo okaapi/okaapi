@@ -1,0 +1,23 @@
+
+<% @people.each do |person| %>
+
+  <a href="http://okaapi.com/okaapi/term_detail?word_id=<%= person[0].id %>">
+    <b> <%= person[0].term %> </b>
+  <a><br>
+  <% person[1].each do |okaapi| %>
+
+    <%= okaapi.subject %>
+    <br>
+  <% end %>
+  <br>
+
+
+<% end %>
+
+<b>priority >2</b><br>
+<% @okaapis.each do |okaapi| %>
+
+  <%= okaapi.subject %>
+    <br>
+
+<% end %>
