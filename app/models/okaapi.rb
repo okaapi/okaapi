@@ -1,3 +1,5 @@
+require 'pp'
+
 class Okaapi < ActiveRecord::Base
   validates :user_id, :presence => true
   validate :id_valid
@@ -57,12 +59,18 @@ class Okaapi < ActiveRecord::Base
           
     terms = Okaapi.terms( okaapis )          
     terms = Word.unarchived_terms_not_person_for_user( user_id, terms ) || {}
-    terms = terms.sort {|x, y| y[1][:count] <=> x[1][:count] } 
+    terms = terms.sort do |x, y| 
+      if y[1][:count] == x[1][:count]
+        x[0] <=> y[0]
+      else
+        y[1][:count] <=> x[1][:count]
+      end
+    end 
     
     mindlimits.each do |limit|
       terms.delete_if{ |t| t[0] == limit }
     end    
-      
+    
     mindmap = {}
     while terms.count > 0 do
       first_term = terms.shift
@@ -81,6 +89,7 @@ class Okaapi < ActiveRecord::Base
       end      
       mindmap[ term ].insert( mindmap[term].size/2, first_term )
     end 
+
     return mindmap
   end
   

@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'pp'
 
 class OkaapiTest < ActiveSupport::TestCase
   
@@ -64,18 +65,32 @@ class OkaapiTest < ActiveSupport::TestCase
     last = Okaapi.find_last_archived( @user_francois.id )
   end
 
+#
+#  Okaapis:    red green violet
+#              red blue purple
+#              yellow gray petrol
+# 
+#    red => [ [blue], [purple], [red], [green], [violet] ]
+#    yellow => [ [gray], [yellow], [petrol] ]
+#
+#  filtered by red
+#    blue => [ [blue], [purple] ]    
+#    green => [ [green], [violet] ]
+#
+
   test "mindmap" do
     mindmap = Okaapi.mindmap( @user_arnaud.id )
     assert_equal mindmap.count, 2
+   
     assert mindmap['red']
-    assert mindmap['yellow']
+    assert mindmap['gray']
   end
   
   test "mindmap with limits" do
-    okaapis = Okaapi.unarchived_for_user( @user_francois.id )
     mindmap = Okaapi.mindmap( @user_arnaud.id, ['red'] )
     assert_equal mindmap.count, 2
-    assert mindmap['purple']
+
+    assert mindmap['blue']
     assert mindmap['green']
   end  
   

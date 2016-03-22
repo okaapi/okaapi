@@ -6,7 +6,7 @@ Rails.application.configure do
   
   
   config.action_controller.perform_caching = true
-  config.serve_static_assets = true
+  config.serve_static_files  = true
   config.assets.js_compressor = :uglifier
   #
   #  this is the only flag that's normally "false" in a production.rb

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.6'
-gem 'mysql'
+gem 'rails', '4.2.6'
+gem 'mysql2', '~> 0.3.18'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -15,3 +15,5 @@ gem 'jbuilder'
 gem 'bcrypt'
 gem 'tzinfo-data'
 gem 'simplecov'
+
+gem 'unicorn'
