@@ -16,6 +16,13 @@ class OkaapiMailer < ActionMailer::Base
     mail from: smtp_settings[:sender_email], to: user_email, subject: subj
   end
     
+  #
+  #
+  #
+  def test( user_email )
+    mail from: smtp_settings[:sender_email], to: user_email
+  end
+    
   # 
   #  yeah, so we're using smtp_settings also for pop
   #

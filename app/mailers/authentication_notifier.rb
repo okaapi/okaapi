@@ -1,4 +1,5 @@
 require "singleton"
+require "pp"
 
   class AuthenticationNotifier < ActionMailer::Base
 
