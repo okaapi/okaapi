@@ -31,7 +31,7 @@ class DiaryReminder < ActionMailer::Base
   # 
   #  yeah, so we're using smtp_settings also for pop
   #
-  def self.get_diary_entries
+  def get_diary_entries
   
     pop = Net::POP3.new smtp_settings[:pop_server]
     pop.enable_ssl
