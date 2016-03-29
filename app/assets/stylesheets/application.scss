@@ -109,7 +109,10 @@ td { padding: 0px 20px 0px 0px }
       border: 0px blue solid;
       padding: 0px 0px 0px 5px;
       overflow-x: auto;	
-
+      color: red;
+      word-wrap: break-word;
+      #white-space: nowrap; 
+    
       min-height: 100px; 
       max-height: 200px; 
       overflow-y: hidden; 

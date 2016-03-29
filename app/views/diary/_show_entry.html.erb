@@ -4,8 +4,17 @@
 	  <%= @weekday %> <%= @day %> <%= monthname( @month ) %>
 	</button>
 	<button type="button" class="close">
-	  <%= link_to 'X', calendar_path %>
+	  <%= link_to 'X', calendar_path( month: @month, year: @year ) %>
 	</button>
 	<p></p>
-    <%= @entry  %>
+	<%= form_tag update_diary_entry_path do %>
+	  <div class="col-xs-8">
+        <%= text_field_tag :entry, @entry, class: "form-control input-sm" %>
+      </div>
+      <%= hidden_field_tag :day, @day %>  
+      <%= hidden_field_tag :month, @month %> 
+      <%= hidden_field_tag :year, @year %>    
+      <%= hidden_field_tag :week, @week %>  
+      <%= hidden_field_tag :weekday, @weekday %>                           
+    <% end %>
 </div>

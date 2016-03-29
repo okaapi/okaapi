@@ -25,6 +25,21 @@ class DiaryEntry < ActiveRecord::Base
     entry = nil if entry.size == 0 
     return entry
   end
+  
+  def self.replace_entry_for_day( user_id, day, month, year, content )
+    entries = DiaryEntry.where.not( archived: "true").where( user_id: user_id, day: day, month: month, year: year )
+                order( updated_at: :desc)
+    entries.each do |e|
+      e.archived = "true"
+      e.save
+    end
+    
+    entry = DiaryEntry.new( day: day, month: month, year: year, date: Time.now, 
+                user_id: user_id, archived: "false",
+                from: user_id.to_s + "@okaapi.com", content: content )   
+    entry.save
+
+  end  
 
   private
 

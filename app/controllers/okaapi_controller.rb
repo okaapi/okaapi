@@ -1,6 +1,7 @@
 class OkaapiController < ApplicationController
   
-  def termcloud    
+  def termcloud 
+    session[:okaapi_mode] = 'termcloud'   
     if @current_user      
       okaapis = Okaapi.unarchived_for_user( @current_user.id )
       terms = Okaapi.terms( okaapis )      
@@ -15,6 +16,16 @@ class OkaapiController < ApplicationController
       @okaapis = Okaapi.for_term( @current_user.id, @word.term )
     end
   end
+  def update_okaapi
+    if @current_user
+      @word = Word.find_by_id( params[:word_id] )
+      @okaapi = Okaapi.find( params[:okaapi_id] )
+      @okaapi.subject = params[:subject]
+      @okaapi.save
+    end
+    redirect_to term_detail_path( word_id: @word.id )
+  end
+  
   def show_okaapi_content
     if @current_user
       @okaapi = Okaapi.find( params[:id] )
@@ -22,6 +33,7 @@ class OkaapiController < ApplicationController
   end
 
   def people
+    session[:okaapi_mode] = 'people' 
     if @current_user 
       @persons = Word.unarchived_people( @current_user.id )
       @people = []
@@ -34,6 +46,7 @@ class OkaapiController < ApplicationController
   end  
   
   def mindmap
+    session[:okaapi_mode] = 'mindmap' 
     if @current_user
       okaapis = Okaapi.unarchived_for_user( @current_user.id )
       @drilldown = params[:drilldown] || []
@@ -42,6 +55,7 @@ class OkaapiController < ApplicationController
   end
   
   def graph
+    session[:okaapi_mode] = 'graph' 
     if @current_user
       okaapis = Okaapi.unarchived_for_user( @current_user.id )
       @drilldown = params[:drilldown] || []

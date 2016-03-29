@@ -4,7 +4,7 @@
   <%= @word.term %>
 </button>
 <button type="button" class="close">
-  X
+  <%= link_to 'X', okaapi_mode %>
 </button>
 
 &nbsp; 
@@ -40,9 +40,15 @@
 <% @okaapis.each do |okaapi| %>
 
     <p></p>
-    <button class="btn btn-default">
-      <%= link_to( okaapi.subject, show_okaapi_content_path( id: okaapi.id ), :target => "_blank" ) %>
-    </button>
+
+	  <%= form_tag update_okaapi_path do %>
+	    <div class="col-xs-4">
+          <%= text_field_tag :subject, okaapi.subject, title: okaapi.content, class: "form-control input-sm" %>
+        </div>
+        <%= hidden_field_tag :word_id, @word.id %> 
+        <%= hidden_field_tag :okaapi_id, okaapi.id %>      
+      <% end %>
+
     &nbsp;
     <%= link_to archive_okaapi_path( id: okaapi.id ) , title: "Archive" do %> 
       <i class="glyphicon glyphicon-download-alt"></i>

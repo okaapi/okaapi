@@ -2,7 +2,6 @@ class DiaryController < ApplicationController
    
   def calendar
     
-
     @month = params[:month].to_i if params[:month]
     @year = params[:year].to_i if params[:year]
     # set the date to the last available diary entry for this user
@@ -72,6 +71,22 @@ class DiaryController < ApplicationController
     @entry = @entry.force_encoding("UTF-8") if @entry
     @divid = '#show_diary_entry' + @week.to_s
   end
+  
+  def update_entry
+    @day = params[:day]
+    @month = params[:month]
+    @year = params[:year]  
+    @weekday = params[:weekday]
+    @week = params[:week]    
+    @divid = '#show_diary_entry' + @week.to_s    
+    @entry = params[:entry]
+    
+    if @current_user
+      DiaryEntry.replace_entry_for_day( @current_user.id, 
+                                  @day, @month, @year, @entry )      
+    end                 
+    redirect_to calendar_path( month: @month, year: @year )
+  end  
   
   def turn_off_diary_emails
     

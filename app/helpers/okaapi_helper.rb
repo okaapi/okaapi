@@ -44,4 +44,8 @@ module OkaapiHelper
     str
   end
   
+  def okaapi_mode
+    session[:okaapi_mode] || 'mindmap'
+  end
+  
 end

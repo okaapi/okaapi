@@ -1,18 +1,39 @@
 
-=begin
+  #
+  #  and this is to tap into ActionMailer receiving capabilities
+  #
+  def receive( email )
+
+    if email.multipart?
+      if email.text_part
+        body = email.text_part.body.decoded
+      end
+    else
+      body = email.decoded
+    end
+
+
+    return email.from.first, email.subject, body
+
+  end  
+  
+  
 require 'net/pop'
 require 'mail'
+require 'pp'
 
 pop = Net::POP3.new "pop.gmail.com"
 pop.enable_ssl
 pop.start 'camera@menhardt.com', 'fV2z6OE2gkJ'
 pop.each_mail do |message|
-  p message
-  p message.delete
+  from, subject, body = receive( message.pop )
+  p subject
 end 
 pop.finish
-=end
 
+
+
+=begin
 require File.dirname(__FILE__) + "/../config/environment" unless defined?(RAILS_ROOT)
 
 Mail.defaults do
@@ -41,3 +62,5 @@ marray.each do |message|
   puts "++++++++++++++++++++++++++++++++++++++++"
   p message.message_id  
 end
+puts "#{marray.count} messages"
+=end
