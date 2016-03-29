@@ -20,6 +20,7 @@ class OkaapiMailer < ActionMailer::Base
   #
   #
   def test( user_email )
+    p smtp_settings
     mail from: smtp_settings[:sender_email], to: user_email
   end
     

@@ -54,7 +54,7 @@ class Postoffice
   end
 
   def self.receive_diary_emails    
-    new_entries = DiaryReminder.get_diary_entries 
+    new_entries = DiaryReceiver.get_diary_entries 
     n = 0
     new_entries.each do |entry|
       if user = User.find_by_email_or_alternate( entry[:from] )
