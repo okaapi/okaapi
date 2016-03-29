@@ -1,4 +1,3 @@
-#require 'net/pop'
 class DiaryReminder < ActionMailer::Base
 
   
@@ -27,88 +26,6 @@ class DiaryReminder < ActionMailer::Base
   def test( user_email )
     mail from: smtp_settings[:sender_email], to: user_email
   end
-      
-  # 
-  #  yeah, so we're using smtp_settings also for pop
-  #
-  def get_diary_entries
-
-    
-=begin  
-    pop = Net::POP3.new smtp_settings[:pop_server]
-    pop.enable_ssl
-    pop.start smtp_settings[:user_name], smtp_settings[:password]
-      
-    entries = []
-    pop.each_mail do |message|
-      from, subject, body = receive( message.pop )
-=end
-
-    pop_server = smtp_settings[:pop_server]
-    user_name = smtp_settings[:user_name]
-    password = smtp_settings[:password]
-    Mail.defaults do
-      retriever_method :pop3, :address    => pop_server,
-                          :port       => 995,
-                          :user_name  => user_name,
-                          :password   => password,
-                          :enable_ssl => true
-    end
-
-    marray = Mail.all
-    marray.each do |message|
-    
-      from = message.from[0]
-      subject = message.subject
-      body = message.text_part.body.decoded
-      
-      t = Time.parse( subject ) rescue Time.now
-      entry = { day: t.day, month: t.month, year: t.year, date: t, from: from }   
-      
-      #
-      #  remove
-      #       On Tuesday, March 22, 2016, Automatic Diary <automaticdiary@gmail.com> wrote:
-      # 
-      body.gsub!(/On(?:(?!On).)*?wrote:/m, '')
-      
-      #
-      #  remove
-      #         From: Automatic Diary [mailto:automaticdiary@gmail.com] 
-      #         Sent: Friday, March 25, 2016 6:00 PM
-      #         To: wido@menhardt.com
-      #         Subject: What did you do on Friday 25 March ?
-      #
-      str.gsub!( /(From: Automatic Diary.*?\?)?/m ,'' )
-      
-      body.gsub!(/\n>/, '')      
-      entry[:content] = body || "" 
-            
-      entries << entry
-      ###message.delete
-
-    end 
-      
-    pop.finish
-  
-    return entries
-  end
-  
-  #
-  #  and this is to tap into ActionMailer receiving capabilities
-  #
-  def receive( email )
-
-    if email.multipart?
-      if email.text_part
-        body = email.text_part.body.decoded
-      end
-    else
-      body = email.decoded
-    end
-
-
-    return email.from.first, email.subject, body
-
-  end   
+ 
       
 end
