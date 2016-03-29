@@ -106,7 +106,7 @@ class DiaryController < ApplicationController
         @current_user.save!(validate: false)
       end
       DiaryReminder.send_diary_reminder( @current_user.email, @current_user.goal_in_subject,
-                                         Time.now ).deliver
+                                         Time.now ).deliver_now
       redirect_to :back, notice: "daily reminders sent to  #{@current_user.email}"
     end
     

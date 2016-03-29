@@ -90,6 +90,8 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
   #  
   test "registering and getting logged in" do
   
+          ActionMailer::Base.deliveries = []   
+          
     # user clicks "registration" link
     if @not_java
       post "/_about_urself"

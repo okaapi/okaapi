@@ -5,7 +5,7 @@ class DummyDiaryDeliverer
   end
 end
 
-class DiaryReminder < ActionMailer::Base
+class DiaryReceiver
   def self.get_diary_entries
     entries = []
     entries << { day: 1, month: 3, year: 2015, date: Time.parse('15/3/1'), 
@@ -46,6 +46,7 @@ class DiaryControllerTest < ActionController::TestCase
     
     assert_difference('DiaryEntry.count', +2) do
       get :receive_diary_emails
+      assert_equal flash[:notice], "received 2 diary emails"
       assert_redirected_to root_path
     end
     
