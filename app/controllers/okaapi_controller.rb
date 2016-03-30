@@ -1,5 +1,12 @@
 class OkaapiController < ApplicationController
   
+  def index
+    #if @current_user and
+    #   Okaapi.unarchived_for_user( @current_user.id ).count == 0
+    #  redirect_to calendar_path
+    #end    
+  end
+    
   def termcloud 
     session[:okaapi_mode] = 'termcloud'   
     if @current_user      
@@ -7,6 +14,8 @@ class OkaapiController < ApplicationController
       terms = Okaapi.terms( okaapis )      
       terms = Word.unarchived_terms_not_person_for_user( @current_user.id, terms ) || {}
       @termcloud = terms.sort     
+    else
+      redirect_to who_are_u_path
     end    
   end
   def term_detail
@@ -14,6 +23,8 @@ class OkaapiController < ApplicationController
       @word = Word.find_by_id( params[:word_id] )      
       @span_id = 'term_'+@word.id.to_s if @word
       @okaapis = Okaapi.for_term( @current_user.id, @word.term )
+    else
+      redirect_to who_are_u_path
     end
   end
   def update_okaapi
@@ -22,14 +33,18 @@ class OkaapiController < ApplicationController
       @okaapi = Okaapi.find( params[:okaapi_id] )
       @okaapi.subject = params[:subject]
       @okaapi.save
-    end
-    redirect_to term_detail_path( word_id: @word.id )
+      redirect_to term_detail_path( word_id: @word.id )
+    else
+      redirect_to who_are_u_path
+    end          
   end
   
   def show_okaapi_content
     if @current_user
       @okaapi = Okaapi.find( params[:id] )
-    end
+    else
+      redirect_to who_are_u_path
+    end    
   end
 
   def people
@@ -42,7 +57,9 @@ class OkaapiController < ApplicationController
         @people << [ person, okaapis ] if okaapis.size > 0
       end
       @people.sort! { |a,b| a[0].term <=> b[0].term } 
-    end
+    else
+      redirect_to who_are_u_path
+    end        
   end  
   
   def mindmap
@@ -51,7 +68,9 @@ class OkaapiController < ApplicationController
       okaapis = Okaapi.unarchived_for_user( @current_user.id )
       @drilldown = params[:drilldown] || []
       @mindmap = Okaapi.mindmap( @current_user.id, @drilldown || [] )
-    end
+    else
+      redirect_to who_are_u_path
+    end         
   end
   
   def graph
@@ -60,7 +79,9 @@ class OkaapiController < ApplicationController
       okaapis = Okaapi.unarchived_for_user( @current_user.id )
       @drilldown = params[:drilldown] || []
       @graph = Okaapi.mindmap( @current_user.id, @drilldown || [] )
-    end
+    else
+      redirect_to who_are_u_path
+    end       
   end  
   
   def toggle_person

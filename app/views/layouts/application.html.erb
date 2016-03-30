@@ -4,20 +4,23 @@
   <title>Okaapi</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">  
+  <meta name="robots" content="index,follow" />
   <%= csrf_meta_tags %>
+  <%= favicon_link_tag 'favicon.ico' %>
+    
 </head>
+
 <% if @current_user %>
 <body>
 <% else %>
 <body background="assets/hatshoes.jpg" class="background-decoration">
 <% end %>
 
-
   <div class="container">
   
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-sm-12">
 		<% if flash[:alert] %>
 		  <div class="alert alert-danger" role="alert">
 		     <%= flash[:alert] %>
@@ -25,20 +28,19 @@
 		<% end %>  
 		<% if flash[:notice] %>
 		  <div class="alert alert-success" role="alert">
-		    <%= flash[:notice] %>
+		    <%= simple_format( flash[:notice] ) %>
 		  </div>
 		<% end %>
         <div id="spinner">
-			<!-- %= image_tag "spinner.gif", width: 30 % -->
-                   <div class="alert alert-warning" role="alert">
-                     <i class="glyphicon glyphicon-repeat"></i>
+		  <div class="alert alert-warning" role="alert">
+               <%= image_tag "spinner.gif", width: 30 %>                   
 		      &nbsp; wait...     
-                   </div>
+          </div>  
 		</div>        
       </div>    
     </div>
     <div class="row">   
-      <div class="col-xs-8">
+      <div class="col-sm-8">
 		<% if session[:reset_user_id] and @current_user = User.find_by_id( session[:reset_user_id] )%>  
 		  <div id="authentication_dialogue_js" style="display:block" >
 		    <%= render "authenticate/ur_secrets" %>
@@ -47,42 +49,41 @@
 		  <div id="authentication_dialogue_js"></div>
 		<% end %>     		 
       </div>
-      <div class="col-xs-4 text-right">
+      <div class="col-sm-4 text-right">
 	    <% if session[:reset_user_id] and @current_user = User.find_by_id( session[:reset_user_id] )%>  
 	    <% else %>  
 	      <div id="authentication_launchpad">
 	        <%= render "authenticate/launchpad" %>
 	      </div>
-	      <br>
 	    <% end %>
       </div>      
     </div>
     
     <div class="row">    
-      <div id="application" class="col-xs-12">    
+      <div id="application" class="col-sm-12">    
         <%= yield %>
       </div>     
     </div>
     
-    <div class="row" style="margin-top:100px">
-      <div class="col-md-12">
+    <div class="row" >
+      <div class="col-sm-12" style="color: #0F0F0F; margin-top:20px">
 		  <% if ( @current_user and @current_user.admin? ) %>
 			  <div class="cleardiv" id="version"> <small>
 			    Application <%= controller.controller_name %> / <%= controller.action_name %> 
 			    Ruby <%= RUBY_VERSION%> Rails <%= Rails.version %> <%= Rails.env %> 
-			    user <%= @current_user.username if @current_user %> 
+			    Site <%= ZiteActiveRecord.site? %> 
+			    User <%= @current_user.username if @current_user %> 
 		 <br> <br>
 			  </small> </div>
 		  <% else %>
-			  <div class="cleardiv" id="version"> <small>
-		      <%= RUBY_VERSION%> <%= Rails.version %> <%= Rails.env[0] %> 
+			  <div class="cleardiv" id="version" style="color:white"	> <small>
+		      <%= RUBY_VERSION%> <%= Rails.version %> <%= Rails.env[0] %> <%= ZiteActiveRecord.site? %> <%= Time.now %>
 			  </small> </div>  	  
 		  <% end %>      
       </div>
     </div>
     
   </div>
-
 
 </body>
 </html>

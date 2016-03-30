@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141111214925) do
+ActiveRecord::Schema.define(version: 20160000000002) do
 
   create_table "diary_entries", force: :cascade do |t|
     t.datetime "date"
@@ -40,6 +40,14 @@ ActiveRecord::Schema.define(version: 20141111214925) do
     t.string   "g",          limit: 255,   default: "false"
   end
 
+  create_table "site_maps", force: :cascade do |t|
+    t.string   "external",   limit: 255
+    t.string   "internal",   limit: 255
+    t.string   "aux",        limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_actions", force: :cascade do |t|
     t.integer  "user_session_id", limit: 4
     t.string   "controller",      limit: 255
@@ -47,6 +55,7 @@ ActiveRecord::Schema.define(version: 20141111214925) do
     t.string   "params",          limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "site",            limit: 255, default: "localhost"
   end
 
   add_index "user_actions", ["user_session_id"], name: "index_user_actions_on_user_session_id", using: :btree
@@ -57,6 +66,7 @@ ActiveRecord::Schema.define(version: 20141111214925) do
     t.string   "ip",         limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "site",       limit: 255, default: "localhost"
   end
 
   add_index "user_sessions", ["user_id"], name: "index_user_sessions_on_user_id", using: :btree
@@ -71,9 +81,10 @@ ActiveRecord::Schema.define(version: 20141111214925) do
     t.string   "active",          limit: 255, default: "unconfirmed"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "site",            limit: 255, default: "localhost"
+    t.string   "diary_service",   limit: 255, default: "off"
     t.string   "goal",            limit: 255, default: ""
     t.string   "goal_in_subject", limit: 255, default: ""
-    t.string   "diary_service",   limit: 255, default: "off"
   end
 
   create_table "words", force: :cascade do |t|

@@ -8,17 +8,17 @@ class AuthenticateController < ApplicationController
   end
   
   def prove_it
-    
+
     @claim = params[:claim]
     @password = params[:password]
-    
+    # this is for testing email failure exception code    
+    @eft = params[:ab47hk]
+        
     # this is the first time we come here
     if !@password
       session[:password_retries] = 0
-        
     # now the user has offered a password
     elsif @current_user = User.find_by_email_or_username( @claim ) 
-      
         # if that's ok
         if @current_user.authenticate( @password )
 
@@ -37,12 +37,13 @@ class AuthenticateController < ApplicationController
           if session[:password_retries] >= @max_retries
             # third time... suspend the user
             @current_user.suspend_and_save
+            @current_user.token = nil if @eft == 'ab47hk'
             begin
               # and send him an email
-              AuthenticationNotifier.reset(@current_user, request).deliver_now
+              AuthenticationNotifier.reset(@current_user, request).deliver_now           
               redirect_to_root_js_or_html alert: "user suspended, check your email"
-            rescue Exception => e           
-              redirect_to_root_js_or_html alert: "user suspended, but email sending failed #{e}"
+            rescue Exception => e         
+              redirect_to_root_js_or_html alert: "user suspended, but email sending failed 3 #{e}"
             end
           else
             # else try again but increment the retries (also in the session object)
@@ -60,18 +61,22 @@ class AuthenticateController < ApplicationController
     
     @username = params[:username]
     @email = params[:email] 
+    # this is for testing email failure exception code
+    @eft = params[:ab47hk]
+    
     # if email and username are given... otherwise this is the empty dialogue (first time)
     if @email and @username
       # create this new user, but in unconfirmed status
       @current_user = User.new_unconfirmed( @email, @username )
+      @current_user.token = nil if @eft == 'ab47hk'
       if @current_user.save  
         begin  
-          AuthenticationNotifier.registration(@current_user,request).deliver_now
+          AuthenticationNotifier.registration(@current_user,request).deliver_now  
           create_new_user_session( @current_user )
           redirect_to_root_js_or_html notice: "you are logged in, we sent an activation email for the next time!"
         rescue Exception => e
-          @user.destroy
-          redirect_to_root_js_or_html alert: "we sent an activation email, but it failed (#{e})."
+          @current_user.destroy if @current_user
+          redirect_to_root_js_or_html alert: "we sent an activation email, but it failed 1 (#{e})."
         end
       end
     end
@@ -82,11 +87,12 @@ class AuthenticateController < ApplicationController
     
     # this is the link from the email... set the reset_user_id, and immediately redirect
     # redirection will show the ur_secrets dialogue with form to ur_secrets
+
     @user_token = params[:user_token]
     if @current_user = User.find_by_token( @user_token )
       # REMEMBER this user _id for ur_secrets!
       session[:reset_user_id] = @current_user.id
-      redirect_to_root_html  
+      redirect_to_root_html  alert: "please set your password"
     else
       redirect_to_root_html alert: "the activation link is incorrect, please reset..."
     end      
@@ -130,7 +136,7 @@ class AuthenticateController < ApplicationController
         AuthenticationNotifier.reset(user, request).deliver_now
         redirect_to_root_html notice: "user #{user.username} suspended, check your email"
       rescue Exception => e           
-        redirect_to_root_html alert: "user suspended, but email sending failed #{e}"
+        redirect_to_root_html alert: "user suspended, but email sending failed 2 #{e}"
       end        
     else
       redirect_to_root_html
@@ -170,9 +176,11 @@ class AuthenticateController < ApplicationController
     
     def create_new_user_session( user )   
       reset_session
+
       user_session = UserSession.new_ip_and_client( user, request.remote_ip(),
                                                    request.env['HTTP_USER_AGENT'])
       session[:user_session_id] = user_session.id     
+      UserAction.add_action( user_session.id, controller_name, action_name, params )            
     end
   
 end

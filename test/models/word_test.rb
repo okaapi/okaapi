@@ -3,6 +3,7 @@ require 'test_helper'
 class WordTest < ActiveSupport::TestCase
   
   setup do
+    ZiteActiveRecord.site( 'testsite45A67' )
     @user_arnaud = users( :arnaud )
     @user_francois = users( :francois )   
     Word.all.each do |w|

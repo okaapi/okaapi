@@ -11,19 +11,22 @@ Rails.application.routes.draw do
     
   # these should only be available to administrators...
   scope module: 'admin' do  
+  
+    # for authentication
     resources :users
-    get 'users/:id/role_change/:role' => 'users#role_change', as: 'role_change'    
+    get 'users/:id/role_change/:role' => 'users#role_change', as: 'role_change'
     resources :user_actions
-    resources :user_sessions   
+    resources :user_sessions  
+    resources :site_maps  
+
+    # for administration 
     resources :words
     resources :okaapis  
     resources :diary_entries      
     post 'okaapis/upload'
     post 'diary_entries/upload'      
   end  
-  
-
-
+ 
   get 'diary/calendar', as: "calendar"
   get 'diary/send_diary_email', as: "send_diary_email"
   get 'diary/send_all_diary_emails/:token' => 'diary#send_all_diary_emails', as: "send_all_diary_emails"
@@ -51,6 +54,6 @@ Rails.application.routes.draw do
 
 
   
-  root "application#index", as: "root"
+  root "okaapi#index", as: "root"
 
 end

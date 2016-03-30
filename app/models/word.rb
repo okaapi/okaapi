@@ -1,6 +1,6 @@
 class Word < ActiveRecord::Base
   validates :user_id, :presence => true
-  validate :id_valid  
+  validate :id_valid
    
   def self.unarchived_terms_not_person_for_user( user_id, terms = nil  )
     

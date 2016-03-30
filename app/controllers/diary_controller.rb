@@ -61,31 +61,37 @@ class DiaryController < ApplicationController
   end
   
   def show_entry
-    @day = params[:day]
-    @weekday = params[:weekday]
-    @month = params[:month]
-    @year = params[:year]    
-    @week = params[:week]
-    @entry = DiaryEntry.entry_for_day( @current_user.id, 
-                                @day, @month, @year )
-    @entry = @entry.force_encoding("UTF-8") if @entry
-    @divid = '#show_diary_entry' + @week.to_s
+    if @current_user
+      @day = params[:day]
+      @weekday = params[:weekday]
+      @month = params[:month]
+      @year = params[:year]    
+      @week = params[:week]
+      @entry = DiaryEntry.entry_for_day( @current_user.id, 
+                                  @day, @month, @year )
+      @entry = @entry.force_encoding("UTF-8") if @entry
+      @divid = '#show_diary_entry' + @week.to_s
+    else
+      redirect_to who_are_u_path
+    end
   end
   
   def update_entry
-    @day = params[:day]
-    @month = params[:month]
-    @year = params[:year]  
-    @weekday = params[:weekday]
-    @week = params[:week]    
-    @divid = '#show_diary_entry' + @week.to_s    
-    @entry = params[:entry]
-    
+  
     if @current_user
+      @day = params[:day]
+      @month = params[:month]
+      @year = params[:year]  
+      @weekday = params[:weekday]
+      @week = params[:week]    
+      @divid = '#show_diary_entry' + @week.to_s    
+      @entry = params[:entry]    
       DiaryEntry.replace_entry_for_day( @current_user.id, 
-                                  @day, @month, @year, @entry )      
-    end                 
-    redirect_to calendar_path( month: @month, year: @year )
+                                  @day, @month, @year, @entry )                       
+      redirect_to calendar_path( month: @month, year: @year )
+    else
+      redirect_to who_are_u_path
+    end    
   end  
   
   def turn_off_diary_emails
@@ -94,7 +100,9 @@ class DiaryController < ApplicationController
       @current_user.diary_service = "off"
       @current_user.save!(validate: false)
       redirect_to :back, notice: "daily reminders turned off"
-    end
+    else
+      redirect_to who_are_u_path
+    end       
     
   end
 
@@ -108,7 +116,9 @@ class DiaryController < ApplicationController
       DiaryReminder.send_diary_reminder( @current_user.email, @current_user.goal_in_subject,
                                          Time.now ).deliver_now
       redirect_to :back, notice: "daily reminders sent to  #{@current_user.email}"
-    end
+    else
+      redirect_to who_are_u_path
+    end   
     
   end
   

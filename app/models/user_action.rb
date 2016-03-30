@@ -1,5 +1,5 @@
 
-  class UserAction < ActiveRecord::Base
+  class UserAction < ZiteActiveRecord
     PARAMS_CLIP = 63
     belongs_to :user_session
     validates :user_session_id, :presence => true  
@@ -14,6 +14,9 @@
       parameters.delete(:action)
       parameters.delete(:controller)      
       parameters.delete(:password) if parameters[:password]      
+      parameters.delete(:password_confirmation) if parameters[:password_confirmation]            
+      parameters.delete(:authenticity_token)
+      parameters.delete(:utf8)
       parameters[:filename] = p[:file].original_filename if p[:file]
       user_action.params = parameters.to_s[0..PARAMS_CLIP]   
       user_action.save

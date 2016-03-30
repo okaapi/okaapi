@@ -25,16 +25,6 @@
   <%= @user.active %>
 </p>
 
-<p>
-  <strong>Goal:</strong>
-  <%= @user.goal %>
-</p>
-
-<p>
-  <strong>Goal in subject:</strong>
-  <%= @user.goal_in_subject %>
-</p>
-
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
 
@@ -47,8 +37,8 @@
 	                     session %> </a></h2>
 	  
 	  <tiny>
-	    <% session.user_actions.each do |action| %>
-	      <%= action.controller %>#<%= action.action %> &nbsp; <%= action.params %><br />
+	    <% session.user_actions.reverse.each do |action| %>
+	      <%= action.created_at%> &nbsp; &nbsp; <%= action.controller %>#<%= action.action %> &nbsp; <%= action.params %><br />
 	    <% end %>    
 	  </tiny>
 	       

@@ -1,9 +1,8 @@
 require 'test_helper'
 
-
 class OkaapiMailer < ActionMailer::Base
   def self.get_okaapis
-    [ { time: Time.now, from: 'wido@menhardt.com', 
+    [ { time: Time.now, from: 'wido@mmm.com', 
           content: 'content 1', subject: 'red green blue' },
       { time: Time.now + 1000, from: 'john_alternate@menhardt.com', 
           content: 'content 2', subject: 'Red blue purple' },
@@ -15,23 +14,19 @@ end
 class OkaapiControllerTest < ActionController::TestCase
   
   setup do
-    @wido = User.find_by_username('wido')
-    @user_session = UserSession.find_by_client('MyClient')
-    @user_session.user_id = @wido.id
-    @user_session.save!
+	ZiteActiveRecord.site( 'testsite45A67' )
+    request.host = 'testhost45A67'	    
+    login_4_test
     
     Okaapi.all.each do |o|
-      o.user_id = @wido.id
+      o.user_id = @current_user.id
       o.save!
     end 
     Word.all.each do |o|
-      o.user_id = @wido.id
+      o.user_id = @current_user.id
       o.save!
     end     
-    @not_java = ! Rails.configuration.use_javascript
-  end
-  def login
-    @controller.session[:user_session_id] = @user_session.id
+
   end
   
   test "receive okaapis" do 
@@ -45,7 +40,7 @@ class OkaapiControllerTest < ActionController::TestCase
   end
   
   test "should get termcloud" do
-    login
+    
     get :termcloud
     assert_response :success    
     assert_not_nil assigns(:current_user)
@@ -56,34 +51,39 @@ class OkaapiControllerTest < ActionController::TestCase
 
   end
   
+
   test "should get termdetail" do
-    login    
-    if ! @not_java
-      xhr :get, :term_detail, word_id: words(:blue).id
-      assert_select_jquery :html, '#term_detail_dialogue' do    
-        assert_select 'button a', 1
-      end 
-    else
-      get :term_detail, word_id: words(:blue).id
-      assert_response :success
-      assert_select '#term_detail_dialogue' do    
-        assert_select 'button a', 1
-      end 
+        
+    [true,false].each do |java|                 
+        Rails.configuration.use_javascript = java
+        @not_java = ! Rails.configuration.use_javascript        
+	    if ! @not_java
+	      xhr :get, :term_detail, word_id: words(:blue).id
+	      assert_select_jquery :html, '#term_detail_dialogue' do    
+	        assert_select 'button a', 1
+	      end 
+	    else
+	      get :term_detail, word_id: words(:blue).id
+	      assert_response :success
+	      assert_select '#term_detail_dialogue' do    
+	        assert_select 'button a', 1
+	      end 
+	    end
     end
     
   end
   
   test "show content" do
-    login
+    
     @id = Okaapi.first
     get :show_okaapi_content, id: @id.id
     assert_response :success 
     assert_select '#application', /text two/
   end
   
-
+ 
   test "show people" do
-    login
+    
     get :people
     
     assert_select ".person", 2 
@@ -92,7 +92,7 @@ class OkaapiControllerTest < ActionController::TestCase
   end
   
   test "show mindmap" do
-    login
+    
     get :mindmap
     assert_select ".mindmap_cluster span a", /blue/ 
     assert_select ".mindmap_cluster span a", /petrol/
@@ -101,7 +101,7 @@ class OkaapiControllerTest < ActionController::TestCase
   end
   
   test "show mindmap limits" do
-    login
+    
     get :mindmap, drilldown: ['red']
     assert_select ".mindmap_cluster span a", /blue/ 
     assert_select ".mindmap_cluster span a", /violet/
@@ -111,7 +111,7 @@ class OkaapiControllerTest < ActionController::TestCase
   
   test "toggle person" do
     @request.env['HTTP_REFERER'] = 'http://test.com'
-    login
+    
     assert_equal  words(:blue).person, "false"
     get :toggle_person, id: words(:blue).id
     assert_redirected_to :back
@@ -120,7 +120,7 @@ class OkaapiControllerTest < ActionController::TestCase
   
   test "priority up" do
     @request.env['HTTP_REFERER'] = 'http://test.com'
-    login
+    
     assert_equal  words(:blue).priority, 0
     get :priority, id: words(:blue).id, increment: 1
     assert_equal Word.find( words(:blue).id ).priority, 1
@@ -128,7 +128,7 @@ class OkaapiControllerTest < ActionController::TestCase
   
   test "priority down" do
     @request.env['HTTP_REFERER'] = 'http://test.com'
-    login
+    
     assert_equal  words(:blue).priority, 0
     get :priority, id: words(:blue).id, increment: -1
     assert_equal Word.find( words(:blue).id ).priority, 0
@@ -136,7 +136,7 @@ class OkaapiControllerTest < ActionController::TestCase
   
   test "archive" do
     @request.env['HTTP_REFERER'] = 'http://test.com'
-    login
+    
     assert_equal  words(:blue).archived, 'false'
     get :archive_word, id: words(:blue).id
     assert_not_equal Word.find( words(:blue).id ).archived, 'false'
@@ -144,7 +144,7 @@ class OkaapiControllerTest < ActionController::TestCase
 
   test "undo archive" do
     @request.env['HTTP_REFERER'] = 'http://test.com'
-    login
+    
     assert_equal  words(:archived).archived, 'true'
     get :undo_archive_word
     assert_equal Word.find( words(:archived).id ).archived, 'false'
@@ -152,7 +152,7 @@ class OkaapiControllerTest < ActionController::TestCase
   
   test "archive okaapi" do
     @request.env['HTTP_REFERER'] = 'http://test.com'
-    login
+    
     assert_equal  okaapis(:okaapi_one).archived, 'false'
     get :archive_okaapi, id: okaapis(:okaapi_one).id
     assert_not_equal Okaapi.find( okaapis(:okaapi_one).id ).archived, 'false'
@@ -160,10 +160,12 @@ class OkaapiControllerTest < ActionController::TestCase
 
   test "undo archive okaapi" do
     @request.env['HTTP_REFERER'] = 'http://test.com'
-    login
+    
     assert_not_equal  okaapis(:okaapi_five).archived, 'false'
     get :undo_archive_okaapi
     assert_equal Okaapi.find( okaapis(:okaapi_five).id ).archived, 'false'
   end  
   
+
+   
 end

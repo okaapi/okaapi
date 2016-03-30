@@ -1,9 +1,9 @@
 require 'securerandom'
 
-  class User < ActiveRecord::Base
+  class User < ZiteActiveRecord
   
-    validates :username, presence: true, uniqueness: true
-    validates :email, presence: true, uniqueness: true, email: true   
+    validates :username, presence: true, uniqueness: { scope: :site }
+    validates :email, presence: true, uniqueness: { scope: :site }, email: true   
     validates :password, length: { minimum: 3 }
     has_secure_password
     has_many :user_sessions, dependent: :destroy
@@ -41,6 +41,12 @@ require 'securerandom'
     
     def admin?
       ( role == 'admin')
+    end
+    def editor?
+      ( role == 'admin' or role == 'editor' )
+    end
+    def user?
+       ( role == 'admin' or role == 'editor' or role == 'user')
     end
 
     def change_role( new_role )

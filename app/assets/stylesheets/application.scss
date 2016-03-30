@@ -1,14 +1,9 @@
-
 @import "bootstrap-sprockets";
 @import "bootstrap";
- 
-/* generic application stuff */
-#spinner {
-	display: none }
 
-body {
-  margin-top: 10px;
-}
+@import "okaapi";
+ 
+#spinner { display: none }
 
 a {
  color: #777777;
@@ -19,23 +14,14 @@ a {
  &:hover {
   color: blue;
   text-decoration: none;
-  }       
+  }    
+ &:visited {
+  color: #777777;
+  text-decoration: none;
+  }        
 }
 
-td { padding: 0px 20px 0px 0px }
-
-.background-decoration {
-  background-image: image-url('hatshoes.jpg');
-  background-position: center top ;  
-  background-size: cover;  
-  background-color: white;  
-  a {
-    color: white;
-    &:visited {
-      color: white;
-    }    
-  }
-}
+td { padding: 0px } 
 
 .login_decor {
   background-color:white; 
@@ -43,90 +29,60 @@ td { padding: 0px 20px 0px 0px }
   box-shadow: 0px 0px 20px 10px rgba(255,255,255,1.0);
 }
 
-.jumbotron {
-  padding: 5%;
-  width:100%;
+body {
+  background-color: #fff;
+  color: #333;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 13px;
 }
 
-/* mindmap stuff */
+#notice {
+  color: green;
+}
 
-#termcloud, #people, #mindmap {
-  padding: 30px;
-  .term_color_1 a { color: grey }
-  .term_color_2 a { font-weight: bold; color: teal }  
-  .term_color_3 a { font-weight: bold; color: red }    
-  .term_size_1 a { font-size: 14px; }
-  .term_size_2 a { font-size: 18px; }
-  .term_size_3 a { font-size: 22px; }
-  .term_size_4 a { font-size: 26px; }
-  .term_size_5 a { font-size: 30px; }
-  .person a { 
-    color: #777777; 
-    font-weight: bold; 
-    font-size: 24px; 
-    text-decoration: none;
-    &:visited {
-      color: #777777;
-      text-decoration: none;
-    }     
-    &:hover {
-      color: #555555;
-      text-decoration: none;
-    }
-  }        
-  
-  .mindmap_drilldown_term a {
-    float: left;
-    padding: 0px;
-	margin: 10px;
-	font-weight: bold; color: grey; font-size: 20px;
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px;
+    margin-bottom: 0px;
+    background-color: #c00;
+    color: #fff;
   }
-	
-  .mindmap_cluster {
-	//border: 1px solid red; 
-	float: left; 
-	padding: 0px;
-	margin: 10px;
-	text-align: center;
-    background: rgba(230,220,230,1.0);
-    box-shadow: 0px 0px 20px 5px rgba(230,220,230,1.0);
-	border-radius: 20px;
+  ul li {
+    font-size: 12px;
+    list-style: square;
   }
-  
-  #term_detail_dialogue { 
-    display:none;
-    padding: 20px }    
 }
 
-#calendar {
-  padding-top: 20px;
+.spinner {
+  display: inline-block;
+  opacity: 0;
+  width: 0;
+
+  -webkit-transition: opacity 0.25s, width 0.25s;
+  -moz-transition: opacity 0.25s, width 0.25s;
+  -o-transition: opacity 0.25s, width 0.25s;
+  transition: opacity 0.25s, width 0.25s;
 }
 
-#calendar {
-  table tr td {
-    vertical-align: top;
-    .diary_entry {
-      border: 0px blue solid;
-      padding: 0px 0px 0px 5px;
-      overflow-x: auto;	
-      color: red;
-      word-wrap: break-word;
-      #white-space: nowrap; 
-    
-      min-height: 100px; 
-      max-height: 200px; 
-      overflow-y: hidden; 
-      text-overflow: ellipsis;
-    }
+.admin-table {
+  th { padding: 0px 10px 0px 0px;
   }
-  #show_diary_entry1 { display:none; padding: 20px }
-  #show_diary_entry2 { display:none; padding: 20px }    
-  #show_diary_entry3 { display:none; padding: 20px }    
-  #show_diary_entry4 { display:none; padding: 20px }    
-  #show_diary_entry5 { display:none; padding: 20px }  
-  #show_diary_entry6 { display:none; padding: 20px }  
-}
-
-
-
-
+  td { padding: 0px 5px 0px 0px;
+  }  
+}  

@@ -1,5 +1,5 @@
 
-  class UserSession < ActiveRecord::Base
+  class UserSession < ZiteActiveRecord
     
     SESSION_TIMEOUT = 60 * 60 * 4 # 4 hours
     attr_accessor :idle
@@ -35,17 +35,14 @@
     def self.recover( session_id )
       
       return if !session_id
-      
-      begin
-        session = self.find( session_id )
-        if session.idle < SESSION_TIMEOUT
-          session.id_will_change!  # make random attribute dirty
-          session.save             # to update updated_at
-          return session         
-        else
-          return nil
-        end
-      rescue ActiveRecord::RecordNotFound
+
+      u = self.where( id: session_id )
+      usession = u[0] ? u[0] : nil       
+      if usession and usession.idle < SESSION_TIMEOUT
+        usession.id_will_change!  # make random attribute dirty
+        usession.save             # to update updated_at
+        return usession         
+      else
         return nil
       end
             
