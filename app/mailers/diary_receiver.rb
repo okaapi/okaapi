@@ -13,6 +13,7 @@ class DiaryReceiver
     pop_server = @@smtp_settings[:pop_server]
     user_name = @@smtp_settings[:user_name]
     password = @@smtp_settings[:password]
+
     Mail.defaults do
       retriever_method :pop3, :address    => pop_server,
                           :port       => 995,
@@ -27,21 +28,16 @@ class DiaryReceiver
     
       from = message.from[0]
       subject = message.subject
-      puts "++++++++++++++++++++++++++++++"
-      puts subject
       if message.multipart? 
         if message.text_part
-          body = message.text_part.body
+          body = message.text_part.body.decoded
         else
           body = "multipart but no text_part"
         end
       else 
         body = message.body.decoded
       end
-      puts body
-       
-      body = message.body.decoded
-            
+                   
       t = Time.parse( subject ) rescue Time.now
       entry = { day: t.day, month: t.month, year: t.year, date: t, from: from }   
       
@@ -62,8 +58,9 @@ class DiaryReceiver
       
       body.gsub!(/\n>/, '')      
       entry[:content] = body || "" 
-            
+      
       entries << entry
+
 
     end 
   
