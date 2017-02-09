@@ -9,15 +9,25 @@ module Admin
 	  # GET /user_sessions.json
 	  def index	    
 	    if params[:by_name]
-        @user_sessions = UserSession.all.order( user_id: :asc )
+          @user_sessions = UserSession.all.order( user_id: :asc )
 	    elsif params[:by_ip]
-        @user_sessions = UserSession.all.order( ip: :asc )          
+          @user_sessions = UserSession.all.order( ip: :asc )          
 	    else
-        @user_sessions = UserSession.all.order( updated_at: :desc )
+          @user_sessions = UserSession.all.order( updated_at: :desc )
 	    end
 	    	    
 	  end
 	
+	  def stats
+	    user_actions = UserAction.all
+		actions = {}
+        user_actions.each do |u_action|
+		  h = u_action.action # + ' ' + u_action.params
+		  actions[h] = ( actions[h] ||= 0 ) + 1
+		end
+		@stats = actions.sort_by { |action, f| -f }
+	  end
+	  
 	  # GET /user_sessions/1
 	  # GET /user_sessions/1.json
 	  def show

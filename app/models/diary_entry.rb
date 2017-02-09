@@ -26,6 +26,28 @@ class DiaryEntry < ActiveRecord::Base
     return entry
   end
   
+  def self.nohash( entry )
+    if entry
+      # #keyword xxx yyy## -> keyword: xxx yyy;
+	  entry = entry.gsub(/#(\S+?)\s+?((?:(?!#).)*?)\s*?##/mi,'\1: \2; ')
+      # remove all #..## occurances
+	  entry = entry.gsub(/#(?:(?!#).)*?##/mi, '')
+	  # #keyword xxx  -> keyword: xxx;	  
+	  entry = entry.gsub(/#(\S+?)\s+?(\S*)/,'\1: \2; ')
+	  # compact all white spaces!
+	  entry.squish
+	else
+	  nil
+	end 
+  end
+  
+  def self.tags( entry )
+    if entry
+      tags = entry.scan(/#(\S+?)\s+?((?:(?!#).)*?)\s*?##/mi)
+      tags += entry.gsub(/#(?:(?!#).)*?##/mi, '').scan(/#(\S+?)\s+?(\S*)/)
+	end
+  end
+  
   def self.replace_entry_for_day( user_id, day, month, year, content )
     entries = DiaryEntry.where.not( archived: "true").where( user_id: user_id, day: day, month: month, year: year )
                 order( updated_at: :desc)

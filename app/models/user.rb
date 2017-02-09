@@ -9,15 +9,15 @@ require 'securerandom'
     has_many :user_sessions, dependent: :destroy
     
     def self.find_by_email_or_alternate( email )
-      user = User.find_by_email( email )
+      user = User.where( email: email ).first
       if !user 
-        user = User.find_by_alternate_email( email )
+        user = User.where( alternate_email: email ).first
       end  
       return user
     end
     
     def self.find_by_email_or_username( claim )
-      User.find_by_email( claim ) || User.find_by_username( claim )
+      User.where( email: claim ).first || User.where( username: claim ).first
     end
   
     def self.new_unconfirmed( email, username )

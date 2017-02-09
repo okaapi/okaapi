@@ -1,7 +1,8 @@
 
-<% if entry %>
 
-  <div style="padding:2px;">
+<div style="padding:2px;	  width: 50%; float: left;">
+  
+  <% if entry %>
 	<div class="panel panel-default" >
 	  <div class="panel-heading">	    
 	    <%= link_to show_diary_entry_path( weekday: day, day: entry[:day], month: month, year: year,
@@ -10,11 +11,16 @@
 	      <%= day %> <%= entry[:day] %>
 	    <% end %>
 	  </div>
-	  <div class="panel-body diary_entry">
+	  <div class="panel-body diary_entry" 
+	      style="
+				 overflow-x: hidden;
+				 word-wrap: break-word">
         <%= simple_format entry[:content].strip if entry[:content] %>	        
 	  </div>
 	</div>
-  </div>  
+  <% end %>
+  
+</div>  
 
-<% end %>
+
 

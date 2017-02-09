@@ -9,7 +9,7 @@ class AuthenticationNotifierTest < ActionMailer::TestCase
 	  
   test "registration" do
     @current_user = users( :john )
-    @request = ActionController::TestRequest.new
+    @request = ActionController::TestRequest.create
     @path = @request.protocol + @request.host + ':' + @request.port.to_s +
               '/_from_mail/' +  @current_user.token               
     mail = AuthenticationNotifier.registration( @current_user, @request )
@@ -21,7 +21,7 @@ class AuthenticationNotifierTest < ActionMailer::TestCase
   end
   test "reset" do
     @current_user = users( :john )
-    @request = ActionController::TestRequest.new
+    @request = ActionController::TestRequest.create
     @path = @request.protocol + @request.host + ':' + @request.port.to_s +
               '/_from_mail/' +  @current_user.token    
     mail = AuthenticationNotifier.reset( @current_user, @request )

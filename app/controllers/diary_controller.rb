@@ -2,6 +2,10 @@ class DiaryController < ApplicationController
    
   def calendar
     
+	if !@current_user
+	  redirect_to who_are_u_path
+	end
+	
     @month = params[:month].to_i if params[:month]
     @year = params[:year].to_i if params[:year]
     # set the date to the last available diary entry for this user
@@ -36,6 +40,7 @@ class DiaryController < ApplicationController
     #   first_day = saturday(6) -> first week monday = -4
     #   first_day = sunday(0) -> first week monday = -5
     day_in_month = 2 - first_day
+	tags = []
     @calendar = {}
     (1..6).each do |week|
       thisweek = {}
@@ -44,20 +49,20 @@ class DiaryController < ApplicationController
           thisweek[day] = nil
         else 
           if @current_user 
-            thisweek[day] = { day: day_in_month, 
-                              content: DiaryEntry.entry_for_day( @current_user.id, day_in_month, @month, @year ) }
-          elsif rand > 0.5
-            thisweek[day] = { day: day_in_month, 
-                   content: "your diary entry here!" }
+		    entry = DiaryEntry.entry_for_day( @current_user.id, day_in_month, @month, @year )
+			entry_tags = DiaryEntry.tags(entry)
+			tags += entry_tags if entry_tags
+            thisweek[day] = { day: day_in_month,  content: DiaryEntry.nohash( entry ) }
           else
             thisweek[day] = { day: day_in_month }
           end
-        end
+        end		
         day_in_month += 1
       end
       @calendar[week]= thisweek
-    end         
-        
+    end      
+	@tag_list = []
+	tags.each { |t| @tag_list += [t[0]] }
   end
   
   def show_entry
@@ -71,6 +76,9 @@ class DiaryController < ApplicationController
                                   @day, @month, @year )
       @entry = @entry.force_encoding("UTF-8") if @entry
       @divid = '#show_diary_entry' + @week.to_s
+	  tags = DiaryEntry.tags(@entry)
+	  @tag_list = []
+	  tags.each { |t| @tag_list += [t[0]] }
     else
       redirect_to who_are_u_path
     end
@@ -94,12 +102,32 @@ class DiaryController < ApplicationController
     end    
   end  
   
+  def show_tag
+    if @current_user
+	  @tag = params[:tag]
+      @month = params[:month]
+      @year = params[:year]    
+	  @events = []
+      (1..31).each do |day_in_month|
+		entry = DiaryEntry.entry_for_day( @current_user.id, day_in_month, @month, @year )
+		entry_tags = DiaryEntry.tags(entry)
+		entry_tags.each do |t|
+		  if t[0] == @tag
+			@events << [ day_in_month, t[1] ]
+	      end
+		end	if entry_tags
+      end		
+    else
+      redirect_to who_are_u_path
+    end
+  end  
+  
   def turn_off_diary_emails
     
     if @current_user
       @current_user.diary_service = "off"
       @current_user.save!(validate: false)
-      redirect_to :back, notice: "daily reminders turned off"
+	  redirect_back fallback_location: root_path, notice: "daily reminders turned off"
     else
       redirect_to who_are_u_path
     end       
@@ -115,7 +143,7 @@ class DiaryController < ApplicationController
       end
       DiaryReminder.send_diary_reminder( @current_user.email, @current_user.goal_in_subject,
                                          Time.now ).deliver_now
-      redirect_to :back, notice: "daily reminders sent to  #{@current_user.email}"
+      redirect_back fallback_location: root_path, notice: "daily reminders sent to  #{@current_user.email}"
     else
       redirect_to who_are_u_path
     end   
@@ -134,7 +162,7 @@ class DiaryController < ApplicationController
 
     n = Postoffice.receive_diary_emails    
 
-    redirect_to :back, notice: "received #{n} diary emails"
+    redirect_back fallback_location: root_path, notice: "received #{n} diary emails"
 
   end
   

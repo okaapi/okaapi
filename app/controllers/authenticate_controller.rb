@@ -10,10 +10,10 @@ class AuthenticateController < ApplicationController
   def prove_it
 
     @claim = params[:claim]
-    @password = params[:password]
+    @password = params[:kennwort]
     # this is for testing email failure exception code    
     @eft = params[:ab47hk]
-        
+	
     # this is the first time we come here
     if !@password
       session[:password_retries] = 0
@@ -112,8 +112,8 @@ class AuthenticateController < ApplicationController
        
     # set the new password
     if @current_user = User.find_by_id( user_id )
-      @current_user.password = params[:password]
-      @current_user.password_confirmation = params[:password_confirmation] 
+      @current_user.password = params[:kennwort]
+      @current_user.password_confirmation = params[:confirmation] 
       @current_user.active = 'confirmed'
       @current_user.token = nil
       if @current_user.save # succes!

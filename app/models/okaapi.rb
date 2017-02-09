@@ -51,8 +51,8 @@ class Okaapi < ActiveRecord::Base
   end
     
   def self.mindmap( user_id, mindlimits = [] )
-    okaapis = Okaapi.unarchived_for_user( user_id ) 
-       
+    okaapis = Okaapi.unarchived_for_user( user_id ).dup
+	
     mindlimits.each do |limit|
       okaapis.delete_if{ |o| ! (o.subject.downcase.index( limit )) }
     end

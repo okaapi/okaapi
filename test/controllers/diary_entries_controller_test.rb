@@ -28,9 +28,9 @@ class DiaryEntriesControllerTest < ActionController::TestCase
   test "should create diary_entry" do
     
     assert_difference('DiaryEntry.count') do
-      post :create, diary_entry: { archived: @diary_entry.archived, day: @diary_entry.day, 
+      post :create, params: { diary_entry: { archived: @diary_entry.archived, day: @diary_entry.day, 
         content: @diary_entry.content, month: @diary_entry.month, user_id: @diary_entry.user_id, 
-        year: @diary_entry.year }
+        year: @diary_entry.year } }
     end
 
     assert_redirected_to diary_entry_path(assigns(:diary_entry))
@@ -38,28 +38,28 @@ class DiaryEntriesControllerTest < ActionController::TestCase
 
   test "should show diary_entry" do
     
-    get :show, id: @diary_entry
+    get :show, params: { id: @diary_entry }
     assert_response :success
   end
 
   test "should get edit" do
     
-    get :edit, id: @diary_entry
+    get :edit, params: { id: @diary_entry }
     assert_response :success
   end
 
   test "should update diary_entry" do
     
-    patch :update, id: @diary_entry, diary_entry: { archived: @diary_entry.archived, 
+    patch :update, params: { id: @diary_entry, diary_entry: { archived: @diary_entry.archived, 
       day: @diary_entry.day, content: @diary_entry.content, month: @diary_entry.month, 
-      user_id: @diary_entry.user_id, year: @diary_entry.year }
+      user_id: @diary_entry.user_id, year: @diary_entry.year } }
     assert_redirected_to diary_entry_path(assigns(:diary_entry))
   end
 
   test "should destroy diary_entry" do
     
     assert_difference('DiaryEntry.count', -1) do
-      delete :destroy, id: @diary_entry
+      delete :destroy, params: { id: @diary_entry }
     end
 
     assert_redirected_to diary_entries_path

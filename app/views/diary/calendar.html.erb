@@ -1,7 +1,17 @@
 
 <%= render "header" %>
- 
+
+
 <% if @current_user %>
+
+<br>
+<% @tag_list.uniq.each do |tag| %>
+  <%= link_to show_diary_tag_path( month: @month, year: @year, tag: tag ),
+	        remote: js? do %>
+	#<%= tag %>
+  <% end %>
+<% end if @tag_list %>
+
 <div id="calendar">
   <div class="container" >   
       

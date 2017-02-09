@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get 'users/:id/role_change/:role' => 'users#role_change', as: 'role_change'
     resources :user_actions
     resources :user_sessions  
+    get 'stats' => 'user_sessions#stats', as: 'stats'
     resources :site_maps  
 
     # for administration 
@@ -33,6 +34,7 @@ Rails.application.routes.draw do
   get 'diary/receive_diary_emails', as: "receive_diary_emails"  
   get 'diary/turn_off_diary_emails', as: "turn_off_diary_emails"
   get 'diary/show_entry', as: "show_diary_entry"
+  get 'diary/show_tag', as: "show_diary_tag"  
   post 'diary/update_entry', as: "update_diary_entry"  
   
   get 'okaapi/termcloud', as: "termcloud"

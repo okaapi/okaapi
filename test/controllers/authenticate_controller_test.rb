@@ -22,7 +22,7 @@ class AuthenticateControllerTest < ActionController::TestCase
 	      assert_select '.form-horizontal'
 	      assert_select '.control-label', /username\/email/ 
 	    else
-	      xhr :get, :who_are_u
+		  get :who_are_u, xhr: true
 	      assert_response :success
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.form-horizontal'
@@ -32,19 +32,18 @@ class AuthenticateControllerTest < ActionController::TestCase
 	end
   end
   
-
-
+  
   test "should post prove_it_with_user_name" do
     [true,false].each do |java|                 
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript  
 	    if @not_java
-	      post :prove_it, claim: "some weird name"
+	      post :prove_it, params: { claim: "some weird name" }		  
 	      assert_response :success
 	      assert_select '.alert-info', /some weird name/
 	      assert_select '.control-label', /password/           
 	    else
-	      xhr :post, :prove_it, claim: "some weird name"
+	      post :prove_it, xhr: true, params: { claim: "some weird name" }
 	      assert_response :success       
 	      assert_select_jquery :html, '#authentication_dialogue_js' do    
 	        assert_select '.alert-info', /some weird name/
@@ -54,37 +53,36 @@ class AuthenticateControllerTest < ActionController::TestCase
 	    assert_equal @controller.session[:password_retries], 0  
 	end
   end
-  
- 
+    
   test "prove_it with correct password" do
     [true,false].each do |java|                 
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript    
 	    @controller.session[:password_retries] = 0
 	    if @not_java  
-	      post :prove_it, claim: "wido", password: "secret"
+	      post :prove_it, params: { claim: "wido", kennwort: "secret" }
 	    else
-	      xhr :post, :prove_it, claim: "wido", password: "secret"
+	      post :prove_it, xhr: true, params: { claim: "wido", kennwort: "secret" }
 	    end
 	    assert_root_path_redirect    
 	    assert_equal flash[:notice], 'wido logged in'
-	    assert_equal @controller.session[:password_retries], nil
+	    assert_nil @controller.session[:password_retries]
 	    assert_equal @controller.session[:user_session_id], UserSession.last.id   
     end	    
   end
-     
+     	 
   test "prove_it with incorrect password" do
     [true,false].each do |java|                 
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript    
 	    @controller.session[:password_retries] = 0
 	    if @not_java
-	      post :prove_it, claim: "wido", password: "secret1"
+	      post :prove_it, params: { claim: "wido", kennwort: "secret1" }
 	      assert_response :success   
 	      assert_select '.form-horizontal' 
 	      assert_select '.control-label', /password/   
 	    else 
-	      xhr :post, :prove_it, claim: "wido", password: "secret1"
+	      post :prove_it, xhr: true, params: { claim: "wido", kennwort: "secret1" }
 	      assert_response :success 
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.form-horizontal' 
@@ -97,15 +95,16 @@ class AuthenticateControllerTest < ActionController::TestCase
     end	    
   end  
   
+
   test "prove_it with incorrect password too often" do
     [true,false].each do |java|                 
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript      
 	    @controller.session[:password_retries] = 3
 	    if @not_java
-	      post :prove_it, claim: "wido", password: "secret1"
+	      post :prove_it, params: { claim: "wido", kennwort: "secret1" }
 	    else 
-	      xhr :post, :prove_it, claim: "wido", password: "secret1"
+	      post :prove_it, xhr: true, params: { claim: "wido", kennwort: "secret1" }
 	    end   
 	    assert_root_path_redirect    
 	    assert_equal flash[:alert], 'user suspended, check your email'      
@@ -120,23 +119,24 @@ class AuthenticateControllerTest < ActionController::TestCase
         @not_java = ! Rails.configuration.use_javascript     
 	    @controller.session[:password_retries] = 3
 	    if @not_java
-	      post :prove_it, claim: "wido", password: "secret1", ab47hk: "ab47hk"
+	      post :prove_it, params: { claim: "wido", kennwort: "secret1", ab47hk: "ab47hk" }
 	    else 
-	      xhr :post, :prove_it, claim: "wido", password: "secret1", ab47hk: "ab47hk"
+	      post :prove_it, xhr: true, params: { claim: "wido", kennwort: "secret1", ab47hk: "ab47hk" }
 	    end   
 	    assert_root_path_redirect  
 	    assert flash[:alert] =~ /sending failed/
     end	    
   end
-          
+         
+
   test "prove_it with suspended user" do
     [true,false].each do |java|                 
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript     
 	    if @not_java
-	      post :prove_it, claim: "john", password: "secret"    
+	      post :prove_it, params: { claim: "john", kennwort: "secret"   } 
 	    else 
-	      xhr :post, :prove_it, claim: "john", password: "secret"
+	      post :prove_it, xhr: true, params: { claim: "john", kennwort: "secret" }
 	    end
 	    assert_root_path_redirect    
 	    assert_equal flash[:alert], 'user is not activated, check your email' 
@@ -148,15 +148,15 @@ class AuthenticateControllerTest < ActionController::TestCase
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript     
 	    if @not_java
-	      post :prove_it, claim: "john1", password: "secret" 
+	      post :prove_it, params: { claim: "john1", kennwort: "secret", test: 'jkl' }
 	    else 
-	      xhr :post, :prove_it, claim: "john1", password: "secret"
+	      post :prove_it, xhr: true, params: { claim: "john1", kennwort: "secret", test: 'jkl'}
 	    end
-	    assert_root_path_redirect    
-	    assert_equal flash[:alert], "username/password is incorrect!" 
+		assert_equal flash[:alert], "username/password is incorrect!" 
+	    assert_root_path_redirect     
     end	    
   end    
-
+ 
   test "about_urself" do
     [true,false].each do |java|                 
         Rails.configuration.use_javascript = java
@@ -168,7 +168,7 @@ class AuthenticateControllerTest < ActionController::TestCase
 	      assert_select '.control-label', /username/  
 	      assert_select '.control-label', /email/        
 	    else  
-	      xhr :post, :about_urself
+	      post :about_urself, xhr: true
 	      assert_response :success
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.form-horizontal'       
@@ -189,26 +189,26 @@ class AuthenticateControllerTest < ActionController::TestCase
         jim.destroy if jim
               
 	    if @not_java
-	      post :about_urself, username: "jim", email: "jim@gmail.com"
+	      post :about_urself, params: { username: "jim", email: "jim@gmail.com" }
 	    else  
-	      xhr :post, :about_urself, username: "jim", email: "jim@gmail.com"       
+	      post :about_urself, xhr: true, params: { username: "jim", email: "jim@gmail.com" }
 	    end
 	    assert_root_path_redirect  
-	    assert_equal flash[:alert], nil
+	    assert_nil flash[:alert]
 	    assert_equal flash[:notice], 
 	        "you are logged in, we sent an activation email for the next time!"
 	    assert_equal @controller.session[:user_session_id], UserSession.last.id   
     end	        
   end
-         
+         	 
   test "about_urself correct credentials email send failure" do
     [true,false].each do |java|                 
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript      
 	    if @not_java
-	      post :about_urself, username: "jim", email: "jim@gmail.com", ab47hk: "ab47hk"
+	      post :about_urself, params: { username: "jim", email: "jim@gmail.com", ab47hk: "ab47hk" }
 	    else  
-	      xhr :post, :about_urself, username: "jim", email: "jim@gmail.com", ab47hk: "ab47hk"    
+	      post :about_urself, xhr: true, params: { username: "jim", email: "jim@gmail.com", ab47hk: "ab47hk"     }
 	    end
 	    assert_root_path_redirect  
 	    assert flash[:alert] =~ /it failed/
@@ -220,13 +220,13 @@ class AuthenticateControllerTest < ActionController::TestCase
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript      
 	    if @not_java
-	      post :about_urself, username: "john", email: "john@mmm.com"
+	      post :about_urself, params: { username: "john", email: "john@mmm.com" }
 	      assert_response :success
 	      assert_select '.form-horizontal' 
 	      assert_select '.control-label', /username/           
 	      assert_select '.control-label', /email/  
 	    else      
-	      xhr :post, :about_urself, username: "john", email: "john@mmm.com"
+	      post :about_urself, xhr: true, params: { username: "john", email: "john@mmm.com" }
 	      assert_response :success
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.form-horizontal' 
@@ -239,19 +239,19 @@ class AuthenticateControllerTest < ActionController::TestCase
 	    assert_equal assigns(:current_user).errors.full_messages[1], "Email has already been taken"
     end	    
   end
-  
+  	  
   test "about_urself incorrect credentials - bad email" do
     [true,false].each do |java|                 
         Rails.configuration.use_javasc=endript = java
         @not_java = ! Rails.configuration.use_javascript      
 	    if @not_java
-	      post :about_urself, username: "john17", email: "whatever"
+	      post :about_urself, params: { username: "john17", email: "whatever" }
 	      assert_response :success
 	      assert_select '.form-horizontal' 
 	      assert_select '.control-label', /username/           
 	      assert_select '.control-label', /email/  
 	    else      
-	      xhr :post, :about_urself, username: "john17", email: "whatever"
+	      post :about_urself, xhr: true, params: {  username: "john17", email: "whatever" }
 	      assert_response :success
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.form-horizontal' 
@@ -264,7 +264,6 @@ class AuthenticateControllerTest < ActionController::TestCase
     end	    
   end  
   
-
   test "about_urself dublicate credentials other site" do
     [true,false].each do |java|                 
         Rails.configuration.use_javascript = java
@@ -276,43 +275,35 @@ class AuthenticateControllerTest < ActionController::TestCase
            
 	    request.host = 'othersite45A67'
 	    if @not_java
-	      post :about_urself, username: "john", email: "john@mmm.com"
+	      post :about_urself, params: { username: "john", email: "john@mmm.com" }
 	    else      
-	      xhr :post, :about_urself, username: "john", email: "john@mmm.com"       
+	      post :about_urself, xhr: true, params: { username: "john", email: "john@mmm.com" }
 	    end
 	    assert_equal assigns(:current_user).errors.count, 0
     end	    
   end  
-  
-  
+    
   test "from_mail get without token" do    
-    get :from_mail, user_token: 'bla'
+    get :from_mail, params: { user_token: 'bla' }
     assert_redirected_to root_path   
     assert_equal flash[:alert], "the activation link is incorrect, please reset..."  
   end
   
   test "from_mail get with correct token" do
-    get :from_mail, user_token: 'john_token'       
+    get :from_mail, params: { user_token: 'john_token' }
+    assert_equal flash[:alert], "please set your password"			
     assert_redirected_to root_path   
     assert_equal session[:reset_user_id], @user_john.id
   end   
 
   test "from_mail get with incorrect token" do
-    [true,false].each do |java|                 
-        Rails.configuration.use_javascript = java
-        @not_java = ! Rails.configuration.use_javascript     
-	    @user_john.token = 'a1b2'
-	    @user_john.password = @user_john.password_confirmation = 'bla'
-	    @user_john.save!
-	    if @not_java
-	      get :from_mail, user_token: 'john_token' 
-	    else
-	      xhr :post, :from_mail, user_token: 'john_token' 
-	    end
-	    assert_redirected_to root_path   
-	    assert_equal flash[:alert], "the activation link is incorrect, please reset..."
-	    assert_nil session[:reset_user_id]
-    end	    
+    @user_john.token = 'a1b2'
+    @user_john.password = @user_john.password_confirmation = 'bla'
+    @user_john.save!
+    get :from_mail, params: { user_token: 'john_token' }
+    assert_equal flash[:alert], "the activation link is incorrect, please reset..."		
+	assert_nil session[:reset_user_id]			
+	assert_redirected_to root_path   	       
   end  
 
   test "ur_secrets from mail post without anything" do
@@ -328,7 +319,7 @@ class AuthenticateControllerTest < ActionController::TestCase
 	      assert_select '.control-label', /password/ 
 	      assert_select '.control-label', /confirmation/     
 	    else
-	      xhr :post, :ur_secrets 
+	      post :ur_secrets, xhr: true
 	      assert_response :success
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.form-horizontal'
@@ -349,13 +340,13 @@ class AuthenticateControllerTest < ActionController::TestCase
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript       
 	    if @not_java
-	      post :ur_secrets, user_id: @user_john.id  
+	      post :ur_secrets, params: { user_id: @user_john.id }
 	      assert_response :success
 	      assert_select '.form-horizontal'
 	      assert_select '.control-label', /password/ 
 	      assert_select '.control-label', /confirmation/      
 	    else
-	      xhr :post, :ur_secrets, user_id: @user_john.id 
+	      post :ur_secrets, xhr: true, params: { user_id: @user_john.id }
 	      assert_response :success      
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.form-horizontal'
@@ -369,15 +360,15 @@ class AuthenticateControllerTest < ActionController::TestCase
 	    assert_nil session[:reset_user_id]
     end	    
   end 
-  
+    
   test "ur_secrets post with incorrect user_id" do
     [true,false].each do |java|                 
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript       
 	    if @not_java
-	      post :ur_secrets, user_id: 27
+	      post :ur_secrets, params: { user_id: 27 }
 	    else
-	      xhr :post, :ur_secrets, user_id: 27
+	      post :ur_secrets, xhr: true, params: { user_id: 27 }
 	    end
 	    assert_root_path_redirect    
 	    assert_equal flash[:alert], "leopards in the bushes!"
@@ -390,13 +381,15 @@ class AuthenticateControllerTest < ActionController::TestCase
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript       
 	    if @not_java
-	      post :ur_secrets, user_id: @user_john.id, password: 'secret', password_confirmation: 'secret2' 
+	      post :ur_secrets, 
+		         params: { user_id: @user_john.id, kennwort: 'secret', confirmation: 'secret2' }
 	      assert_response :success 
 	      assert_select '.form-horizontal'    
 	      assert_select '.control-label', /password/ 
 	      assert_select '.control-label', /confirmation/         
 	    else
-	      xhr :post, :ur_secrets, user_id: @user_john.id, password: 'secret', password_confirmation: 'secret2' 
+	      post :ur_secrets, xhr: true, 
+		         params: { user_id: @user_john.id, kennwort: 'secret', confirmation: 'secret2' }
 	      assert_response :success      
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.form-horizontal'
@@ -415,27 +408,27 @@ class AuthenticateControllerTest < ActionController::TestCase
         Rails.configuration.use_javascript = java
         @not_java = ! Rails.configuration.use_javascript       
 	    if @not_java
-	      post :ur_secrets, user_id: @user_john.id, password: 'secret', password_confirmation: 'secret' 
+	      post :ur_secrets, params: { user_id: @user_john.id, kennwort: 'secret', confirmation: 'secret' }
 	    else
-	      xhr :post, :ur_secrets, user_id: @user_john.id, 
-	                        password: 'secret', password_confirmation: 'secret'   
+	      post :ur_secrets, xhr: true, 
+		           params: { user_id: @user_john.id, kennwort: 'secret', confirmation: 'secret' }
 	    end
 	    assert_root_path_redirect
 	    assert_equal flash[:notice], "password set!"         
 	    assert_equal @controller.session[:user_session_id], UserSession.last.id 
     end	    
   end 
-  
+
   test "reset_mail" do
     @controller.session[:user_session_id] = @session_wido.id
-    get :reset_mail, claim: "wido"
+    get :reset_mail, params: { claim: "wido" }
     assert_redirected_to root_path
     assert_equal flash[:notice], "user wido suspended, check your email" 
     assert_nil @controller.session[:user_session_id]      
   end
   
   test "reset_mail invalid" do
-    get :reset_mail, claim: "wido1"  
+    get :reset_mail, params: { claim: "wido1" }
     assert_redirected_to root_path
     assert_nil @controller.session[:user_session_id]        
   end  
@@ -449,7 +442,6 @@ class AuthenticateControllerTest < ActionController::TestCase
     assert_nil @controller.session[:user_session_id]
     assert_nil session[:reset_user_id]
   end
-
 
   private
   
