@@ -1,0 +1,28 @@
+
+<div id="term_detail_dialogue" class="jumbotron" >
+	<button class="btn btn-primary btn-lg">
+	  #<%= @tag %> <%= monthname( @month ) %> <%= @year %> 
+	</button>
+	<button type="button" class="close">
+	  <%= link_to 'X', calendar_path( month: @month, year: @year ) %>
+	</button>
+	<p></p>	
+	
+	<table>
+	  <% @events.each do |event| %>	
+	    <tr>
+          <td><%= event[0] %> <%= monthname( @month ) %> </td>
+		  <td>
+		    <%= link_to show_diary_entry_path( day: event[0], 
+	                                     month: @month, year: @year ),
+	             remote: js? do %>
+	          &nbsp; <%= event[1] %>
+	        <% end %>	  
+		  </td>
+		</tr>
+	  <% end %>
+	</table>
+</div>
+
+
+
