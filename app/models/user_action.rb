@@ -1,6 +1,6 @@
 
   class UserAction < ZiteActiveRecord
-    PARAMS_CLIP = 63
+    PARAMS_CLIP = 16
     belongs_to :user_session
     validates :user_session_id, :presence => true  
     validate :user_session_id_valid
@@ -18,7 +18,10 @@
       parameters.delete(:authenticity_token)
       parameters.delete(:utf8)
       parameters[:filename] = p[:file].original_filename if p[:file]
-      user_action.params = parameters.to_s[0..PARAMS_CLIP]   
+	  user_action.params = ""
+	  parameters.each do |k,v|
+	    user_action.params += "#{k}: #{v[0..PARAMS_CLIP]}; "
+	  end
       user_action.save
     end    
       

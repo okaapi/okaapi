@@ -33,9 +33,10 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
         @not_java = ! Rails.configuration.use_javascript
                 
 	    # user comes to the website and sees the "login" link
-	    get_via_redirect "/"
+	    get "/"
 	    assert_response :success
 	    assert_select '#authentication_launchpad a', 'login'
+
 	
 	    # clicks the login link and gets username entry field
 	    if @not_java
@@ -43,21 +44,21 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	      assert_response :success
 	      assert_select '.control-label', /username\/email/ 
 	    else
-	      xhr :get, "/_who_are_u"
+	      get "/_who_are_u", xhr: true
 	      assert_response :success
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.control-label', /username\/email/ 
 	      end
 	    end
-	
+			
 	    # enters username and gets password entry field with username legend
 	    if @not_java
-	      post "/_prove_it", claim: "arnaud"
+	      post "/_prove_it", params: { claim: "arnaud" }
 	      assert_response :success
 	      assert_select '.alert-info', /arnaud/
 	      assert_select '.control-label', /password/            
 	    else
-	      xhr :post, "/_prove_it", claim: "arnaud"
+	      post "/_prove_it", xhr: true, params: { claim: "arnaud" }
 	      assert_response :success       
 	      assert_select_jquery :html, '#authentication_dialogue_js' do    
 	        assert_select '.alert-info', /arnaud/
@@ -67,14 +68,13 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	      
 	    # enters correct password and gets logged in and session is created
 	    if @not_java  
-	      post "/_prove_it", claim: "arnaud", password: "secret"
+	      post "/_prove_it", params: { claim: "arnaud", kennwort: "secret" }
 	    else
-	      xhr :post, "/_prove_it", claim: "arnaud", password: "secret"
+	      post "/_prove_it", xhr: true, params: { claim: "arnaud", kennwort: "secret" }
 	    end
 	    assert_root_path_redirect    
 	    assert_equal flash[:notice], 'arnaud logged in'
-	          
-	    
+	          	    
 	    # user refreshes and username is displayed
 	    get "/"
 	    assert_response :success
@@ -85,14 +85,15 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	    assert_redirected_to root_path
 	      
 	    # refreshes and confirms that user is not shown as logged in
-	    get_via_redirect "/"
+	    get "/"
 	    assert_response :success
 	    assert_select '#authentication_launchpad', /login/ 
-           
+		
     end
           
   end
-  
+
+
   #
   #  user logs in and out with correct credentials
   #  (error handling is tested in the controller)
@@ -105,9 +106,10 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
         @not_java = ! Rails.configuration.use_javascript
   
 	    # user comes to the website and sees the "login" link
-	    get_via_redirect "/"
+	    get "/"
 	    assert_response :success
 	    assert_select '#authentication_launchpad a', 'login'
+		
 	
 	    # clicks the login link and gets username entry field
 	    if @not_java
@@ -115,21 +117,21 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	      assert_response :success
 	      assert_select '.control-label', /username\/email/ 
 	    else
-	      xhr :get, "/_who_are_u"
+	      get "/_who_are_u", xhr: true
 	      assert_response :success
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.control-label', /username\/email/ 
 	      end
 	    end
-	
+  	
 	    # enters username and gets password entry field with username legend
 	    if @not_java
-	      post "/_prove_it", claim: "arnaud"
+	      post "/_prove_it", params: { claim: "arnaud" }
 	      assert_response :success
 	      assert_select '.alert-info', /arnaud/
 	      assert_select '.control-label', /password/            
 	    else
-	      xhr :post, "/_prove_it", claim: "arnaud"
+	      post "/_prove_it", xhr: true, params: { claim: "arnaud" }
 	      assert_response :success       
 	      assert_select_jquery :html, '#authentication_dialogue_js' do    
 	        assert_select '.alert-info', /arnaud/
@@ -137,15 +139,15 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	      end      
 	    end
 	      
+
 	    # enters correct password and gets logged in and session is created
 	    if @not_java  
-	      post "/_prove_it", claim: "arnaud", password: "secret"
+	      post "/_prove_it", params: { claim: "arnaud", kennwort: "secret" }
 	    else
-	      xhr :post, "/_prove_it", claim: "arnaud", password: "secret"
+	      post "/_prove_it", xhr: true, params: { claim: "arnaud", kennwort: "secret" }
 	    end
 	    assert_root_path_redirect    
 	    assert_equal flash[:notice], 'arnaud logged in'
-	          
 	    
 	    # user refreshes and username is displayed
 	    get "/"
@@ -157,14 +159,14 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	    assert_redirected_to root_path
 	      
 	    # refreshes and confirms that user is not shown as logged in
-	    get_via_redirect "/"
+	    get "/"
 	    assert_response :success
 	    assert_select '#authentication_launchpad', /login/
 	     
     end 
                 
   end
-
+ 
   #
   #  user registers, gets an email, and is also logged in
   #  (error handling is tested in the controller)
@@ -188,19 +190,19 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	      assert_select '.control-label', /username/
 	      assert_select '.control-label', /email/        
 	    else  
-	      xhr :post, "/_about_urself"
+	      post "/_about_urself", xhr: true
 	      assert_response :success
 	      assert_select_jquery :html, '#authentication_dialogue_js' do
 	        assert_select '.control-label', /username/
 	        assert_select '.control-label', /email/           
 	      end
 	    end
-	
+	 
 	    # user enters proper username / email combo
 	    if @not_java
-	      post "/_about_urself", username: "jim", email: "jim@gmail.com"
+	      post "/_about_urself", params: { username: "jim", email: "jim@gmail.com" }
 	    else  
-	      xhr :post, "/_about_urself", username: "jim", email: "jim@gmail.com"       
+	      post "/_about_urself", xhr: true, params: { username: "jim", email: "jim@gmail.com" }
 	    end
 	    assert_root_path_redirect  
 	    assert_equal flash[:notice], 
@@ -215,8 +217,10 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	    get "/"
 	    assert_response :success
 	    assert_select '#authentication_launchpad', /jim/    
-    end
+	  
+	end
   end
+
 
   #
   #  user clicks on the link in the email sets password, and gets logged in
@@ -224,7 +228,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
   #  
   test "setting password" do
     
-    [true,false].each do |java|
+    [true, false].each do |java|
            
         User.find_by_username( 'francois' ).update_attribute( :token, 'francois_token' )     
         
@@ -232,34 +236,35 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
         @not_java = ! Rails.configuration.use_javascript
         
 	    # user clicks on the link
-	    get "/_from_mail", user_token: 'francois_token'       
+	    get "/_from_mail", params: { user_token: 'francois_token' }
 	    assert_redirected_to root_path
 	    	
 	    # refreshes and still gets the correct user displayed
-	    get_via_redirect "/"
+	    get "/"
 	    assert_response :success
 	    assert_select '.control-label', /password/    	    
 	    assert_select '.alert-info', /francois/
 	    
 	    # sets the password and gets logged in
 	    if @not_java
-	      post "/_ur_secrets", user_id: @user_francois.id, password: 'secret', password_confirmation: 'secret' 
+	      post "/_ur_secrets", params: { user_id: @user_francois.id, 
+		                           kennwort: 'secret', confirmation: 'secret' }
 	    else
-	      xhr :post, "/_ur_secrets", user_id: @user_francois.id, 
-	                        password: 'secret', password_confirmation: 'secret'   
+	      post "/_ur_secrets", xhr: true, params: { user_id: @user_francois.id, 
+	                               kennwort: 'secret', confirmation: 'secret' }
 	    end
-	    
-	    assert_root_path_redirect
+    	assert_root_path_redirect
+		
 	    assert_equal flash[:notice], "password set!"         
 	
 	    # user refreshes and username is displayed
 	    get "/"
 	    assert_response :success
 	    assert_select '#authentication_launchpad', /francois/
-	    
+ 	    
 	end
   end
-  
+
 
   private
      

@@ -32,31 +32,33 @@ module Admin
 	 
 	  test "should create word" do
 	    assert_difference('Word.count') do
-	      post :create, term: { archived: @word.archived, person: @word.person, 
-	        priority: @word.priority, term: @word.term, user_id: @word.user_id }
+	      post :create, params: { term: { archived: @word.archived, person: @word.person, 
+	        priority: @word.priority, term: @word.term, user_id: @word.user_id } }
 	    end
 	    assert_redirected_to word_path(assigns(:word))
 	  end
 	  
 	
 	  test "should show word" do
-	    get :show, id: @word
+	    get :show, params: { id: @word }
 	    assert_response :success
 	  end
 	
 	  test "should get edit" do
-	    get :edit, id: @word
+	    get :edit, params: { id: @word }
 	    assert_response :success
 	  end
 	
 	  test "should update word" do
-	    patch :update, id: @word, term: { archived: @word.archived, person: @word.person, priority: @word.priority, term: @word.term, user_id: @word.user_id }
+	    patch :update, params: { id: @word, 
+		   term: { archived: @word.archived, person: @word.person, 
+		           priority: @word.priority, term: @word.term, user_id: @word.user_id } }
 	    assert_redirected_to word_path(assigns(:word))
 	  end
 	
 	  test "should destroy word" do
 	    assert_difference('Word.count', -1) do
-	      delete :destroy, id: @word
+	      delete :destroy, params: { id: @word }
 	    end
 	
 	    assert_redirected_to words_path

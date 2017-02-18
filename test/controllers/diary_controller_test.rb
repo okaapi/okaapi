@@ -25,15 +25,21 @@ class DiaryControllerTest < ActionController::TestCase
   
   setup do
 	ZiteActiveRecord.site( 'testsite45A67' )
-    request.host = 'testhost45A67'	    
-    login_4_test    
-     
+    request.host = 'testhost45A67'	     
+    login_4_test 
     DiaryEntry.all.each do |o|
       o.user_id = @current_user.id
       o.save!
     end 
   end
 
+  test "when not logged in" do
+    # we're logged in so we need to clear that
+    session[:user_session_id] = nil
+    get :calendar
+    assert_redirected_to who_are_u_path 
+  end
+  
   test "receive diary entries" do 
     @request.env['HTTP_REFERER'] = 'http://testhost45A67/'
     # wido@menhardt.com and john@menhardt.com are known users, so they get added,
@@ -82,14 +88,14 @@ class DiaryControllerTest < ActionController::TestCase
   
   test "display November 2014" do
     
-    get :calendar, month: 11, year: 2014
+    get :calendar, params: { month: 11, year: 2014 }
     assert_response :success  
     assert_equal assigns(:calendar)[1][7][:day], 2
   end
   
   test "display November 2021" do
     
-    get :calendar, month: 9, year: 2014
+    get :calendar, params: { month: 9, year: 2014 }
     assert_response :success  
     assert_equal assigns(:calendar)[1][7][:day], 7
   end

@@ -13,7 +13,11 @@
       return t
     end 
     
-    private
+    def duration
+	  updated_at - created_at
+	end	
+    
+	private
   
     def id_valid
       if user_id
@@ -47,6 +51,6 @@
       end
             
     end             
-   
+	
   end
 

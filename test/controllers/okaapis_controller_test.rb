@@ -29,9 +29,9 @@ require 'test_helper'
 	  test "should create okaapi" do
 	    
 	    assert_difference('Okaapi.count') do
-	      post :create, okaapi: { archived: @okaapi.archived, content: @okaapi.content, 
+	      post :create, params: { okaapi: { archived: @okaapi.archived, content: @okaapi.content, 
 	        from: @okaapi.from, reminder: @okaapi.reminder, subject: @okaapi.subject, 
-	        time: @okaapi.time, user_id: @okaapi.user_id }
+	        time: @okaapi.time, user_id: @okaapi.user_id } }
 	    end
 	
 	    assert_redirected_to okaapi_path(assigns(:okaapi))
@@ -39,28 +39,28 @@ require 'test_helper'
 	
 	  test "should show okaapi" do
 	    
-	    get :show, id: @okaapi
+	    get :show, params: { id: @okaapi }
 	    assert_response :success
 	  end
 	
 	  test "should get edit" do
 	    
-	    get :edit, id: @okaapi
+	    get :edit, params: { id: @okaapi }
 	    assert_response :success
 	  end
 	
 	  test "should update okaapi" do
 	    
-	    patch :update, id: @okaapi, okaapi: { archived: @okaapi.archived, content: @okaapi.content, 
+	    patch :update, params: { id: @okaapi, okaapi: { archived: @okaapi.archived, content: @okaapi.content, 
 	       from: @okaapi.from, reminder: @okaapi.reminder, subject: @okaapi.subject, 
-	       time: @okaapi.time, user_id: @okaapi.user_id }
+	       time: @okaapi.time, user_id: @okaapi.user_id } }
 	    assert_redirected_to okaapi_path(assigns(:okaapi))
 	  end
 	
 	  test "should destroy okaapi" do
 	    
 	    assert_difference('Okaapi.count', -1) do
-	      delete :destroy, id: @okaapi
+	      delete :destroy, params: { id: @okaapi }
 	    end
 	
 	    assert_redirected_to okaapis_path
