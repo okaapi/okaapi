@@ -78,7 +78,7 @@ class DiaryController < ApplicationController
       @divid = '#show_diary_entry' + @week.to_s
 	  tags = DiaryEntry.tags(@entry)
 	  @tag_list = []
-	  tags.each { |t| @tag_list += [t[0]] }
+	  tags.each { |t| @tag_list += [t[0]] } if tags
     else
       redirect_to who_are_u_path
     end
