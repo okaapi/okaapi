@@ -1,4 +1,4 @@
-class DiaryReceiver
+class DiaryReceiver < ActionMailer::Base
   
   # this gets executed once when the class is initialized
   mail_config = (YAML::load( File.open(Rails.root + 'config/diary_mail.yml') ))
