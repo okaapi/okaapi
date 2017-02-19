@@ -20,22 +20,22 @@
       <div class="row"> 
         <div class="col-md-3" style="padding:0px;">     
           <%= render partial: "two_days", 
-            locals: { day1: "Monday", entry1: week[1], day2: "Tuesday", entry2: week[2], 
+            locals: { day1: "Mon", entry1: week[1], day2: "Tue", entry2: week[2], 
                       week: i, month: @month, year: @year } %>
         </div>
         <div class="col-md-3" style="padding:0px;">
           <%= render partial: "two_days", 
-            locals: { day1: "Wednesday", entry1: week[3], day2: "Thursday", entry2: week[4], 
+            locals: { day1: "Wed", entry1: week[3], day2: "Thu", entry2: week[4], 
                        week: i, month: @month, year: @year } %>
         </div>      
         <div class="col-md-3" style="padding:0px;">
           <%= render partial: "two_days", 
-            locals: { day1: "Friday", entry1: week[5], day2: "Saturday", entry2: week[6], 
+            locals: { day1: "Fri", entry1: week[5], day2: "Sat", entry2: week[6], 
                        week: i, month: @month, year: @year } %>
         </div> 
         <div class="col-md-3" style="padding:0px;">
           <%= render partial: "two_days", 
-            locals: { day1: "Sunday", entry1: week[7], day2: nil, entry2: nil, 
+            locals: { day1: "Sun", entry1: week[7], day2: nil, entry2: nil, 
                        week: i, month: @month, year: @year} %>        
         </div>  
       </div>               

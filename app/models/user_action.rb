@@ -1,6 +1,6 @@
 
   class UserAction < ZiteActiveRecord
-    PARAMS_CLIP = 16
+    PARAMS_CLIP = 63
     belongs_to :user_session
     validates :user_session_id, :presence => true  
     validate :user_session_id_valid
@@ -21,17 +21,15 @@
 	  user_action.params = ""
 	  parameters.each do |k,v|
 	    user_action.params += "#{k}: #{v[0..PARAMS_CLIP]}; "
-	  end
+	  end 
       user_action.save
     end    
       
     private
     
     def user_session_id_valid
-      begin
-        UserSession.find(user_session_id)
-      rescue
-        errors.add( :user_session_id, "has to be valid")
+      if ! UserSession.where( id: user_session_id ).take
+        errors.add( :user_session_id, "has to be valid" )
       end
     end
     

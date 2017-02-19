@@ -20,7 +20,7 @@
     <% @tag_list.uniq.each do |tag| %>
       <%= link_to show_diary_tag_path( month: @month, year: @year, tag: tag ),
 	        remote: js? do %>
-	    #<%= tag %> <%= monthname( @month ) %> <%= @year %>
-      <% end %><br>
+	    #<%= tag %> 
+      <% end %><%= monthname( @month ) %> <%= @year %><br>
     <% end if @tag_list %>
 </div>
