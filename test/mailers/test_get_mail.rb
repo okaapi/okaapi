@@ -1,7 +1,7 @@
 require "rubygems"
 require 'net/smtp'
 
-require File.dirname(__FILE__) + "/../config/environment" unless defined?(RAILS_ROOT)
+require File.dirname(__FILE__) + "/../../config/environment" unless defined?(RAILS_ROOT)
 
 (1..3).each {puts "."}
 puts "DiaryReminder smtp settings"
@@ -17,7 +17,7 @@ end
 
 (1..3).each {puts "."}
 puts "Diary Reminder ----------------------------------------------------------"
-entries = DiaryReminder.get_diary_entries
+entries = DiaryReceiver.get_diary_entries
 entries.each do |e|
   p e
   (1..2).each {puts "."}

@@ -11,6 +11,10 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
     # not sure why request has to be called first, but it won't work without
     request
     open_session.host! "testhost45A67"
+    if ( Rails.configuration.respond_to? 'page_caching' ) and 
+      Rails.configuration.page_caching 
+      delete_cache_directories_with_content
+    end       
   end
   
   #
@@ -33,10 +37,9 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
         @not_java = ! Rails.configuration.use_javascript
                 
 	    # user comes to the website and sees the "login" link
-	    get "/"
+	    get "/" 
 	    assert_response :success
 	    assert_select '#authentication_launchpad a', 'login'
-
 	
 	    # clicks the login link and gets username entry field
 	    if @not_java
@@ -52,7 +55,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	    end
 			
 	    # enters username and gets password entry field with username legend
-	    if @not_java
+	    if @not_java  
 	      post "/_prove_it", params: { claim: "arnaud" }
 	      assert_response :success
 	      assert_select '.alert-info', /arnaud/
@@ -206,17 +209,17 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	    end
 	    assert_root_path_redirect  
 	    assert_equal flash[:notice], 
-	      "you are logged in, we sent an activation email for the next time!" 
+	      "Please check your email jim@gmail.com (including your SPAM folder) for an email to verify it's you and set your password!" 
 	    
 	    # has email been sent?
 	    assert_equal Rails.configuration.action_mailer.delivery_method, :test
-	    assert_equal ActionMailer::Base.deliveries[0].subject, "Okaapi registration confirmation"
+	    assert_equal ActionMailer::Base.deliveries[0].subject, "Registration information for testhost45A67"
 	    assert_equal ActionMailer::Base.deliveries[0].to[0], "jim@gmail.com"
 	    
 	    # refreshes and confirms that user is shown as logged in
 	    get "/"
 	    assert_response :success
-	    assert_select '#authentication_launchpad', /jim/    
+	    assert_select '#authentication_launchpad a', 'login'
 	  
 	end
   end
@@ -255,7 +258,7 @@ class AuthUserStoriesTest < ActionDispatch::IntegrationTest
 	    end
     	assert_root_path_redirect
 		
-	    assert_equal flash[:notice], "password set!"         
+	    assert_equal flash[:notice], "password set, you are logged in!"         
 	
 	    # user refreshes and username is displayed
 	    get "/"
