@@ -9,7 +9,7 @@
 	<p></p>
 	<%= form_tag update_diary_entry_path do %>
 	  <div class="col-xs-8">
-        <%= text_field_tag :entry, @entry, class: "form-control input-sm" %>
+        <%= text_field_tag :entry, @entry, lines: 2, class: "form-control input-sm" %>
       </div>
       <%= hidden_field_tag :day, @day %>  
       <%= hidden_field_tag :month, @month %> 

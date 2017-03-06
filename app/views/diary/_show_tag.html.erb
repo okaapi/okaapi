@@ -11,12 +11,12 @@
 	<table>
 	  <% @events.each do |event| %>	
 	    <tr>
-          <td><%= event[0] %> <%= monthname( @month ) %> </td>
+          <td><%= event[0] %>&nbsp;<%= monthname( @month ) %>&nbsp; </td>
 		  <td>
 		    <%= link_to show_diary_entry_path( day: event[0], 
 	                                     month: @month, year: @year ),
 	             remote: js? do %>
-	          &nbsp; <%= event[1] %>
+	          <%= truncate( event[1], length: 80 ) %>
 	        <% end %>	  
 		  </td>
 		</tr>
