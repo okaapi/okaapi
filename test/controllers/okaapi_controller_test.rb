@@ -66,9 +66,9 @@ class OkaapiControllerTest < ActionController::TestCase
 		  begin
 	        get :term_detail, params: { word_id: words(:blue).id }
 		  rescue Exception => e
-		    puts "strange message in authenticate_controller_test:"
+		    puts "strange message in okaapi_controller_test:"
 		    puts e		    
-		  end	        
+		  end		   
 	      assert_response :success
 	      assert_select '#term_detail_dialogue' do    
 	        assert_select 'button a', 1
