@@ -4,7 +4,7 @@ class Postoffice
     new_entries = OkaapiMailer.get_okaapis
     n = 0
     new_entries.each do |entry|
-      if user = User.find_by_email_or_alternate( entry[:from] )
+      if user = User.by_email_or_alternate( entry[:from] )
         ok = Okaapi.new( entry )
         ok.user_id = user.id
         ok.save!
@@ -57,7 +57,7 @@ class Postoffice
     new_entries = DiaryReceiver.get_diary_entries 
     n = 0
     new_entries.each do |entry|
-      if user = User.find_by_email_or_alternate( entry[:from] )
+      if user = User.by_email_or_alternate( entry[:from] )
         entry[:user_id] = user.id
         de = DiaryEntry.create( entry )
          de.save!

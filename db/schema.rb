@@ -43,8 +43,8 @@ ActiveRecord::Schema.define(version: 20160000000002) do
     t.string   "external"
     t.string   "internal"
     t.string   "aux"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "user_actions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -52,8 +52,8 @@ ActiveRecord::Schema.define(version: 20160000000002) do
     t.string   "controller"
     t.string   "action"
     t.string   "params"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.string   "site",            default: "localhost"
     t.index ["user_session_id"], name: "index_user_actions_on_user_session_id", using: :btree
   end
@@ -62,8 +62,8 @@ ActiveRecord::Schema.define(version: 20160000000002) do
     t.integer  "user_id"
     t.string   "client"
     t.string   "ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.string   "site",       default: "localhost"
     t.index ["user_id"], name: "index_user_sessions_on_user_id", using: :btree
   end
@@ -76,8 +76,8 @@ ActiveRecord::Schema.define(version: 20160000000002) do
     t.string   "token"
     t.string   "role",            default: "user"
     t.string   "active",          default: "unconfirmed"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.string   "site",            default: "localhost"
     t.string   "diary_service",   default: "off"
     t.string   "goal",            default: ""

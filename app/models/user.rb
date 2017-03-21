@@ -8,17 +8,29 @@ require 'securerandom'
     has_secure_password
     has_many :user_sessions, dependent: :destroy
     
-    def self.find_by_email_or_alternate( email )
-      user = User.where( email: email ).first
+    def self.by_email_or_alternate( email )
+      user = User.where( email: email ).take
       if !user 
-        user = User.where( alternate_email: email ).first
+        user = User.where( alternate_email: email ).take
       end  
       return user
     end
     
-    def self.find_by_email_or_username( claim )
-      User.where( email: claim ).first || User.where( username: claim ).first
+    def self.by_email_or_username( claim )
+      user = User.where( email: claim ).take
+      if !user 
+        user = User.where( username: claim ).take
+      end  
+      return user
     end
+	
+	def self.by_token( token )
+	  User.where( token: token).take
+	end
+	
+	def self.by_id( an_id )
+	  User.where( id: an_id ).take
+	end
   
     def self.new_unconfirmed( email, username )
       user = User.new( email: email, username: username )
@@ -40,7 +52,13 @@ require 'securerandom'
     end
     
     def admin?
-      ( role == 'admin')
+      ( role == 'admin')     
+    end
+    def self.admin_emails
+      admins = User.where( role: 'admin' )
+      emails = []
+      admins.each {|a| emails << a.email }
+      emails
     end
     def editor?
       ( role == 'admin' or role == 'editor' )

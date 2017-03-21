@@ -12,21 +12,17 @@
       t = ( Time.now - ( updated_at or Time.now ) )
       return t
     end 
+	
+	def _user	
+	  # overriding this in because it fails with scope
+	  User.by_id( user_id )
+	end
     
-    def duration
-	  updated_at - created_at
-	end	
-    
-	private
+    private
   
-    def id_valid
-      if user_id
-        begin
-          User.find(user_id)
-        rescue
-          errors.add( :user_id, "has to be valid")
-          false
-        end
+    def id_valid	  
+      if user_id and ! User.by_id(user_id) 
+        errors.add( :user_id, "has to be valid, #{user_id} is not")
       end
     end
     
@@ -51,6 +47,6 @@
       end
             
     end             
-	
+   
   end
 
