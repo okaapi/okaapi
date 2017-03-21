@@ -6,6 +6,11 @@ class AuthFilesCompareTest < ActionDispatch::IntegrationTest
 
   end
 
+  test "message" do
+    puts "AUthFilesCOmpareTest turned off"
+  end
+
+=begin
   test "models" do
     assert FileUtils.compare_file('app/models/user.rb','../zite/app/models/user.rb')
     assert FileUtils.compare_file('app/models/user_action.rb','../zite/app/models/user_action.rb')
@@ -134,5 +139,6 @@ class AuthFilesCompareTest < ActionDispatch::IntegrationTest
     return diff_string
   end
   
+=end
   
 end
