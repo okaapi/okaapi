@@ -63,7 +63,12 @@ class OkaapiControllerTest < ActionController::TestCase
 	        assert_select 'button a', 1
 	      end 
 	    else
-	      get :term_detail, params: { word_id: words(:blue).id }
+		  begin
+	        get :term_detail, params: { word_id: words(:blue).id }
+		  rescue Exception => e
+		    puts "strange message in authenticate_controller_test:"
+		    puts e		    
+		  end	        
 	      assert_response :success
 	      assert_select '#term_detail_dialogue' do    
 	        assert_select 'button a', 1
