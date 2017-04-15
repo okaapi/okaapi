@@ -1,5 +1,6 @@
 #!/bin/bash          
 echo "background script in okaapi/lib"
+echo "executed by user --" $USER "--"
 
 cd /var/rails/okaapi/lib
 #on wien#cd /home/wido/okaapi/lib
@@ -9,10 +10,10 @@ pwd
 /usr/local/bin/ruby okaapi_background.rb
 #on wien#ruby okaapi_background.rb
 
-echo " "
+echo "okaapi_background done"
 
 /usr/local/bin/ruby camera_background.rb
 #on wien#ruby camera_background.rb
 
-echo " "
+echo "camera background done"
 

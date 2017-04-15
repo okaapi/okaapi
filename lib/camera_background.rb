@@ -35,14 +35,16 @@ marray = ['dummy']
 panasonic_index = 0
 dlink_index = 0
 
-p Time.now
-if ( Time.now.min < 15 ) && ( Time.now.hour == 13 )
+puts 
+puts "GETTING CAMERA MAILS at #{Time.now}"
+
+if ( Time.now.hour == 21 )
 
 	directory = File.join( Rails.root , 'public', 'camera')
 	Dir.mkdir directory if ! Dir.exists? directory
 	directory = File.join( Rails.root , 'public', 'camera', engarble( Date.today.to_s ) )
 	Dir.mkdir directory if ! Dir.exists? directory
-		        
+        puts "into directory #{directory}"		        
 	"A======================================================"
 	until marray.count == 0 
 	
