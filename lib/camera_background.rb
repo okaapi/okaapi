@@ -37,8 +37,9 @@ dlink_index = 0
 
 puts 
 puts "GETTING CAMERA MAILS at #{Time.now}"
+puts "conditional disabled!!!"
 
-if ( Time.now.hour == 21 )
+if true#( Time.now.hour == 21 )
 
 	directory = File.join( Rails.root , 'public', 'camera')
 	Dir.mkdir directory if ! Dir.exists? directory
@@ -57,7 +58,7 @@ if ( Time.now.hour == 21 )
 		  #p message.date
 		  puts "++++++++++++++++++++++++++++++++++++++++"
 		  p message.subject  
-		  #puts "++++++++++++++++++++++++++++++++++++++++"
+		  #puts "++++++++++++++++++++++++++++++++++++++++"#filename = 'dlink' + dlink_index.to_s + '.jpg'
 		  p message.text_part.body.decoded
 		  #puts "++++++++++++++++++++++++++++++++++++++++"
 		  #p message.cc  
@@ -69,16 +70,21 @@ if ( Time.now.hour == 21 )
 		  #p message.message_id
 		  message.mark_for_delete = true  
 		  
+		  p message.date
 		  message.attachments.each do | attachment |  
 		    if (attachment.content_type.start_with?('image/'))
 		      if attachment.filename == 'image.jpg'
-	                #panasonic
-		        filename = 'panasonic' + panasonic_index.to_s + '.jpg'
-	                panasonic_index += 1
-	              else
-	                #dlink
-		        filename = 'dlink' + dlink_index.to_s + '.jpg'
-	                dlink_index += 1
+	            #panasonic
+		        #filename = 'panasonic' + panasonic_index.to_s + '.jpg'	
+		        slist = message.subject.split('Image:')
+		        t = slist[1].split('s')
+		        filename = "panasonic#{t[1][0..1]}h#{t[1][2..3]}m#{t[1][4..5]}s.jpg"
+	            panasonic_index += 1
+	          else
+	            #dlink
+		        #filename = 'dlink' + dlink_index.to_s + '.jpg'
+		        filename = "dlink#{message.date.strftime("%Hh%Mm%Ss")}.jpg"
+	            dlink_index += 1
 		      end
 		      puts "saving #{filename}"
 		      begin
