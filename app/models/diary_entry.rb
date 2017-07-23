@@ -26,21 +26,6 @@ class DiaryEntry < ActiveRecord::Base
     return entry
   end
   
-  def self.nohash( entry )
-    if entry
-      # #keyword xxx yyy## -> keyword: xxx yyy;
-	  entry = entry.gsub(/#(\S+?)\s+?((?:(?!#).)*?)\s*?##/mi,'\1: \2; ')
-      # remove all #..## occurances
-	  entry = entry.gsub(/#(?:(?!#).)*?##/mi, '')
-	  # #keyword xxx  -> keyword: xxx;	  
-	  entry = entry.gsub(/#(\S+?)\s+?(\S*)/,'\1: \2; ')
-	  # compact all white spaces!
-	  entry.squish
-	else
-	  nil
-	end 
-  end
-  
   def self.tags( entry )
     if entry
       tags = entry.scan(/#(\S+?)\s+?((?:(?!#).)*?)\s*?##/mi)
