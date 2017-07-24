@@ -1,10 +1,7 @@
 class OkaapiController < ApplicationController
   
   def index
-    #if @current_user and
-    #   Okaapi.unarchived_for_user( @current_user.id ).count == 0
-    #  redirect_to calendar_path
-    #end    
+
   end
     
   def termcloud 
@@ -18,6 +15,7 @@ class OkaapiController < ApplicationController
       redirect_to who_are_u_path
     end    
   end
+  
   def term_detail
     if @current_user 
       @word = Word.find_by_id( params[:word_id] )      
@@ -27,6 +25,7 @@ class OkaapiController < ApplicationController
       redirect_to who_are_u_path
     end
   end
+  
   def update_okaapi
     if @current_user
       @word = Word.find_by_id( params[:word_id] )
@@ -89,7 +88,7 @@ class OkaapiController < ApplicationController
       @word.person = ( @word.person == 'false' ? 'true' : 'false' )
       @word.save  
     end  
-    redirect_back fallback_location: root_path
+    redirect_to action: :term_detail, word_id: @word.id
   end
   def priority
     if @word = Word.find( params[:id] )
@@ -97,14 +96,14 @@ class OkaapiController < ApplicationController
       @word.priority = 0 if @word.priority < 0
       @word.save
     end  
-    redirect_back fallback_location: root_path      
+    redirect_to action: :term_detail, word_id: @word.id     
   end
   def archive_word
     if @word = Word.find( params[:id] )
       @word.archived = Time.now.utc
       @word.save      
     end
-    redirect_back fallback_location: root_path   
+    redirect_to session[:okaapi_mode] ? ( '/okaapi/' + session[:okaapi_mode] ) : root_path
   end
   def undo_archive_word
     if @current_user
@@ -113,14 +112,14 @@ class OkaapiController < ApplicationController
         @word.save
       end
     end
-    redirect_back fallback_location: root_path   
+    redirect_to action: :term_detail, word_id: @word.id  
   end
   def archive_okaapi
     if @okaapi = Okaapi.find( params[:id] )
       @okaapi.archived = Time.now.utc
       @okaapi.save      
     end
-    redirect_back fallback_location: root_path   
+    redirect_to session[:okaapi_mode] ? ( '/okaapi/' + session[:okaapi_mode] ) : root_path
   end
   def undo_archive_okaapi
     if @current_user
@@ -129,7 +128,7 @@ class OkaapiController < ApplicationController
         @okaapi.save
       end
     end
-    redirect_back fallback_location: root_path   
+    redirect_to session[:okaapi_mode] ? ( '/okaapi/' + session[:okaapi_mode] ) : root_path
   end  
   
   def receive_okaapi_emails
