@@ -25,7 +25,7 @@ module DiaryHelper
       
       # #keyword xxx yyy## -> xxx yyy; 
       tags.each_with_index do |tag,i|
-        entry = entry.gsub(/##{tag}((?:(?!#).)*?)\s*?##/mi, "<span style='color:#{colors[i]}'>" + '\1' + "</span>")
+        entry = entry.gsub(/##{tag}((?:(?!#).)*?)\s*?##/mi, "<span style='color:#{colors[i]}'> #{tag}: " + '\1' + "</span>")
       end
       
       ##      # remove all #..## occurances
@@ -33,7 +33,7 @@ module DiaryHelper
 
       # #keyword xxx  -> xxx; 
       tags.each_with_index do |tag,i|
-        entry = entry.gsub(/##{tag}\s+?(\S*)/, "<span style='color:#{colors[i]}'>" + '\1' + "</span>")
+        entry = entry.gsub(/##{tag}\s+?(\S*)/, "<span style='color:#{colors[i]}'>#{tag}: " + '\1' + "</span>")
       end      
 
 	  # compact all white spaces!

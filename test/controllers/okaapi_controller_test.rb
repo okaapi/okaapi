@@ -173,7 +173,7 @@ class OkaapiControllerTest < ActionController::TestCase
     
     assert_equal  okaapis(:okaapi_one).archived, 'false'
     get :archive_okaapi, params: { id: okaapis(:okaapi_one).id }
-	assert_redirected_to 'http://test.com'	
+	assert_redirected_to 'http://testhost45A67/okaapi/term_detail'	
     assert_not_equal Okaapi.find( okaapis(:okaapi_one).id ).archived, 'false'
   end       
 
@@ -182,7 +182,7 @@ class OkaapiControllerTest < ActionController::TestCase
     
     assert_not_equal  okaapis(:okaapi_five).archived, 'false'
     get :undo_archive_okaapi
-	assert_redirected_to 'http://test.com'	
+	assert_redirected_to 'http://testhost45A67/okaapi/term_detail'	
     assert_equal Okaapi.find( okaapis(:okaapi_five).id ).archived, 'false'
   end  
   

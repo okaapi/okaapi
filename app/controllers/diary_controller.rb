@@ -1,5 +1,5 @@
 class DiaryController < ApplicationController
-  COLORS = ['purple', 'cyan', 'orange', 'magenta', 'green']
+  COLORS = ['purple', 'blue', 'green', 'magenta', 'orange']
   def calendar
     
 	if !@current_user

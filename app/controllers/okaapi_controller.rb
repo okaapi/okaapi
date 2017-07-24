@@ -104,7 +104,7 @@ class OkaapiController < ApplicationController
       @word.archived = Time.now.utc
       @word.save      
     end
-    redirect_back fallback_location: root_path   
+    redirect_back fallback_location: root_path
   end
   def undo_archive_word
     if @current_user
@@ -120,7 +120,7 @@ class OkaapiController < ApplicationController
       @okaapi.archived = Time.now.utc
       @okaapi.save      
     end
-    redirect_back fallback_location: root_path   
+    redirect_to( { action: :term_detail, word_id: params[:word_id] } )  
   end
   def undo_archive_okaapi
     if @current_user
@@ -129,7 +129,7 @@ class OkaapiController < ApplicationController
         @okaapi.save
       end
     end
-    redirect_back fallback_location: root_path   
+    redirect_to( { action: :term_detail, word_id: params[:word_id] } ) 
   end  
   
   def receive_okaapi_emails
