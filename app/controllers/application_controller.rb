@@ -37,9 +37,9 @@ class ApplicationController < ActionController::Base
 	  end 
   	  
   	  #
-          #  this can really not happen
-          #
-	  if @current_user_session.site != ZiteActiveRecord.site?
+  	  # this can really not happen
+  	  # 
+	  if @current_user_session.site != ZiteActiveRecord.site? 
 	    redirect_to '/', alert: "name mismatch #{@current_user_session.site} #{request.host}"
 	  end
 

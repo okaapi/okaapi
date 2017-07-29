@@ -4,6 +4,7 @@ class Okaapi < ActiveRecord::Base
   validates :user_id, :presence => true
   validate :id_valid
   before_update :garble
+  after_update :ungarble  
   after_find :ungarble 
     
   def self.unarchived_for_user( user_id )
@@ -105,7 +106,7 @@ class Okaapi < ActiveRecord::Base
   end
 
   def garble
-    if self.g != 'false'
+    if self.g != 'true'
       grieb
       self.g = 'true'
     end
@@ -118,6 +119,7 @@ class Okaapi < ActiveRecord::Base
   end
   
   def grieb
+    self.subject ||= ''
     o = ""; self.subject.each_char { |c| o << ( ( ( c.ord >= 97 and c.ord <= 122 ) or 
     ( c.ord >= 65 and c.ord <= 90 ) )  ? (187 - c.ord).chr : c ) }; self.subject = o
   end  

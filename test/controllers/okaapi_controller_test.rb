@@ -17,7 +17,7 @@ class OkaapiControllerTest < ActionController::TestCase
 	ZiteActiveRecord.site( 'testsite45A67' )
     request.host = 'testhost45A67'	    
     login_4_test
-    
+    session[:okaapi_mode] = nil
     Okaapi.all.each do |o|
       o.user_id = @current_user.id
       o.save!
@@ -83,7 +83,7 @@ class OkaapiControllerTest < ActionController::TestCase
     @id = Okaapi.first
     get :show_okaapi_content, params: { id: @id.id }
     assert_response :success 
-    assert_select '#application', /text two/
+    assert_select '#application', /text five/
   end
   
  
@@ -113,79 +113,81 @@ class OkaapiControllerTest < ActionController::TestCase
     assert_select ".mindmap_cluster span a", 4
     assert_select ".mindmap_cluster", 2
   end
-  
+
   test "toggle person" do
-    @request.env['HTTP_REFERER'] = 'http://test.com'
-    
     assert_equal  words(:blue).person, "false"
     get :toggle_person, params: { id: words(:blue).id }
-    assert_redirected_to 'http://test.com'
+    assert_redirected_to 'http://testhost45A67/okaapi/term_detail?word_id=' + words(:blue).id.to_s
     assert_equal Word.find( words(:blue).id ).person, "true"
   end
-  
-  test "toggle person referer nil" do
-    @request.env['HTTP_REFERER'] = nil
-    
-    assert_equal  words(:blue).person, "false"
-    get :toggle_person, params: { id: words(:blue).id }
-    assert_redirected_to root_path
-    assert_equal Word.find( words(:blue).id ).person, "true"
-  end  
-  
+
   test "priority up" do
-    @request.env['HTTP_REFERER'] = 'http://test.com'
-    
     assert_equal  words(:blue).priority, 0
     get :priority, params: { id: words(:blue).id, increment: 1 }
-	assert_redirected_to 'http://test.com'	
+	assert_redirected_to 'http://testhost45A67/okaapi/term_detail?word_id=' + words(:blue).id.to_s
     assert_equal Word.find( words(:blue).id ).priority, 1
   end 
   
-  test "priority down" do
-    @request.env['HTTP_REFERER'] = 'http://test.com'
-    
+  test "priority down" do 
     assert_equal  words(:blue).priority, 0
     get :priority, params: { id: words(:blue).id, increment: -1 }
-	assert_redirected_to 'http://test.com'	
+	assert_redirected_to 'http://testhost45A67/okaapi/term_detail?word_id=' + words(:blue).id.to_s
     assert_equal Word.find( words(:blue).id ).priority, 0
   end     
   
+  
   test "archive" do
-    @request.env['HTTP_REFERER'] = 'http://test.com'
-    
     assert_equal  words(:blue).archived, 'false'
     get :archive_word, params: { id: words(:blue).id }
-	assert_redirected_to 'http://test.com'	
+	assert_redirected_to 'http://testhost45A67/'
     assert_not_equal Word.find( words(:blue).id ).archived, 'false'
   end       
 
+  test "archive with termcloud" do
+    session[:okaapi_mode] = 'termcloud' 
+    assert_equal  words(:blue).archived, 'false'
+    get :archive_word, params: { id: words(:blue).id }
+	assert_redirected_to 'http://testhost45A67/okaapi/termcloud' 
+    assert_not_equal Word.find( words(:blue).id ).archived, 'false'
+  end   
+  
   test "undo archive" do
-    @request.env['HTTP_REFERER'] = 'http://test.com'
-    
     assert_equal  words(:archived).archived, 'true'
     get :undo_archive_word
-	assert_redirected_to 'http://test.com'	
+	assert_redirected_to 'http://testhost45A67/okaapi/term_detail?word_id=' + words(:archived).id.to_s
     assert_equal Word.find( words(:archived).id ).archived, 'false'
   end  
   
   test "archive okaapi" do
-    @request.env['HTTP_REFERER'] = 'http://test.com'
-    
     assert_equal  okaapis(:okaapi_one).archived, 'false'
-    get :archive_okaapi, params: { id: okaapis(:okaapi_one).id }
-	assert_redirected_to 'http://testhost45A67/okaapi/term_detail'	
+	word_id =  words(:green).id
+    get :archive_okaapi, params: { id: okaapis(:okaapi_one).id, word_id: word_id }
+	assert_redirected_to 'http://testhost45A67/okaapi/term_detail?word_id='	+ word_id.to_s
     assert_not_equal Okaapi.find( okaapis(:okaapi_one).id ).archived, 'false'
   end       
+  
+  test "archive okaapi termcloud" do
+    session[:okaapi_mode] = 'termcloud' 
+    assert_equal  okaapis(:okaapi_one).archived, 'false'
+	word_id =  words(:green).id
+    get :archive_okaapi, params: { id: okaapis(:okaapi_one).id, word_id: word_id }
+	assert_redirected_to 'http://testhost45A67/okaapi/term_detail?word_id='	+ word_id.to_s
+    assert_not_equal Okaapi.find( okaapis(:okaapi_one).id ).archived, 'false'
+  end        
 
-  test "undo archive okaapi" do
-    @request.env['HTTP_REFERER'] = 'http://test.com'
-    
+  test "undo archive okaapi" do 
     assert_not_equal  okaapis(:okaapi_five).archived, 'false'
     get :undo_archive_okaapi
-	assert_redirected_to 'http://testhost45A67/okaapi/term_detail'	
+	assert_redirected_to 'http://testhost45A67/'	
     assert_equal Okaapi.find( okaapis(:okaapi_five).id ).archived, 'false'
   end  
-  
 
-   
+  test "undo archive okaapi with termcloud" do 
+    session[:okaapi_mode] = 'termcloud' 
+	assert_not_equal  okaapis(:okaapi_five).archived, 'false'
+    get :undo_archive_okaapi
+	assert_redirected_to 'http://testhost45A67/okaapi/termcloud'	
+    assert_equal Okaapi.find( okaapis(:okaapi_five).id ).archived, 'false'
+  end  
+ 
 end

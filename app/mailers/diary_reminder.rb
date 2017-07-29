@@ -21,11 +21,9 @@ class DiaryReminder < ActionMailer::Base
   end
 
   #
-  #
-  #
-  def test( user_email )
-    mail from: smtp_settings[:sender_email], to: user_email
-  end
+  #def test( user_email )
+  #  mail from: smtp_settings[:sender_email], to: user_email
+  #end
  
       
 end
