@@ -43,7 +43,6 @@ class ApplicationController < ActionController::Base
 	    redirect_to '/', alert: "name mismatch #{@current_user_session.site} #{request.host}"
 	  end
 
-
 	  #
 	  #  current user (this is just a shorthand for @current_user_session._user throughout)
 	  #
