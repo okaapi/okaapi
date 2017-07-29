@@ -83,7 +83,7 @@ class OkaapiControllerTest < ActionController::TestCase
     @id = Okaapi.first
     get :show_okaapi_content, params: { id: @id.id }
     assert_response :success 
-    assert_select '#application', /text two/
+    assert_select '#application', /text five/
   end
   
  
@@ -158,22 +158,23 @@ class OkaapiControllerTest < ActionController::TestCase
     assert_equal Word.find( words(:archived).id ).archived, 'false'
   end  
   
-
   test "archive okaapi" do
     assert_equal  okaapis(:okaapi_one).archived, 'false'
-    get :archive_okaapi, params: { id: okaapis(:okaapi_one).id }
-	assert_redirected_to 'http://testhost45A67/'	
+	word_id =  words(:green).id
+    get :archive_okaapi, params: { id: okaapis(:okaapi_one).id, word_id: word_id }
+	assert_redirected_to 'http://testhost45A67/okaapi/term_detail?word_id='	+ word_id.to_s
     assert_not_equal Okaapi.find( okaapis(:okaapi_one).id ).archived, 'false'
   end       
   
   test "archive okaapi termcloud" do
     session[:okaapi_mode] = 'termcloud' 
     assert_equal  okaapis(:okaapi_one).archived, 'false'
-    get :archive_okaapi, params: { id: okaapis(:okaapi_one).id }
-	assert_redirected_to 'http://testhost45A67/okaapi/termcloud'	
+	word_id =  words(:green).id
+    get :archive_okaapi, params: { id: okaapis(:okaapi_one).id, word_id: word_id }
+	assert_redirected_to 'http://testhost45A67/okaapi/term_detail?word_id='	+ word_id.to_s
     assert_not_equal Okaapi.find( okaapis(:okaapi_one).id ).archived, 'false'
   end        
-   
+
   test "undo archive okaapi" do 
     assert_not_equal  okaapis(:okaapi_five).archived, 'false'
     get :undo_archive_okaapi
@@ -188,5 +189,5 @@ class OkaapiControllerTest < ActionController::TestCase
 	assert_redirected_to 'http://testhost45A67/okaapi/termcloud'	
     assert_equal Okaapi.find( okaapis(:okaapi_five).id ).archived, 'false'
   end  
-   
+ 
 end

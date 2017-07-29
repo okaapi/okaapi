@@ -65,7 +65,17 @@ class OkaapiTest < ActiveSupport::TestCase
     john.save!   
     last = Okaapi.find_last_archived( @user_francois.id )
   end
-
+  
+  test "okaapi id" do
+    okap = Okaapi.create( user_id: users(:john).id )
+	assert okap.save
+  end
+  
+  test "okaapi id invalid" do
+    okap = Okaapi.create( user_id: 77 )
+	assert !okap.save
+  end
+ 
 #
 #  Okaapis:    red green violet
 #              red blue purple

@@ -2,6 +2,7 @@
 
 okaapi_one:
   subject: red green violet john
+  g: "false"
   content: text one
   time: 2014-10-27 13:29:01
   from: wido@menhardt.com
@@ -11,6 +12,7 @@ okaapi_one:
 
 okaapi_two:
   subject: Red blue purple peter
+  g: "false"
   content: text two
   time: 2014-10-27 14:29:01
   from: wido@menhardt.com
@@ -20,6 +22,7 @@ okaapi_two:
   
 okaapi_three:
   subject: yellow gray petrol
+  g: "false"
   content: text three
   time: 2014-10-27 15:29:01
   from: wido@menhardt.com
@@ -38,6 +41,7 @@ okaapi_four:
   
 okaapi_five:
   subject: for cow horse john
+  g: "false"
   content: text five
   time: 2014-10-27 16:29:01
   from: wido@menhardt.com
@@ -45,5 +49,13 @@ okaapi_five:
   archived: 2014-10-29 15:30:01
   user_id: 11
 
-
+okaapi_garbled:
+  subject: BVOOLD TIZB TIVVM YOFV
+  g: "true"
+  content: text five
+  time: 2014-10-27 16:29:01
+  from: wido@menhardt.com
+  reminder: MyString
+  archived: 2014-10-29 15:30:01
+  user_id: 11
   

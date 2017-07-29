@@ -1,5 +1,5 @@
 class DiaryController < ApplicationController
-   
+  COLORS = ['purple', 'blue', 'green', 'magenta', 'orange']
   def calendar
     
 	if !@current_user
@@ -52,7 +52,7 @@ class DiaryController < ApplicationController
 		    entry = DiaryEntry.entry_for_day( @current_user.id, day_in_month, @month, @year )
 			entry_tags = DiaryEntry.tags(entry)
 			tags += entry_tags if entry_tags
-            thisweek[day] = { day: day_in_month,  content: DiaryEntry.nohash( entry ) }
+            thisweek[day] = { day: day_in_month,  content: entry }
           else
             thisweek[day] = { day: day_in_month }
           end
@@ -63,6 +63,7 @@ class DiaryController < ApplicationController
     end      
 	@tag_list = []
 	tags.each { |t| @tag_list += [t[0]] }
+	@colors = COLORS
   end
   
   def show_entry

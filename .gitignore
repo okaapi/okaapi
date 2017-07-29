@@ -24,5 +24,6 @@
 /tmp
 /shared
 /public/assets
+/public/camera
 /app/assets/stylesheets/.sass-cache
-/lib/mailtest/images
+/lib/crondump

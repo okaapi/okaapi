@@ -1,9 +1,9 @@
 require 'test_helper'
 
-class DummyDiaryDeliverer
-  def deliver
-  end
-end
+#class DummyDiaryDeliverer
+#  def deliver
+#  end
+#end
 
 class DiaryReceiver
   def self.get_diary_entries
@@ -16,9 +16,9 @@ class DiaryReceiver
             from: 'arnaud@gmail.com', content: "day 3"}
     entries                    
   end
-  def self.send_diary_reminder( email, goal, time )
-    DummyDiaryDeliverer.new
-  end
+  #def self.send_diary_reminder( email, goal, time )
+  #  DummyDiaryDeliverer.new
+  #end
 end
 
 class DiaryControllerTest < ActionController::TestCase

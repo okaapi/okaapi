@@ -10,6 +10,17 @@ class AuthenticateControllerTest < ActionController::TestCase
     request.host = 'testhost45A67'	    
   end
   
+  test "@current_user_session.site != ZiteActiveRecord.site?" do
+    @session_wido.site = 'xloxlo'
+	@session_wido.save!
+	session[:user_session_id] = @session_wido.id
+	puts '@@@@@@@@@@@@@@@@'
+	p session[:user_session_id]
+	p user_sessions(:session_one).id
+	puts '@@@@@@@@@@@@@@@@'
+    get :who_are_u	
+  end
+=begin  
   test "should get who_are_u" do
     
     [true,false].each do |java|                 
@@ -460,7 +471,7 @@ class AuthenticateControllerTest < ActionController::TestCase
     assert_nil @controller.session[:user_session_id]
     assert_nil session[:reset_user_id]
   end
-
+=end
   private
   
     def root_path

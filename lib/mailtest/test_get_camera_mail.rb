@@ -1,6 +1,11 @@
 require File.dirname(__FILE__) + "/../../config/environment" unless defined?(RAILS_ROOT)
 require 'mail'
 
+#
+# ffmpeg -i panasonic%d.jpg -vcodec mpeg4 panasonic.avi
+#
+
+
 mail_config = (YAML::load( File.open(Rails.root + 'config/camera_mail.yml') ))
 
 smtp_settings = mail_config["server"].merge(mail_config["credentials"]).merge(mail_config["pop"]).symbolize_keys

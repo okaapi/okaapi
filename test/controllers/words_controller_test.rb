@@ -38,7 +38,12 @@ module Admin
 	    assert_redirected_to word_path(assigns(:word))
 	  end
 	  
-	
+	  test "should fail to create word" do
+	    post :create, params: { term: { archived: @word.archived, person: @word.person, 
+	        priority: @word.priority, term: @word.term, user_id: 1717 } }
+	    assert_response :success
+	  end
+	  
 	  test "should show word" do
 	    get :show, params: { id: @word }
 	    assert_response :success
@@ -55,6 +60,13 @@ module Admin
 		           priority: @word.priority, term: @word.term, user_id: @word.user_id } }
 	    assert_redirected_to word_path(assigns(:word))
 	  end
+	  
+	  test "should fail to update word" do
+	    patch :update, params: { id: @word, 
+		   term: { archived: @word.archived, person: @word.person, 
+		           priority: @word.priority, term: @word.term, user_id: 1717 } }
+	    assert_response :success
+	  end	  
 	
 	  test "should destroy word" do
 	    assert_difference('Word.count', -1) do

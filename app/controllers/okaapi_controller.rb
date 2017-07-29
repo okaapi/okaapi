@@ -119,7 +119,7 @@ class OkaapiController < ApplicationController
       @okaapi.archived = Time.now.utc
       @okaapi.save      
     end
-    redirect_to session[:okaapi_mode] ? ( '/okaapi/' + session[:okaapi_mode] ) : root_path
+    redirect_to( { action: :term_detail, word_id: params[:word_id] } ) 
   end
   def undo_archive_okaapi
     if @current_user
