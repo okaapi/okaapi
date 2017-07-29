@@ -45,6 +45,7 @@ if true#( Time.now.hour == 21 )
 	Dir.mkdir directory if ! Dir.exists? directory
 	directory = File.join( Rails.root , 'public', 'camera', engarble( Date.today.to_s ) )
 	Dir.mkdir directory if ! Dir.exists? directory
+        File.chmod(0777, directory)
         puts "into directory #{directory}"		        
 	"A======================================================"
 	until marray.count == 0 
@@ -89,7 +90,7 @@ if true#( Time.now.hour == 21 )
 		      puts "saving #{filename}"
 		      begin
 		        path = File.join( directory, filename )
-		        File.open(path, "w+b", 0644) {|f| f.write attachment.body.decoded}
+		        File.open(path, "w+b", 0777) {|f| f.write attachment.body.decoded}
 		      rescue => e
 		        puts "Unable to save data for #{filename} because #{e.message}"
 		      end
