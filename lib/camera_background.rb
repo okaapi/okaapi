@@ -37,9 +37,8 @@ dlink_index = 0
 
 puts 
 puts "GETTING CAMERA MAILS at #{Time.now}"
-puts "conditional disabled!!!"
 
-if true#( Time.now.hour == 21 )
+if true  #( Time.now.hour == 21 )
 
 	directory = File.join( Rails.root , 'public', 'camera')
 	Dir.mkdir directory if ! Dir.exists? directory

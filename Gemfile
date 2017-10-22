@@ -18,3 +18,5 @@ gem 'tzinfo-data'
 gem 'simplecov'
 
 gem 'unicorn'
+
+gem 'minitest', '5.10.1'

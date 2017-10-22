@@ -128,7 +128,7 @@ class DiaryController < ApplicationController
     if @current_user
       @current_user.diary_service = "off"
       @current_user.save!(validate: false)
-	  redirect_back fallback_location: root_path, notice: "daily reminders turned off"
+	  redirect_back calendar_path, notice: "daily reminders turned off"
     else
       redirect_to who_are_u_path
     end       
@@ -144,7 +144,7 @@ class DiaryController < ApplicationController
       end
       DiaryReminder.send_diary_reminder( @current_user.email, @current_user.goal_in_subject,
                                          Time.now ).deliver_now
-      redirect_back fallback_location: root_path, notice: "daily reminders sent to  #{@current_user.email}"
+      redirect_to calendar_path, notice: "daily reminders sent to  #{@current_user.email}"
     else
       redirect_to who_are_u_path
     end   
@@ -155,7 +155,7 @@ class DiaryController < ApplicationController
   def send_all_diary_emails
     
     Postoffice.send_all_diary_emails( params[:token] )
-    redirect_to root_path, notice: "sent all diary emails"
+    redirect_to calendar_path, notice: "sent all diary emails"
         
   end
 
@@ -163,7 +163,7 @@ class DiaryController < ApplicationController
 
     n = Postoffice.receive_diary_emails    
 
-    redirect_back fallback_location: root_path, notice: "received #{n} diary emails"
+    redirect_to calendar_path, notice: "received #{n} diary emails"
 
   end
   
