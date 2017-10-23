@@ -43,8 +43,10 @@ if true  #( Time.now.hour == 21 )
 	directory = File.join( Rails.root , 'public', 'camera')
 	Dir.mkdir directory if ! Dir.exists? directory
 	directory = File.join( Rails.root , 'public', 'camera', engarble( Date.today.to_s ) )
-	Dir.mkdir directory if ! Dir.exists? directory
-        File.chmod(0777, directory)
+        if ! Dir.exists? directory
+	  Dir.mkdir directory
+          #File.chmod(0700, directory)
+        end
         puts "into directory #{directory}"		        
 	"A======================================================"
 	until marray.count == 0 
