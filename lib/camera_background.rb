@@ -35,75 +35,77 @@ marray = ['dummy']
 panasonic_index = 0
 dlink_index = 0
 
-puts 
+puts ""
 puts "GETTING CAMERA MAILS at #{Time.now}"
+puts ""
 
 if true  #( Time.now.hour == 21 )
 
-	directory = File.join( Rails.root , 'public', 'camera')
-	Dir.mkdir directory if ! Dir.exists? directory
-	directory = File.join( Rails.root , 'public', 'camera', engarble( Date.today.to_s ) )
-        if ! Dir.exists? directory
-	  Dir.mkdir directory
-          #File.chmod(0700, directory)
+  directory = File.join( Rails.root , 'public', 'camera')
+  Dir.mkdir directory if ! Dir.exists? directory
+  directory = File.join( Rails.root , 'public', 'camera', engarble( Date.today.to_s ) )
+  if ! Dir.exists? directory
+  Dir.mkdir directory
+    #File.chmod(0700, directory)
+  end
+  puts "USING DIRECTORY #{directory}"
+  puts "\n"
+  until marray.count == 0 
+  
+    marray = Mail.all
+    puts "FOUND #{marray.count} MESSAGES"
+    puts "\n"
+    marray.each do |message|
+      message_received=message.received[0].field.element.date_time
+      puts "MESSAGE SUBJECT #{message.subject}\n"
+      puts "MESSAGE SENT AT #{message.date}\n"
+      puts "MESSAGE RECEIVED AT #{message_received}\n"
+      p message.text_part.body.decoded
+      
+      #p message.from[0]
+      #p message.date
+      #p message.subject  
+      #p message.cc  
+      #p message.return_path
+      #p message.to  
+      #p message.message_id
+
+      # this seems to make no difference?
+      message.mark_for_delete = true  
+ 
+      if !message_received
+        common_filename = "#{message.date.strftime("%-d%b_%Hh%Mm%Ss")}.jpg"
+      else
+        common_filename = "#{message_received.strftime("%-d%b_%Hh%Mm%Ss")}.jpg"
+      end
+      message.attachments.each do | attachment |  
+        if (attachment.content_type.start_with?('image/'))
+          if attachment.filename == 'image.jpg'
+            #panasonic
+            filename = 'panasonic_' + common_filename
+            panasonic_index += 1
+          else
+            #dlink
+            filename = 'dlink_' + common_filename
+            dlink_index += 1
+          end
+          puts "SAVING #{filename}"
+          puts ""
+          begin
+            path = File.join( directory, filename )
+            File.open(path, "w+b", 0777) {|f| f.write attachment.body.decoded}
+          rescue => e
+            puts "Unable to save data for #{filename} because #{e.message}"
+          end
         end
-        puts "into directory #{directory}"		        
-	"A======================================================"
-	until marray.count == 0 
-	
-	    "B======================================================="
-		marray = Mail.all
-		"1======================================================"
-		marray.each do |message|
-		  #p message.from[0]
-		  #puts "++++++++++++++++++++++++++++++++++++++++"
-		  #p message.date
-		  puts "++++++++++++++++++++++++++++++++++++++++"
-		  p message.subject  
-		  #puts "++++++++++++++++++++++++++++++++++++++++"#filename = 'dlink' + dlink_index.to_s + '.jpg'
-		  p message.text_part.body.decoded
-		  #puts "++++++++++++++++++++++++++++++++++++++++"
-		  #p message.cc  
-		  #puts "++++++++++++++++++++++++++++++++++++++++"
-		  #p message.return_path
-		  #puts "++++++++++++++++++++++++++++++++++++++++"
-		  #p message.to  
-		  #puts "++++++++++++++++++++++++++++++++++++++++"
-		  #p message.message_id
-		  message.mark_for_delete = true  
-		  
-		  p message.date
-		  message.attachments.each do | attachment |  
-		    if (attachment.content_type.start_with?('image/'))
-		      if attachment.filename == 'image.jpg'
-	            #panasonic
-		        #filename = 'panasonic' + panasonic_index.to_s + '.jpg'	
-		        slist = message.subject.split('Image:')
-		        t = slist[1].split('s')
-		        filename = "panasonic#{t[1][0..1]}h#{t[1][2..3]}m#{t[1][4..5]}s.jpg"
-	            panasonic_index += 1
-	          else
-	            #dlink
-		        #filename = 'dlink' + dlink_index.to_s + '.jpg'
-		        filename = "dlink#{message.date.strftime("%Hh%Mm%Ss")}.jpg"
-	            dlink_index += 1
-		      end
-		      puts "saving #{filename}"
-		      begin
-		        path = File.join( directory, filename )
-		        File.open(path, "w+b", 0777) {|f| f.write attachment.body.decoded}
-		      rescue => e
-		        puts "Unable to save data for #{filename} because #{e.message}"
-		      end
-		    end
-		  end
-		  
-		end
-	  
-	end
-    "2======================================================"
+      end
+      
+    end
     
-    puts "#{marray.count} messages"     
+  end
+
+    
+  puts "DONE PROCESSING MESSAGES"     
 
 end
 

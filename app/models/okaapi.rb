@@ -3,8 +3,8 @@ require 'pp'
 class Okaapi < ActiveRecord::Base
   validates :user_id, :presence => true
   validate :id_valid
-  before_update :garble
-  after_update :ungarble  
+  before_save :garble
+  after_save :ungarble  
   after_find :ungarble 
     
   def self.unarchived_for_user( user_id )
