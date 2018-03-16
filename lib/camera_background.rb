@@ -83,10 +83,12 @@ if true  #( Time.now.hour == 21 )
           if attachment.filename == 'image.jpg'
             #panasonic
             filename = 'panasonic_' + common_filename
+            filename = filename.gsub('.jpg', pansonic_index.to_s+'.jpg')
             panasonic_index += 1
           else
             #dlink
             filename = 'dlink_' + common_filename
+            filename = filename.gsub('.jpg', dlink_index.to_s+'.jpg')
             dlink_index += 1
           end
           puts "SAVING #{filename}"
