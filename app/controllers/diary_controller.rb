@@ -128,7 +128,7 @@ class DiaryController < ApplicationController
     if @current_user
       @current_user.diary_service = "off"
       @current_user.save!(validate: false)
-	  redirect_back calendar_path, notice: "daily reminders turned off"
+	  redirect_to calendar_path, notice: "daily reminders turned off"
     else
       redirect_to who_are_u_path
     end       

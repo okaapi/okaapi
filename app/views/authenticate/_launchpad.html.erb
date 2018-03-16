@@ -1,12 +1,15 @@
+<%= render "authenticate/fb_script" %>	
 
+<span id="login-logout">
 <% if !@current_user  %>
 
-  <%= link_to 'login', who_are_u_path, remote: js? %>
-  <%= link_to 'register', about_urself_path, method: :post, remote: js? %>
+  <%= link_to 'login', who_are_u_path %> 
+  <%= link_to 'register', about_urself_path, method: :post %>
 
 <% else %>
 
-  <%= link_to 'logout', see_u_path %> 
+  <%= link_to 'logout', see_u_path, onclick: "fb_logout();" %> 
   <%= @current_user.username  %>
 
 <% end %>
+</span>

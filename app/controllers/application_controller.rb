@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   private
   
   def set_current_user_session_and_create_action
-       
+
       #
       # set the site name - this is like a global variable, it will be used
       # in each model (via ZiteActiveRecord)
@@ -23,11 +23,12 @@ class ApplicationController < ActionController::Base
       else 
         ZiteActiveRecord.site( request.host )
       end
-         	  
+
+      @title = (ZiteActiveRecord.site?).gsub( /.com/,'' ).gsub( /www./,'').split(/[\s.,_]+/).each{|x| x.capitalize!}.join(' ') 
       #
       #  set the current user session
       #
-	  @current_user_session = UserSession.recover( session[:user_session_id] )
+	  @current_user_session, @idle = UserSession.recover( session[:user_session_id] )
 	  if @current_user_session
 	    #nothing !
 	  elsif !@current_user_session
@@ -35,7 +36,7 @@ class ApplicationController < ActionController::Base
 	                                                               request.env['HTTP_USER_AGENT'])
 	    session[:user_session_id] = @current_user_session.id 
 	  end 
-  	  
+
   	  #
   	  # this can really not happen
   	  # 
@@ -47,8 +48,7 @@ class ApplicationController < ActionController::Base
 	  #  current user (this is just a shorthand for @current_user_session._user throughout)
 	  #
 	  @current_user = User.by_id( @current_user_session.user_id )
-	  if @current_user  and
-	       @current_user.site != @current_user_session.site
+	  if @current_user  and  @current_user.site != @current_user_session.site
         reset_session
 	    redirect_to '/', 
 		    alert: "site mismatch #{@current_user_session.user.site} #{@current_user_session.site}"
@@ -58,7 +58,6 @@ class ApplicationController < ActionController::Base
 	  #  log the action
 	  #  
       UserAction.add_action( @current_user_session.id, controller_name, action_name, params )            
-
 
   end
      

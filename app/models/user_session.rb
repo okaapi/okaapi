@@ -34,16 +34,23 @@
     
     def self.recover( session_id )
       
-      return if !session_id
+      if !session_id
+        return nil, 0
+      end
 
       u = self.where( id: session_id )
-      usession = u[0] ? u[0] : nil       
-      if usession and usession.idle < SESSION_TIMEOUT
-        usession.id_will_change!  # make random attribute dirty
-        usession.save             # to update updated_at
-        return usession         
+      usession = u[0] ? u[0] : nil   
+      if usession 
+        idle_time = usession.idle
+        if idle_time < SESSION_TIMEOUT
+          usession.id_will_change!  # make random attribute dirty
+          usession.save             # to update updated_at
+          return usession, idle_time
+        else 
+          return nil, idle_time
+        end
       else
-        return nil
+        return nil, 0
       end
             
     end             

@@ -48,7 +48,7 @@ class DiaryControllerTest < ActionController::TestCase
     assert_difference('DiaryEntry.count', +2) do
       get :receive_diary_emails
       assert_equal flash[:notice], "received 2 diary emails"
-      assert_redirected_to root_path
+      assert_redirected_to calendar_path
     end
     
   end
@@ -59,7 +59,7 @@ class DiaryControllerTest < ActionController::TestCase
     assert_equal  @current_user.diary_service, "off"
     post :send_diary_email
     assert_equal  User.find_by_username('arnaud').diary_service, "on"
-    assert_redirected_to root_path   
+    assert_redirected_to calendar_path   
   end
   
   test "turn diary service off" do
@@ -70,7 +70,7 @@ class DiaryControllerTest < ActionController::TestCase
     assert_equal  @current_user.diary_service, "on"
     post :turn_off_diary_emails
     assert_equal  User.find_by_username('arnaud').diary_service, "off"
-    assert_redirected_to root_path    
+    assert_redirected_to calendar_path    
   end  
   
   test "display March 2015" do

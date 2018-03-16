@@ -25,6 +25,7 @@ module Okaapi2
     config.action_mailer.smtp_settings = 
       mail_config["server"].merge(mail_config["credentials"]).symbolize_keys
     config.action_mailer.raise_delivery_errors = true
+    config.fb_app_id = false
     
   end
 end
