@@ -83,7 +83,7 @@ if true  #( Time.now.hour == 21 )
           if attachment.filename == 'image.jpg'
             #panasonic
             filename = 'panasonic_' + common_filename
-            filename = filename.gsub('.jpg', pansonic_index.to_s+'.jpg')
+            filename = filename.gsub('.jpg', panasonic_index.to_s+'.jpg')
             panasonic_index += 1
           else
             #dlink
