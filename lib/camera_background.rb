@@ -56,7 +56,11 @@ if true  #( Time.now.hour == 21 )
     puts "FOUND #{marray.count} MESSAGES"
     puts "\n"
     marray.each do |message|
-      message_received=message.received[0].field.element.date_time
+      if message_received=message.received[0].field.element
+        message_received=message.received[0].field.element.date_time
+      else
+        message_received=message.date
+      end
       puts "MESSAGE SUBJECT #{message.subject}\n"
       puts "MESSAGE SENT AT #{message.date}\n"
       puts "MESSAGE RECEIVED AT #{message_received}\n"
@@ -73,31 +77,30 @@ if true  #( Time.now.hour == 21 )
       # this seems to make no difference?
       message.mark_for_delete = true  
  
-      if !message_received
-        common_filename = "#{message.date.strftime("%-d%b_%Hh%Mm%Ss")}.jpg"
-      else
-        common_filename = "#{message_received.strftime("%-d%b_%Hh%Mm%Ss")}.jpg"
-      end
+      common_filename = "#{message_received.strftime("%-d%b_%Hh%Mm%Ss")}.jpg"
       message.attachments.each do | attachment |  
         if (attachment.content_type.start_with?('image/'))
+          cam_type = ''
           if attachment.filename == 'image.jpg'
-            #panasonic
+            cam_type = 'panasonic'
             filename = 'panasonic_' + common_filename
-            filename = filename.gsub('.jpg', panasonic_index.to_s+'.jpg')
             panasonic_index += 1
           else
-            #dlink
+            cam_type = 'dlink'
             filename = 'dlink_' + common_filename
             filename = filename.gsub('.jpg', dlink_index.to_s+'.jpg')
             dlink_index += 1
           end
-          puts "SAVING #{filename}"
-          puts ""
-          begin
-            path = File.join( directory, filename )
-            File.open(path, "w+b", 0777) {|f| f.write attachment.body.decoded}
-          rescue => e
-            puts "Unable to save data for #{filename} because #{e.message}"
+          if cam_type == 'panasonic' or
+            ( cam_type == 'dlink' and dlink_index.modulo(6) == 4 )
+            puts "SAVING #{filename}"
+            puts ""
+            begin
+              path = File.join( directory, filename )
+              File.open(path, "w+b", 0777) {|f| f.write attachment.body.decoded}
+            rescue => e
+              puts "Unable to save data for #{filename} because #{e.message}"
+            end
           end
         end
       end
@@ -106,9 +109,20 @@ if true  #( Time.now.hour == 21 )
     
   end
 
+  Dir.chdir(directory){
+    imagefiles = Dir.entries(directory).sort                                   
+    if imagefiles.find{|each| ( each.include? 'panasonic' )}
+      %x[#{"ffmpeg -y -hide_banner -loglevel panic -r 60 -pattern_type glob -i 'panasonic*.jpg' -filter:v 'setpts=30.0*PTS' -vcodec mpeg4 panasonic.avi"}]
+    end
+  }
+  Dir.chdir(directory){
+    imagefiles = Dir.entries(directory).sort                                   
+    if imagefiles.find{|each| ( each.include? 'dlink' )}
+      %x[#{"ffmpeg -y -hide_banner -loglevel panic -r 60 -pattern_type glob -i 'dlink*.jpg' -filter:v 'setpts=30.0*PTS' -vcodec mpeg4 dlink.avi"}]
+    end
+  }
     
   puts "DONE PROCESSING MESSAGES"     
 
 end
-
 
