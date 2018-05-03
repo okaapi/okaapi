@@ -18,6 +18,7 @@
 # Ignore config files
 /config/yml
 /config/*.yml
+Gemfile.lock
 
 # Ignore all logfiles and tempfiles.
 /log
