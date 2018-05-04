@@ -12,8 +12,8 @@ setInterval(function(){
 }, 3000);
 </script>
 
-<% link_to 'refresh html', dashboard_path %><br>
-<% link_to 'refresh ajax', dashboard_path, remote: true %><br>
+<%= link_to 'refresh html', dashboard_path %><br>
+<%= link_to 'refresh ajax', dashboard_path, remote: true %><br>
 
 <div id="dashboard">
   <%= render 'dashboard' %>

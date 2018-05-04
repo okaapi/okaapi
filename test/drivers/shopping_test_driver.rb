@@ -70,6 +70,8 @@ while true
   puts "c = clear"
   puts "y = clear yes"
   puts "n = clear no"
+  puts "H = help"  
+  puts "S = stop"  
   puts ">>>"
   x = gets
 
@@ -86,13 +88,17 @@ while true
     json = json_clear_yes
   when 'n'
     json = json_clear_no
+  when 'S'
+    json = json_stop
+  when 'H'
+    json = json_help        
   else
-    json = {nothing: 'when'}
+    json = {nothing: 'no valid input'}  
   end
   puts "REQUEST #{json}"
   
   #uri = URI('http://localhost:3000/shopping')
-  uri = URI('https://www.menhardt.com/shopping') 
+  uri = URI('https://www.okaapi.com/shopping') 
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
   req = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
@@ -101,11 +107,15 @@ while true
 
   puts "RESPONSE #{res.body}"  
   puts
-  res = eval(res.body)
-  if res[:response][:outputSpeech]
-    puts res[:response][:outputSpeech][:text]
-  elsif res[:response][:directives]
-    puts res[:response][:directives][0][:type]
+  begin
+    res = eval(res.body)
+    if res[:response][:outputSpeech]
+      puts res[:response][:outputSpeech][:text]
+    elsif res[:response][:directives]
+      puts res[:response][:directives][0][:type]
+    end
+  rescue SyntaxError
+    puts "exit with errors"
   end
   
   puts 

@@ -12,7 +12,7 @@ class AlexaController < ApplicationController
     if params['request']     
       case params['request']['type']
       when 'LaunchRequest'
-        response = launch_request_response('BeckmanDashboard', "Welcome to the Beckman dashboard!")
+        response = launch_request_response('BeckmanDashboard', "Welcome to the Beckman dashboard!", false)
       when 'IntentRequest'
         response = intent_request_response_beckman('BeckmanDashboard',params['request']['intent'])
       else
@@ -39,7 +39,7 @@ class AlexaController < ApplicationController
   #  beckman dashboard - remove this
   #   
   def dashboard_partial
-    @intent = Alexa.last.intent       
+    @intent = Alexa.last.intent if Alexa.last      
     session[:last_intent] = @intent
     render partial: 'dashboard'        
   end    
@@ -47,7 +47,7 @@ class AlexaController < ApplicationController
   def shopping
     begin
       if params['request']['type'] == 'LaunchRequest'
-        response = launch_request_response("BlackberryList", "Welcome to the Blackberry Hill List!")
+        response = launch_request_response("BlackberryList", "Welcome to the Blackberry Hill List!", false)
       elsif params['request']['type'] == 'IntentRequest'
         response = intent_request_response_shopping("BlackberryList",params['request']['intent'])
       else
@@ -61,19 +61,33 @@ class AlexaController < ApplicationController
     
   end
   
+  def tides
+    begin
+      if params['request']['type'] == 'LaunchRequest'
+        response = launch_request_response("SantaCruzTides", Tides.get_santa_cruz_tides, true)
+      else
+        response = {request: params, status: 'unknown request'} 
+      end      
+    rescue StandardError => e
+      response = {request: params, status: e}
+    end
+    
+    render json: response
+    
+  end  
 
     
   
 private
 
-  def launch_request_response(skill, speech)
+  def launch_request_response(skill, speech, stop_interaction)
     Alexa.create(skill: skill, request: 'LaunchRequest')
     { version: "1.0",
       response: {
         outputSpeech: {
           type: "PlainText",
           text: speech },
-        shouldEndSession: "false" }
+        shouldEndSession: stop_interaction ? "true" : "false" }
     }        
   end
 
@@ -101,7 +115,8 @@ private
       else
         speech = 'I did not understand that.'
       end
-
+      Alexa.create(skill: skill, request: "IntentRequest", 
+                   intent: intent_name, answer: speech ) 
         { version: "1.0",
           response: {
             outputSpeech: {
@@ -146,7 +161,8 @@ private
       else
         speech = 'I did not understand that.'
       end
-      Alexa.create(skill: "BlackberryList", request: "IntentRequest", intent: intent_name, slot: @item)    
+      Alexa.create(skill: skill, request: "IntentRequest", 
+                   intent: intent_name, slot: @item, answer: speech )    
       
       #
       #  normal response (with stop interaction flag), or dialog delegation

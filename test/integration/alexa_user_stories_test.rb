@@ -8,6 +8,22 @@ class AlexaUserStoriesTest < ActionDispatch::IntegrationTest
     open_session.host! "testhost45A67"
   end
 
+  test "tides launch" do
+    json = { version: "1.0",
+    	     request: {
+               type: "LaunchRequest"
+             }
+           }
+    post "/tides", params: json, as: :json    
+    assert_response :success
+
+    r = eval(@response.body)  
+    today = Time.now
+    speech = "On #{today.strftime("%A %e %B")}: "
+    assert_equal r[:response][:outputSpeech][:text][0..speech.length-1], speech
+    assert_equal r[:response][:shouldEndSession], 'true'         
+  end	
+  
   test "shopping launch" do
     json = { version: "1.0",
     	     request: {

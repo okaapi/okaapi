@@ -5,6 +5,7 @@ class CreateAlexas < ActiveRecord::Migration[5.0]
       t.string :slot
       t.string :skill
       t.string :request
+      t.string :answer
       t.string :aux
 
       t.timestamps

@@ -79,15 +79,15 @@ while true
   when 'H'
     json = json_help    
   else
-    json = {nothing: 'when'}
+    json = {nothing: 'no valid input'}
   end
   puts "REQUEST #{json}"
   
-  #uri = URI('http://localhost:3000/alexa')
-  uri = URI('https://www.okaapi.com/alexa')
+  uri = URI('http://localhost:3000/alexa')
+  #uri = URI('https://www.okaapi.com/alexa')
   puts uri.host+uri.path
   http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
+  #http.use_ssl = true
   req = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
   req.body = json.to_json
   res = http.request(req)
