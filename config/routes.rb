@@ -56,9 +56,12 @@ Rails.application.routes.draw do
   get 'okaapi/show_okaapi_content', as: "show_okaapi_content"
   get 'okaapi/send_okaapi_emails', as: "send_okaapi_emails"
   get 'okaapi/receive_okaapi_emails', as: "receive_okaapi_emails"
-  
 
-
+  # temporary for alexa
+  match 'alexa' => "alexa#index", as: 'alexa', via: [:get, :post] 
+  match 'shopping' => "alexa#shopping", as: 'shopping', via: [:get, :post] 
+  get 'dashboard' => "alexa#dashboard", as: 'dashboard' 
+  get 'dashboard_partial' => "alexa#dashboard_partial", as: 'dashboard_partial' 
   
   root "okaapi#index", as: "root"
 

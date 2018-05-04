@@ -1,24 +1,16 @@
-
 require File.dirname(__FILE__) + "/../config/environment" unless defined?(RAILS_ROOT)
+require 'net/http'
+require 'json'
 
+def try_https( url )
+  uri = URI( 'https://'+url+'/index' )
+  http = Net::HTTP::new( uri.host, uri.port)
+  http.use_ssl = true
+  request = Net::HTTP::Get.new(uri.request_uri)
+  response = http.request(request)
+  p response
 
-def encrypt( str )
-  o = ""; 
-  str.each_char { |c| o << (c.ord+30).chr }; 
-  o
-end   
-def decrypt( str )
-  o = ""; 
-  str.each_char { |c| o << (c.ord-30).chr }; 
-  o
-end 
-  
-d = Date.today.to_s
-puts '---------------------'
-puts d
-puts '---------------------'
-dn = encrypt(d) 
-p dn
-puts '---------------------'
-p decrypt( dn) 
-puts '---------------------'
+end
+
+try_https('www.menhardt.com')
+try_https('menhardt.com')
