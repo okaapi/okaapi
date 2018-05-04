@@ -1,3 +1,4 @@
+
 require "../../config/environment" unless defined?(::Rails.root)
 
 puts Tides.get_santa_cruz_tides
