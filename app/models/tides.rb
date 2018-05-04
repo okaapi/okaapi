@@ -36,10 +36,10 @@ class Tides
 	  answer = "On #{today.strftime("%A %e %B")}: "
 	  (0..water_levels.length-1).each do |i|
 	    if water_levels[i][:max_candidate]
-	      answer += "There is high of #{water_levels[i][:level].round(1)} feet " +
+	      answer += "There is a high of #{water_levels[i][:level].round(1)} feet " +
 	                "at #{water_levels[i][:time].strftime("%I:%M%p")}. "
 	    elsif water_levels[i][:min_candidate]   
-	      answer += "There is low of #{water_levels[i][:level].round(1)} feet " + 
+	      answer += "There is a low of #{water_levels[i][:level].round(1)} feet " + 
 	                "at #{water_levels[i][:time].strftime("%I:%M%p")}. "
 	    end
 	  end
