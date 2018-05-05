@@ -1,3 +1,5 @@
+require 'net/http'
+
 class Postoffice
 
   def self.receive_okaapi_emails  
@@ -21,6 +23,8 @@ class Postoffice
 
       puts "sending email to #{user.email}"
 
+      @tides = Tides.get_santa_cruz_tides
+
       @persons = Word.unarchived_people( user.id )
       @people = []
       @persons.each do |person|
@@ -41,11 +45,11 @@ class Postoffice
 
       if @prio_okaapis.count > 0
         OkaapiMailer.send_okaapi_reminder( user.email, "Okaapi Reminder", 
-             @people, @prio_okaapis ).deliver_now
+             @tides, @people, @prio_okaapis ).deliver_now
         if( user.alternate_email )
           OkaapiMailer.send_okaapi_reminder( user.alternate_email, 
 	  	"Okaapi Reminder", 
-               @people, @prio_okaapis ).deliver_now
+               @tides, @people, @prio_okaapis ).deliver_now
         end
       end
       n = n + 1
