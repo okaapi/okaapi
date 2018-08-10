@@ -15,6 +15,19 @@ def degarble( str )
   str.each_char { |c| o << (c.ord-30).chr }; 
   o
 end 
+def purge_directories( maxdatediff = 31 )
+  directory = File.join( Rails.root , 'public', 'camera')
+  if Dir.exists? directory
+    datelist = Dir.entries(directory).reject{|entry| entry =~ /^\.{1,2}$/}.sort
+    datelist.each do |date|
+      datediff = (Date.today - Date.parse( degarble(date) )).to_i
+      datedirectory = File.join( directory, date )  
+      if datediff > maxdatediff
+        FileUtils.rm_rf(datedirectory)
+      end
+    end
+  end
+end
 
 mail_config = (YAML::load( File.open(Rails.root + 'config/camera_mail.yml') ))
 
@@ -56,13 +69,25 @@ if true  #( Time.now.hour == 21 )
     puts "FOUND #{marray.count} MESSAGES"
     puts "\n"
     marray.each do |message|
-      if message_received=message.received[0].field.element
-        message_received=message.received[0].field.element.date_time
+
+      puts "MESSAGE SUBJECT #{message.subject}\n"
+      puts "MESSAGE SENT AT #{message.date}\n"
+
+      if message.received and message.received[0]
+        p message.received[0]
+        if message.received[0].field
+          p message.received[0].field
+          if defined? ( message.received[0].field.element )
+            message_received=message.received[0].field.element.date_time
+          else
+            message_received=message.date
+          end
+        else
+          message_received=message.date
+        end
       else
         message_received=message.date
       end
-      puts "MESSAGE SUBJECT #{message.subject}\n"
-      puts "MESSAGE SENT AT #{message.date}\n"
       puts "MESSAGE RECEIVED AT #{message_received}\n"
       p message.text_part.body.decoded
       
@@ -75,7 +100,7 @@ if true  #( Time.now.hour == 21 )
       #p message.message_id
 
       # this seems to make no difference?
-      message.mark_for_delete = true  
+      message.mark_for_delete = false
  
       common_filename = "#{message_received.strftime("%-d%b_%Hh%Mm%Ss")}.jpg"
       message.attachments.each do | attachment |  
@@ -109,6 +134,8 @@ if true  #( Time.now.hour == 21 )
     
   end
 
+  puts "DONE PROCESSING MESSAGES"     
+
   Dir.chdir(directory){
     imagefiles = Dir.entries(directory).sort                                   
     if imagefiles.find{|each| ( each.include? 'panasonic' )}
@@ -122,7 +149,12 @@ if true  #( Time.now.hour == 21 )
     end
   }
     
-  puts "DONE PROCESSING MESSAGES"     
+  puts "DONE CREATING VIDEOFILES"     
+
+  purge_directories( 5 )
+
+  puts "DONE PURGING DIRECTORIES"     
+
 
 end
 
