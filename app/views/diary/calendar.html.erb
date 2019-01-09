@@ -5,7 +5,7 @@
 <% if @current_user %>
 
   <br>
-  <% @tag_list.uniq.each_with_index do |tag,i| %>
+  <% @tag_list.each_with_index do |tag,i| %>
 
       <%= link_to show_diary_tag_path( month: @month, year: @year, tag: tag ),     
             style: 'color:' + tag_color_helper( @colors, i ),    

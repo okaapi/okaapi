@@ -54,55 +54,57 @@ puts ""
 
 if true  #( Time.now.hour == 21 )
 
+  marray = Mail.all
+  puts "FOUND #{marray.count} MESSAGES"
+  puts "\n"
+
   directory = File.join( Rails.root , 'public', 'camera')
   Dir.mkdir directory if ! Dir.exists? directory
   directory = File.join( Rails.root , 'public', 'camera', engarble( Date.today.to_s ) )
   if ! Dir.exists? directory
-  Dir.mkdir directory
+    Dir.mkdir directory
     #File.chmod(0700, directory)
   end
-  puts "USING DIRECTORY #{directory}"
-  puts "\n"
-  until marray.count == 0 
   
-    marray = Mail.all
-    puts "FOUND #{marray.count} MESSAGES"
+#  until marray.count == 0 
+  
+    puts "USING DIRECTORY #{directory}"
     puts "\n"
-    marray.each do |message|
+        
+    marray.each_with_index do |message,index|
 
-      puts "MESSAGE SUBJECT #{message.subject}\n"
+      puts "MESSAGE #{index} SUBJECT #{message.subject}\n"
+
       puts "MESSAGE SENT AT #{message.date}\n"
-
-      if message.received and message.received[0]
-        p message.received[0]
-        if message.received[0].field
-          p message.received[0].field
-          if defined? ( message.received[0].field.element )
-            message_received=message.received[0].field.element.date_time
-          else
-            message_received=message.date
-          end
-        else
-          message_received=message.date
-        end
-      else
-        message_received=message.date
+      begin
+        message_timestamp = Time.parse(message.subject)
+      rescue => e
+        puts "USING message.date"
+        message_timestamp = message.date
       end
-      puts "MESSAGE RECEIVED AT #{message_received}\n"
-      p message.text_part.body.decoded
-      
-      #p message.from[0]
-      #p message.date
-      #p message.subject  
-      #p message.cc  
-      #p message.return_path
-      #p message.to  
-      #p message.message_id
+      puts "MESSAGE TIMESTAMP #{message_timestamp}\n"
 
-      # this seems to make no difference?
-      message.mark_for_delete = false
+#      if message.received.class == Array
+#        puts 'Array'
+#        p message.received
+#        if message.received[0] == Mail::Field
+#          puts 'Mail::Field'
+#          p message.received[0]
+#          message_received = message.received[0].date_time
+#        end
+#      elsif message.received.class == Mail::Field
+#        message_received = message.received.date_time
+#      else
+#        p message.received
+      #      end
+      
+      puts "MESSAGE BODY: #{message.text_part.body.decoded}\n"
+      puts "---"
+      
+      message.mark_for_delete = true
  
-      common_filename = "#{message_received.strftime("%-d%b_%Hh%Mm%Ss")}.jpg"
+      common_filename = "#{message_timestamp.strftime("%-d%b_%Hh%Mm%Ss")}.jpg"
+      dlink_index = 0
       message.attachments.each do | attachment |  
         if (attachment.content_type.start_with?('image/'))
           cam_type = ''
@@ -132,7 +134,9 @@ if true  #( Time.now.hour == 21 )
       
     end
     
-  end
+#    puts "MESSAGES LEFT: #{marray.count}"
+
+#  end
 
   puts "DONE PROCESSING MESSAGES"     
 

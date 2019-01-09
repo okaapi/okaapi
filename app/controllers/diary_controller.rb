@@ -49,9 +49,9 @@ class DiaryController < ApplicationController
           thisweek[day] = nil
         else 
           if @current_user 
-		    entry = DiaryEntry.entry_for_day( @current_user.id, day_in_month, @month, @year )
-			entry_tags = DiaryEntry.tags(entry)
-			tags += entry_tags if entry_tags
+            entry = DiaryEntry.entry_for_day( @current_user.id, day_in_month, @month, @year )
+            entry_tags = DiaryEntry.tags(entry)
+	    tags += entry_tags if entry_tags
             thisweek[day] = { day: day_in_month,  content: entry }
           else
             thisweek[day] = { day: day_in_month }
@@ -60,10 +60,10 @@ class DiaryController < ApplicationController
         day_in_month += 1
       end
       @calendar[week]= thisweek
-    end      
-	@tag_list = []
-	tags.each { |t| @tag_list += [t[0]] }
-	@colors = COLORS
+    end
+    @tag_list = []
+    tags.each { |t| @tag_list += [t[0]] if !@tag_list.include?(t[0]) }
+    @colors = COLORS
   end
   
   def show_entry

@@ -17,6 +17,8 @@ gem 'bcrypt'
 gem 'tzinfo-data'
 gem 'simplecov'
 
-gem 'unicorn'
+if !ENV['windir']
+  gem 'unicorn'
+end
 
 gem 'minitest', '5.10.1'
