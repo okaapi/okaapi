@@ -1,19 +1,26 @@
 class OkaapiController < ApplicationController
   
   def index
-
+    if @current_user 	
+      termcloud_render    
+	  render 'termcloud'
+	end
   end
-    
+  
   def termcloud 
-    session[:okaapi_mode] = 'termcloud'   
     if @current_user      
-      okaapis = Okaapi.unarchived_for_user( @current_user.id )
-      terms = Okaapi.terms( okaapis )      
-      terms = Word.unarchived_terms_not_person_for_user( @current_user.id, terms ) || {}
-      @termcloud = terms.sort     
+      termcloud_render
     else
       redirect_to who_are_u_path
     end    
+  end
+  
+  def termcloud_render
+    session[:okaapi_mode] = 'termcloud'     
+    okaapis = Okaapi.unarchived_for_user( @current_user.id )
+    terms = Okaapi.terms( okaapis )      
+    terms = Word.unarchived_terms_not_person_for_user( @current_user.id, terms ) || {}
+    @termcloud = terms.sort     
   end
   
   def term_detail

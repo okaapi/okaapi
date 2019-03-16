@@ -37,7 +37,7 @@ class DiaryControllerTest < ActionController::TestCase
     # we're logged in so we need to clear that
     session[:user_session_id] = nil
     get :calendar
-    assert_redirected_to who_are_u_path 
+    assert_response :success  
   end
   
   test "receive diary entries" do 

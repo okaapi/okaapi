@@ -2,6 +2,9 @@ require 'test_helper'
   
 class TidesTest < ActiveSupport::TestCase
   
+  test "get_santa_cruz_tides" do
+    tides = Tides.get_santa_cruz_tides
+  end
   
   test "1" do
 	water_levels = [

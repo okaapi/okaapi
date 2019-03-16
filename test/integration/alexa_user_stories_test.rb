@@ -4,8 +4,11 @@ class AlexaUserStoriesTest < ActionDispatch::IntegrationTest
   
   setup do
     ZiteActiveRecord.site( 'testsite45A67' )
-    request
-    open_session.host! "testhost45A67"
+	# Rails 5.0
+    #request
+    #open_session.host! "testhost45A67"
+	# Rails 5.2
+	host! "testhost45A67"
   end
 
   test "tides launch" do

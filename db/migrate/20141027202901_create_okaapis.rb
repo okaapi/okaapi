@@ -1,4 +1,4 @@
-class CreateOkaapis < ActiveRecord::Migration
+class CreateOkaapis < ActiveRecord::Migration[5.0]
   def change
     create_table :okaapis do |t|
       t.string :subject

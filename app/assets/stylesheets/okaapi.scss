@@ -76,7 +76,7 @@
     .diary_entry {
       border: 1px blue solid;
       padding: 0px 0px 0px 5px;
-border: 1px solid red; 
+       border: 1px solid red; 
 		         text-overflow: ellipsis; 
     
       min-height: 100px; 
@@ -84,10 +84,10 @@ border: 1px solid red;
       overflow-y: hidden; 
     }
   }
-  #show_diary_entry1 { display:none; padding: 20px }
-  #show_diary_entry2 { display:none; padding: 20px }    
-  #show_diary_entry3 { display:none; padding: 20px }    
-  #show_diary_entry4 { display:none; padding: 20px }    
-  #show_diary_entry5 { display:none; padding: 20px }  
-  #show_diary_entry6 { display:none; padding: 20px }  
+  #show_diary_entry1 { display:none; padding: 10px }
+  #show_diary_entry2 { display:none; padding: 10px }    
+  #show_diary_entry3 { display:none; padding: 10px }    
+  #show_diary_entry4 { display:none; padding: 10px }    
+  #show_diary_entry5 { display:none; padding: 10px }  
+  #show_diary_entry6 { display:none; padding: 10px }  
 }

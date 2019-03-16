@@ -32,7 +32,7 @@ Rails.application.routes.draw do
     post 'diary_entries/upload'      
   end  
  
-  get 'diary/calendar', as: "calendar"
+  get 'calendar' => 'diary#calendar', as: "calendar"
   get 'diary/send_diary_email', as: "send_diary_email"
   get 'diary/send_all_diary_emails/:token' => 'diary#send_all_diary_emails', as: "send_all_diary_emails"
   get 'diary/receive_diary_emails', as: "receive_diary_emails"  
@@ -44,7 +44,7 @@ Rails.application.routes.draw do
   get 'okaapi/termcloud', as: "termcloud"
   get 'okaapi/mindmap', as: "mindmap"
   get 'okaapi/people', as: "people"
-  get 'okaapi/graph', as: "graph"  
+  get 'okaapi/graph' , as: "graph"  
   get 'okaapi/term_detail', as: "term_detail"  
   post 'okaapi/update_okaapi', as: "update_okaapi"
   get 'okaapi/toggle_person', as: "toggle_person"
@@ -65,5 +65,7 @@ Rails.application.routes.draw do
   get 'dashboard_partial' => "alexa#dashboard_partial", as: 'dashboard_partial' 
   
   root "okaapi#index", as: "root"
+  
+  match '*path' => 'okaapi#index', via: [:get, :post] 
 
 end

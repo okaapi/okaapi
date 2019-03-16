@@ -171,6 +171,8 @@ class AuthenticateController < ApplicationController
             authentication_logger("user is confirmed")   
   	       
             create_new_user_session( @current_user )	
+			session[:password_retries] = nil
+			session[:login_from] = nil
             redirect_to_action_html( { notice: "#{@current_user.username} logged in" }, 
                                      login_from, (1+rand(10000)) )		                    
           else
@@ -197,7 +199,8 @@ class AuthenticateController < ApplicationController
             begin
               # and send him an email
               AuthenticationNotifier.reset(@current_user, request, User.admin_emails).deliver_now           
-              reset_session
+              UserSession.clear_cookies(cookies)
+			  session[:password_retries] = nil
               redirect_to_action_html( { alert: "user suspended, check your email (including SPAM folder)"},
                                              login_from )
             rescue Exception => e         
@@ -238,28 +241,38 @@ class AuthenticateController < ApplicationController
     
     @username = params[:username]
     @email = params[:email] 
+	if params[:answer].to_i != 0
+		quiz = (params[:answer].to_i == params[:qa].to_i * params[:qb].to_i)
+	else
+	  quiz = false
+	end
+	
     # this is for testing email failure exception code
     @eft = params[:ab47hk]
     
     # if we're already logged in
     if @current_user
       redirect_to_action_html( { alert: "#{@current_user.username} already logged in" } )
-     authentication_logger("about_urself but #{@current_user.username} already logged in")   
+      authentication_logger("about_urself but #{@current_user.username} already logged in")   
           
-    # if email and username are given... otherwise this is the empty dialogue (first time)
-    elsif @email and @username
+    # if email and username are given...iotherwise this is the empty dialogue (first time)
+    elsif @email and @username and quiz
       # create this new user, but in unconfirmed status
       @current_user = User.new_unconfirmed( @email, @username )
       @current_user.token = nil if @eft == 'ab47hk'
-      if @current_user.save  
+      if @current_user.save 
         begin  
-          AuthenticationNotifier.registration(@current_user,request,User.admin_emails).deliver_now  
-          redirect_to_action_html notice: "Please check your email #{@email} (including your SPAM folder) for an email to verify it's you and set your password!"
+          path = AuthenticationNotifier.registration(@current_user,request,User.admin_emails).deliver_now  
+          authentication_logger("password path #{path}")	
+		  redirect_to_action_html notice: "Please check your email #{@email} (including your SPAM folder) for an email to verify it's you and set your password!"
         rescue Exception => e
           @current_user.destroy if @current_user
           redirect_to_action_html alert: "we sent an activation email, but it failed 1 (#{e})."
         end
       end
+	else
+		@qa = rand(4)+1
+		@qb = rand(4)+1
     end
     
   end
@@ -270,8 +283,9 @@ class AuthenticateController < ApplicationController
     # log out current user
     
     uncache_all
-    session[:user_session_id] = @current_user = @current_user_session = nil
-    
+	@current_user = @current_user_session = nil
+	UserSession.clear_cookies(cookies)
+	
     @user_token = params[:user_token]
     @error_messages = params[:error_messages]
     if @user_token and @user_token != '' and current_user = User.by_token( @user_token )
@@ -317,17 +331,18 @@ class AuthenticateController < ApplicationController
   def reset_mail
     
     # reset the session object and suspend the user, with email
-    reset_session  
+    UserSession.clear_cookies(cookies)
     if user = User.by_email_or_username( params[:claim] ) 
       begin
         user.suspend_and_save
-        AuthenticationNotifier.reset(user, request, User.admin_emails).deliver_now        
+        path = AuthenticationNotifier.reset(user, request, User.admin_emails).deliver_now    
+        authentication_logger("password path #{path}")		
         redirect_to_root_html notice: "user #{user.username} suspended, check your email (including SPAM folder)"
-      rescue Exception => e           
+      rescue Exception => e         
         redirect_to_root_html alert: "user suspended, but email sending failed 2 #{e}"
       end        
     else
-      redirect_to_root_html
+      redirect_to_root_html alert: "user suspended, check your email"
     end
     
   end
@@ -339,7 +354,7 @@ class AuthenticateController < ApplicationController
 	session[:login_from] = a[a.rindex('/')+1..a.length] if a
     authentication_logger('see_u from #{session[:login_from]}')	
         
-    reset_session
+    UserSession.clear_cookies(cookies)
     redirect_to_root_html #  notice: "logged out"  if we keep this, then it shows up on the cached pages!
   end
        
@@ -352,7 +367,7 @@ class AuthenticateController < ApplicationController
   end
   
   def clear
-    reset_session
+    UserSession.clear_cookies(cookies)
 	redirect_to root_path, alert: "session reset..."
   end
          
@@ -381,7 +396,7 @@ class AuthenticateController < ApplicationController
     
     def redirect_to_root_html( flash_content = nil )
         
-      authentication_logger('redirect_to_root_html')        
+      authentication_logger("redirect_to_root_html #{flash_content}")        
           
       if flash_content
         flash[ flash_content.keys[0] ] = flash_content[ flash_content.keys[0] ]
@@ -394,12 +409,13 @@ class AuthenticateController < ApplicationController
     
     def create_new_user_session( user )   
 
-      reset_session
+      UserSession.clear_cookies(cookies)	  
       uncache_all
       user_session = UserSession.new_ip_and_client( user, request.remote_ip(),
                                                    request.env['HTTP_USER_AGENT'])
-      session[:user_session_id] = user_session.id     
-      UserAction.add_action( user_session.id, controller_name, action_name, params )            
+      user_session.set_cookies(cookies)
+      UserAction.add_action( user_session.id, controller_name, action_name, params )        
+			
     end
   
     def uncache_all

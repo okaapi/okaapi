@@ -3,16 +3,16 @@
 <div style="padding:2px;	  width: 50%; float: left;">
   
   <% if entry %>
-	<div class="panel panel-default" >
-	  <div class="panel-heading">	    
+	<div class="card" >
+	  <div class="card-header">	    
 	    <%= link_to show_diary_entry_path( weekday: day, day: entry[:day], month: month, year: year,
 	                                       week: week ),
 	        remote: js? do %>
 	      <%= day %> <%= entry[:day] %>
 	    <% end %>
 	  </div>
-	  <div class="panel-body diary_entry" 
-	      style="
+	  <div class="diary_entry card-body" 
+	      style="padding: 10px;
 				 overflow-x: hidden;
 				 word-wrap: break-word">
         <%= substitute_tag_and_color_helper( entry[:content], @tag_list, @colors ).html_safe %>	        

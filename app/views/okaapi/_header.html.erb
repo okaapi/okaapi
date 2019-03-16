@@ -1,36 +1,47 @@
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+	<a class="nav-link" href="<%= calendar_path%>">Diary</a>
+  </li>
+  <li class="nav-item">
+	<a class="nav-link active" href="<%= mindmap_path%>">MindMap</a>
+  </li>
+</ul> 
+<br>
 
-<ul class="nav nav-tabs" role="tablist">
-  <li <%= ( controller.action_name == 'termcloud' ) ? 'class="active"'.html_safe : ''  %> >
-    <%= link_to 'cloud', termcloud_path, title: "Term Cloud" %>
+<ul class="nav nav-tabs ">
+  <li class="nav-item">
+    <%= link_to 'termcloud', termcloud_path, title: "Term Cloud", 
+	                       class: 'nav-link ' + (( session[:okaapi_mode] == 'termcloud' ) ? 'active' : '') %>
   </li>
-  <li <%= ( controller.action_name == 'mindmap' ) ? 'class="active"'.html_safe : ''  %> >
-    <%= link_to 'map', mindmap_path, title: "Mind Map" %>
+  <li class="nav-item">
+    <%= link_to 'mindmap', mindmap_path, title: "Mind Map", 
+	                       class: 'nav-link ' + (( session[:okaapi_mode] == 'mindmap' ) ? 'active' : '') %>
   </li>
-  <li <%= ( controller.action_name == 'graph' ) ? 'class="active"'.html_safe : ''  %> >
-     <%= link_to 'graph', graph_path, title: "Graph" %>
+  <li class="nav-item">
+    <%= link_to 'graph', graph_path, title: "Graph", 
+	                       class: 'nav-link ' + (( session[:okaapi_mode] == 'graph' ) ? 'active' : '') %>
   </li>
-  <li <%= ( controller.action_name == 'people' ) ? 'class="active"'.html_safe : ''  %> >
-     <%= link_to 'people', people_path, title: "People" %>
-  </li>
-  <li style="float:right" >
-    <%= link_to root_path, title: "Back" do %>
-      <i class="glyphicon glyphicon-eject"></i>
-    <% end %>
+  <li class="nav-item">
+    <%= link_to 'people', people_path, title: "People", 
+	                       class: 'nav-link ' + (( session[:okaapi_mode] == 'people' ) ? 'active' : '') %>
   </li>  
-</ul>
-<ul class="nav nav-tabs" role="tablist">
+</ul> 
+
+
+  
+<ul class="nav nav-pills justify-content-end" >
 
   <% if @current_user  %>	    
-    <li style="float:right" >        
+    <li >        
 	  <%= link_to send_okaapi_emails_path, 
-	     title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" do %>
-	    <i class="glyphicon glyphicon-envelope"></i>
+	     class: 'nav-link ' , title: "Send daily reminder email", onclick: "$('#spinner').fadeIn('slow');" do %>
+	    &nbsp;<i class="far fa-envelope"></i>&nbsp;
 	  <% end %>
     </li>
-    <li style="float:right" >
+    <li >
 	  <%= link_to receive_okaapi_emails_path,
-	      title: "Check emails", onclick: "$('#spinner').fadeIn('slow');" do %>
-	    <i class="glyphicon glyphicon-inbox"></i>
+	      class: 'nav-link ' , title: "Check emails", onclick: "$('#spinner').fadeIn('slow');" do %>
+	    &nbsp;<i class="fas fa-inbox"></i>&nbsp;
 	  <% end %>
 	</li>
   <% end %>  
