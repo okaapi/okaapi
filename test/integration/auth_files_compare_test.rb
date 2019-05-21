@@ -8,7 +8,7 @@ class AuthFilesCompareTest < ActionDispatch::IntegrationTest
 
 =begin
   test "message" do
-    puts "AUthFilesCOmpareTest turned off"
+    puts "AuthFilesCompareTest turned off"
   end
 =end
 
@@ -17,6 +17,9 @@ class AuthFilesCompareTest < ActionDispatch::IntegrationTest
     assert FileUtils.compare_file('app/models/user_action.rb','../menhardt/app/models/user_action.rb')
     assert FileUtils.compare_file('app/models/user_session.rb','../menhardt/app/models/user_session.rb')   
     assert FileUtils.compare_file('app/models/site_map.rb','../menhardt/app/models/site_map.rb')
+	assert FileUtils.compare_file('app/models/captcha.rb','../menhardt/app/models/captcha.rb')
+	assert FileUtils.compare_file('app/models/geo_ip.rb','../menhardt/app/models/geo_ip.rb')
+	assert FileUtils.compare_file('app/models/fb_login.rb','../menhardt/app/models/fb_login.rb')
     
     assert FileUtils.compare_file('test/models/user_test.rb','../menhardt/test/models/user_test.rb')
     assert FileUtils.compare_file('test/models/site_map_test.rb','../menhardt/test/models/site_map_test.rb')

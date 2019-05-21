@@ -15,6 +15,13 @@ module Admin
 	    else
           @user_sessions = UserSession.all.order( updated_at: :desc )
 	    end
+		@user_sessions.each do |u|
+		  if u.ip
+            u.ip += ' ' + GeoIp.getcountryandorg(u.ip) 
+		  else 
+		    u.ip = GeoIp.getcountryandorg(u.ip) 
+		  end
+		end
 	  end
 
 	  def stats
@@ -82,6 +89,19 @@ module Admin
 	  # DELETE /user_sessions/1.json
 	  def destroy
 	    @user_session.destroy
+	    respond_to do |format|
+	      format.html { redirect_to user_sessions_url }
+	      format.json { head :no_content }
+	    end
+	  end
+	  
+	  def purge_sessions
+        purge_id = params[:id]	
+		user_sessions = UserSession.where("id <= ? ", params[:id] )
+		user_sessions.each do |u|
+		  u.delete
+		end
+	
 	    respond_to do |format|
 	      format.html { redirect_to user_sessions_url }
 	      format.json { head :no_content }

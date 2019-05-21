@@ -1,4 +1,3 @@
-require 'net/http'
 
 class AuthenticateController < ApplicationController
 
@@ -20,17 +19,7 @@ class AuthenticateController < ApplicationController
     # 
     begin
     
-      url = URI.parse('https://graph.facebook.com/me?fields=name,email&access_token=' + params[:fb_token] )
-      http = Net::HTTP.new(url.host, url.port)
-      http.use_ssl = true if url.scheme == 'https'
-      http.read_timeout = 1  # set this to zero to check time out... or 'http://httpstat.us/200?sleep=3000'
-      http.open_timeout = 1
-      
-      authentication_logger('checking access_token with Facebook...')
-      resp = http.start() {|http| http.get(url) }
-      
-      authentication_logger('   ...done')      
-      parsed_resp = JSON.parse(resp.body)
+	  parsed_resp = FbLogin.check_token( params[:fb_token] )
 
       if ! parsed_resp['error']
       
@@ -145,8 +134,12 @@ class AuthenticateController < ApplicationController
     
     # if we're already logged in
     if @current_user
-      redirect_to_action_html( { alert: "#{@current_user.username} already logged in" }, 
+	  if login_from != '_prove_it' 
+        redirect_to_action_html( { alert: "#{@current_user.username} already logged in" }, 
                                        login_from)  
+      else
+	    redirect_to_action_html( { alert: "#{@current_user.username} already logged in" } )
+	  end
       authentication_logger("prove_it but #{@current_user.username} already logged in")   
       
     # this is the first time we come here
@@ -158,7 +151,8 @@ class AuthenticateController < ApplicationController
     # now the user has offered a password
     elsif @current_user = User.by_email_or_username( @claim ) 
 
-        authentication_logger("user #{@claim} exists")   
+        authentication_logger("coming from page '#{login_from}'")  
+		authentication_logger("user #{@claim} exists")   
 
         # if that's ok
         if @current_user.authenticate( @password )
@@ -173,6 +167,7 @@ class AuthenticateController < ApplicationController
             create_new_user_session( @current_user )	
 			session[:password_retries] = nil
 			session[:login_from] = nil
+			authentication_logger("redirecting to page '#{login_from}'")  
             redirect_to_action_html( { notice: "#{@current_user.username} logged in" }, 
                                      login_from, (1+rand(10000)) )		                    
           else
@@ -249,14 +244,22 @@ class AuthenticateController < ApplicationController
 	
     # this is for testing email failure exception code
     @eft = params[:ab47hk]
-    
+
+    # 1) there is no :captcha parameter (when about_urself is first called up)
+	# 2) else check with Google captcha what the score is (-1 if error)
+    if params[:captcha]
+      captcha = Captcha.verify(params[:captcha])
+      @current_user_action.params = @current_user_action.params + 'captcha: ' + captcha.to_s + '; '
+      @current_user_action.save  
+	end
+	
     # if we're already logged in
     if @current_user
       redirect_to_action_html( { alert: "#{@current_user.username} already logged in" } )
       authentication_logger("about_urself but #{@current_user.username} already logged in")   
           
     # if email and username are given...iotherwise this is the empty dialogue (first time)
-    elsif @email and @username and quiz
+    elsif @email and @username and quiz and captcha > 0.1
       # create this new user, but in unconfirmed status
       @current_user = User.new_unconfirmed( @email, @username )
       @current_user.token = nil if @eft == 'ab47hk'
@@ -270,10 +273,9 @@ class AuthenticateController < ApplicationController
           redirect_to_action_html alert: "we sent an activation email, but it failed 1 (#{e})."
         end
       end
-	else
-		@qa = rand(4)+1
-		@qb = rand(4)+1
     end
+    @qa = rand(4)+1
+    @qb = rand(4)+1	
     
   end
   
@@ -350,7 +352,7 @@ class AuthenticateController < ApplicationController
   def see_u
     # reset the session object, and forget the user that way
 	
-	a = request.headers['HTTP_REFERER']	
+	a = request.headers['HTTPREFERER']	
 	session[:login_from] = a[a.rindex('/')+1..a.length] if a
     authentication_logger('see_u from #{session[:login_from]}')	
         
