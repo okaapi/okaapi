@@ -18,7 +18,7 @@ class Postoffice
 
   def self.send_okaapi_emails
     n = 0
-    users = User.all
+    users = User.where( active: 'confirmed' )
     users.each do |user|
 
       puts "sending email to #{user.email}"
