@@ -11,6 +11,7 @@
 /db/*.sqlite3
 /db/*.sql
 /db/*.sqlite3-journal
+/db/schema.rb
 
 # Ignore coverage files
 /coverage
