@@ -10,57 +10,49 @@
 &nbsp; 
 <%= link_to toggle_person_path( id: @word.id ), title: "Toggle person" do %>
   <% if @word.person == 'false' %>
-    <i class="glyphicon glyphicon-user"></i>
+    <i class="fas fa-user"></i>
   <% else %>
-    <i class="glyphicon glyphicon-bookmark"></i>
+    <i class="far fa-bookmark"></i>
   <% end %> 
 <% end %>
 
 <% if @word.person == 'false' %>
   &nbsp; 
   <%= link_to priority_path( id: @word.id, increment: -1 ) do %>
-    <i class="glyphicon glyphicon-arrow-down"></i>
+    <i class="fas fa-arrow-up"></i>
   <% end %> 
   <span class="badge badge-important"><%= @word.priority %> </span> 
   <%= link_to priority_path( id: @word.id, increment: +1 ) do %>
-    <i class="glyphicon glyphicon-arrow-up"></i>
+    <i class="fas fa-arrow-down"></i>
   <% end %> 
 <% end %>   
 &nbsp;  
 
 <%= link_to archive_word_path( id: @word.id ), title: "Archive" do %> 
-  <i class="glyphicon glyphicon-download-alt"></i>
+  <i class="fa fa-level-down-alt"></i>
 <% end %>
 &nbsp; 
 <%= link_to undo_archive_word_path( ) , title: "Undo last archive" do %>
-  <i class="glyphicon glyphicon-open"></i>
+  <i class="fa fa-level-up-alt"></i>
 <% end %>
 
 
 <% @okaapis.each do |okaapi| %>
 
     <p></p>
-
 	  <%= form_tag update_okaapi_path do %>
-	    <div class="col-xs-4">
-          <%= text_field_tag :subject, okaapi.subject, title: okaapi.content, class: "form-control input-sm" %>
-        </div>
+
+        <%= text_field_tag :subject, okaapi.subject, size: 75, title: okaapi.content, class: "" %>
+		<%= link_to archive_okaapi_path( id: okaapi.id, word_id: @word.id ) , title: "Archive" do %> 
+          &nbsp;<i class="fa fa-level-down-alt"></i>
+        <% end %>
+        <%= link_to undo_archive_okaapi_path( word_id: @word.id ) , title: "Undo last archive" do %>
+          &nbsp;<i class="fa fa-level-up-alt"></i>
+        <% end %> 		  
+
         <%= hidden_field_tag :word_id, @word.id %> 
         <%= hidden_field_tag :okaapi_id, okaapi.id %>      
       <% end %>
-
-    &nbsp;
-    <%= link_to archive_okaapi_path( id: okaapi.id, word_id: @word.id ) , title: "Archive" do %> 
-      <i class="glyphicon glyphicon-download-alt"></i>
-    <% end %>
-    &nbsp;    
-    <% if okaapi == @okaapis[0] %>
-      <%= link_to undo_archive_okaapi_path( word_id: @word.id ) , title: "Undo last archive" do %>
-        <i class="glyphicon glyphicon-open"></i>
-      <% end %> 
-    <% end %> 
-
-
 
 <% end %>
 

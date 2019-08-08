@@ -22,7 +22,7 @@
             <% if cluster.size > 1 %>
                <%= link_to mindmap_path( drilldown: (@drilldown || []) + [cluster[((cluster.size-1)/2)][0]] ),
                    title: ( cluster[((cluster.size-1)/2)][0] + ' Drilldown' ) do %>
-                 <i class="glyphicon glyphicon-search"></i>
+                 <i class="fas fa-search"></i>
                <% end %>
             <% end %> 
           </span>
