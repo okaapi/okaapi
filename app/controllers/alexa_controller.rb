@@ -4,45 +4,6 @@ class AlexaController < ApplicationController
 
   skip_before_action :verify_authenticity_token
   
-  #
-  #  beckman dashboard - remove this
-  # 
-  def index
-
-    if params['request']     
-      case params['request']['type']
-      when 'LaunchRequest'
-        response = launch_request_response('BeckmanDashboard', "Welcome to the Beckman dashboard!", false)
-      when 'IntentRequest'
-        response = intent_request_response_beckman('BeckmanDashboard',params['request']['intent'])
-      else
-        response = {request: params['request']['type'],status: 'error request'}.to_json
-      end
-    else
-      response = {request: params,status: 'error params'}.to_json
-    end
-
-    render json: response
-    
-  end
-  
-  #
-  #  beckman dashboard - remove this
-  #   
-  def dashboard
-    @intent = Alexa.last.intent       
-    session[:last_intent] = @intent   
-    render layout: 'dashboard'  
-  end
-  
-  #
-  #  beckman dashboard - remove this
-  #   
-  def dashboard_partial
-    @intent = Alexa.last.intent if Alexa.last      
-    session[:last_intent] = @intent
-    render partial: 'dashboard'        
-  end    
 
   def shopping
     begin
@@ -61,10 +22,27 @@ class AlexaController < ApplicationController
     
   end
   
-  def tides
+  def movie_theatre_on
     begin
       if params['request']['type'] == 'LaunchRequest'
-        response = launch_request_response("SantaCruzTides", Tides.get_santa_cruz_tides, true)
+        response = launch_request_response("MovieTheatreOn", "Alexa okaapi on", true)
+        session[:movie_theatre] = true    
+      else
+        response = {request: params, status: 'unknown request'} 
+      end      
+    rescue StandardError => e
+      response = {request: params, status: e}
+    end
+
+    render json: response
+    
+  end  
+
+  def movie_theatre_off
+    begin
+      if params['request']['type'] == 'LaunchRequest'
+        response = launch_request_response("MovieTheatreOff", "Alexa okaapi off", true)
+        session[:movie_theatre] = false    
       else
         response = {request: params, status: 'unknown request'} 
       end      
@@ -76,6 +54,9 @@ class AlexaController < ApplicationController
     
   end  
 
+  def movie_theatre_status
+    render json: { movie_theatre: session[:movie_theatre] }
+  end
     
   
 private
@@ -91,40 +72,6 @@ private
     }        
   end
 
-  def intent_request_response_beckman( skill, intent )
-      intent_name = intent['name']
-      stop_interaction = false
-      case intent_name
-      when 'Overview'
-        Alexa.create(skill: skill,intent: intent_name)
-        speech = 'Here is the overview. You can ask to show turnaround time or sample volume, or to cancel.'
-      when 'Turnaround'
-        Alexa.create(skill: skill,intent: intent_name)
-        speech = 'This shows turnaround time. Current turnaround time is 40 minutes.'
-      when 'Samplevolume'
-        Alexa.create(skill: skill,intent: intent_name)
-        speech = 'This shows sample volume or throughput.'
-      when 'AMAZON.HelpIntent'
-        speech = 'You can say show overview, turnaroundtime, or sample volume.'
-      when 'AMAZON.StopIntent'
-        speech = 'Beckman dashboard, out.'
-        stop_interaction = true
-      when 'AMAZON.CancelIntent'
-        speech = 'Beckman dashboard, out.'
-        stop_interaction = true
-      else
-        speech = 'I did not understand that.'
-      end
-      Alexa.create(skill: skill, request: "IntentRequest", 
-                   intent: intent_name, answer: speech ) 
-        { version: "1.0",
-          response: {
-            outputSpeech: {
-              type: "PlainText",
-              text: speech },
-            shouldEndSession: stop_interaction ? "true" : "false" }
-        }             
-  end
 
   def intent_request_response_shopping( skill, intent )
   
@@ -195,66 +142,8 @@ private
   
 end
 
+
 =begin
-
-Alexa skills beckman dashboard
-{
-    "interactionModel": {
-        "languageModel": {
-            "invocationName": "beckman dashboard",
-            "intents": [
-                {
-                    "name": "AMAZON.CancelIntent",
-                    "samples": [
-                        "cancel"
-                    ]
-                },
-                {
-                    "name": "AMAZON.HelpIntent",
-                    "samples": [
-                        "help"
-                    ]
-                },
-                {
-                    "name": "AMAZON.StopIntent",
-                    "samples": [
-                        "exit",
-                        "stop"
-                    ]
-                },
-                {
-                    "name": "Overview",
-                    "slots": [],
-                    "samples": [
-                        "overview",
-                        "show overview"
-                    ]
-                },
-                {
-                    "name": "Turnaround",
-                    "slots": [],
-                    "samples": [
-                        "TTA",
-                        "turn around time",
-                        "turnaroundtime",
-                        "show turnaround time",
-                        "turnaround time"
-                    ]
-                },
-                {
-                    "name": "Samplevolume",
-                    "slots": [],
-                    "samples": [
-                        "show sample volume",
-                        "sample volume"
-                    ]
-                }
-            ],
-            "types": []
-        }
-    }
-}
-
 Alexa skills shopping
 
 {

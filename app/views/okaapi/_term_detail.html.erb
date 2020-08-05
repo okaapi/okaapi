@@ -42,7 +42,7 @@
     <p></p>
 	  <%= form_tag update_okaapi_path do %>
 
-        <%= text_field_tag :subject, okaapi.subject, size: 75, title: okaapi.content, class: "" %>
+        <%= text_field_tag :subject, okaapi.subject, size: 75, title: 'Content: ' + okaapi.content, class: "" %>
 		<%= link_to archive_okaapi_path( id: okaapi.id, word_id: @word.id ) , title: "Archive" do %> 
           &nbsp;<i class="fa fa-level-down-alt"></i>
         <% end %>

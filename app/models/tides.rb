@@ -17,16 +17,16 @@ class Tides
   def self.get_predictions_from_noaa
 	  today = Time.now
 	  td = today.strftime("%Y%m%d")
-	  url = "https://tidesandcurrents.noaa.gov/api/datagetter?" + 
+	  url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?" + 
 	        "begin_date=#{td}&end_date=#{td}&" + 
 	        "station=9413450&time_zone=lst_ldt&product=predictions&datum=MLLW&units=english&time_zone=lst&format=json"
-	                     
+
 	  uri = URI(url) 
 	  http = Net::HTTP.new(uri.host, uri.port)
 	  http.use_ssl = true
 	  req = Net::HTTP::Get.new(uri.path+'?'+uri.query)
-	
 	  res = http.request(req)
+          
 	  res = JSON.parse(res.body)
 	  predictions = res['predictions']
 	  

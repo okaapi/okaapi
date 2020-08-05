@@ -9,8 +9,13 @@ class Postoffice
       if user = User.by_email_or_alternate( entry[:from] )
         ok = Okaapi.new( entry )
         ok.user_id = user.id
-        ok.save!
-         n = n + 1
+        begin
+          ok.save!
+        rescue
+          ok.content = 'content erased'
+          ok.save!
+        end
+        n = n + 1
       end
     end
     return n

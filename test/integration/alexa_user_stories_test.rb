@@ -11,22 +11,39 @@ class AlexaUserStoriesTest < ActionDispatch::IntegrationTest
 	host! "testhost45A67"
   end
 
-  test "tides launch" do
+  test "movie theatre" do
+
     json = { version: "1.0",
     	     request: {
                type: "LaunchRequest"
              }
            }
-    post "/tides", params: json, as: :json    
+    post "/movie_theatre_on", params: json, as: :json    
     assert_response :success
-
     r = eval(@response.body)  
-    today = Time.now
-    speech = "On #{today.strftime("%A %e %B")}: "
+    speech = "Alexa okaapi on"
     assert_equal r[:response][:outputSpeech][:text][0..speech.length-1], speech
     assert_equal r[:response][:shouldEndSession], 'true'         
+
+    get "/movie_theatre_status"
+    assert_response :success
+    r = eval(@response.body)  
+    assert_equal r[:movie_theatre], true
+
+    post "/movie_theatre_off", params: json, as: :json    
+    assert_response :success
+    r = eval(@response.body)  
+    speech = "Alexa okaapi off"
+    assert_equal r[:response][:outputSpeech][:text][0..speech.length-1], speech
+    assert_equal r[:response][:shouldEndSession], 'true'         
+
+    get "/movie_theatre_status"
+    assert_response :success
+    r = eval(@response.body)  
+    assert_equal r[:movie_theatre], false
+
   end	
-  
+
   test "shopping launch" do
     json = { version: "1.0",
     	     request: {
