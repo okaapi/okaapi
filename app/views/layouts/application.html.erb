@@ -49,7 +49,7 @@
 		  <div id="authentication_dialogue_js"></div>
 		<% end %>     		 
       </div>
-      <div class="col-sm-4 text-right">
+      <div class="col-sm-4 text-end">
 	    <% if session[:reset_user_id] and @current_user = User.find_by_id( session[:reset_user_id] )%>  
 	    <% else %>  
 	      <div id="authentication_launchpad">

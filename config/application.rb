@@ -31,6 +31,8 @@ module Okaapi2
 	config.captcha_good_test_token = captcha_config["good-test-token"]
 	config.captcha_bad_test_token = captcha_config["bad-test-token"]
 	config.captcha_bypass = captcha_config["bypass"]
-    
+
+
+    config.hosts << 'www.okaapi.com'        
   end
 end

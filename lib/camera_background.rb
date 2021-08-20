@@ -140,21 +140,33 @@ if true  #( Time.now.hour == 21 )
 #end
   puts "DONE PROCESSING MESSAGES"     
 
-  Dir.chdir(directory){
-    imagefiles = Dir.entries(directory).sort                                   
-    if imagefiles.find{|each| ( each.include? 'panasonic' )}
-      %x[#{"ffmpeg -y -hide_banner -loglevel panic -r 60 -pattern_type glob -i 'panasonic*.jpg' -filter:v 'setpts=30.0*PTS' -vcodec mpeg4 panasonic.avi"}]
-      %x[#{"ffmpeg -y -hide_banner -loglevel panic -r 60 -pattern_type glob -i 'panasonic*.jpg' -filter:v 'setpts=30.0*PTS' -f mp4 -vcodec libx264 panasonic.mp4"}]
-    end
-  }
-  Dir.chdir(directory){
-    imagefiles = Dir.entries(directory).sort                                   
-    if imagefiles.find{|each| ( each.include? 'dlink' )}
-      %x[#{"ffmpeg -y -hide_banner -loglevel panic -r 60 -pattern_type glob -i 'dlink*.jpg' -filter:v 'setpts=30.0*PTS' -vcodec mpeg4 dlink.avi"}]
-      %x[#{"ffmpeg -y -hide_banner -loglevel panic -r 60 -pattern_type glob -i 'dlink*.jpg' -filter:v 'setpts=30.0*PTS' -f mp4 -vcodec libx264 dlink.mp4"}]
-    end
-  }
-    
+
+  begin
+    Dir.chdir(directory){
+      imagefiles = Dir.entries(directory).sort                                   
+      if imagefiles.find{|each| ( each.include? 'panasonic' )}
+        %x[#{"ffmpeg -y -hide_banner -loglevel panic -r 60 -pattern_type glob -i 'panasonic*.jpg' -filter:v 'setpts=30.0*PTS' -vcodec mpeg4 panasonic.avi"}]
+        %x[#{"ffmpeg -y -hide_banner -loglevel panic -r 60 -pattern_type glob -i 'panasonic*.jpg' -filter:v 'setpts=30.0*PTS' -f mp4 -vcodec libx264 panasonic.mp4"}]
+      end
+    }
+  rescue e
+    puts "error writing panasonic video file"
+    p e
+  end
+
+  begin
+    Dir.chdir(directory){
+      imagefiles = Dir.entries(directory).sort                                   
+      if imagefiles.find{|each| ( each.include? 'dlink' )}
+        %x[#{"ffmpeg -y -hide_banner -loglevel panic -r 60 -pattern_type glob -i 'dlink*.jpg' -filter:v 'setpts=30.0*PTS' -vcodec mpeg4 dlink.avi"}]
+        %x[#{"ffmpeg -y -hide_banner -loglevel panic -r 60 -pattern_type glob -i 'dlink*.jpg' -filter:v 'setpts=30.0*PTS' -f mp4 -vcodec libx264 dlink.mp4"}]
+      end
+    }
+  rescue e
+    puts "error writing dlink video file"
+    p e
+  end
+  
   puts "DONE CREATING VIDEOFILES"     
 
   purge_directories( 5 )

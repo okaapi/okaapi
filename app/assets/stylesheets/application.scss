@@ -3,13 +3,15 @@
 
 @import "okaapi";
  
+
 #spinner { display: none }
 
 bla { color: green }
 
 a {
- color: #777777;
- &:hover {
+  color: #777777;
+  text-decoration: none;
+  &:hover {
   color: red;
   text-decoration: none;
   }    
