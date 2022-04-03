@@ -3,9 +3,6 @@
 <button class="btn btn-primary btn-lg">
   <%= @word.term %>
 </button>
-<button type="button" class="close">
-  <%= link_to 'X', okaapi_mode %>
-</button>
 
 &nbsp; 
 <%= link_to toggle_person_path( id: @word.id ), title: "Toggle person" do %>
@@ -45,11 +42,12 @@
         <%= text_field_tag :subject, okaapi.subject, size: 75, title: 'Content: ' + okaapi.content, class: "" %>
 		<%= link_to archive_okaapi_path( id: okaapi.id, word_id: @word.id ) , title: "Archive" do %> 
           &nbsp;<i class="fa fa-level-down-alt"></i>
-        <% end %>
+	<% end %>
+	<%= okaapi.reminder %>	
         <%= link_to undo_archive_okaapi_path( word_id: @word.id ) , title: "Undo last archive" do %>
           &nbsp;<i class="fa fa-level-up-alt"></i>
         <% end %> 		  
-
+        
         <%= hidden_field_tag :word_id, @word.id %> 
         <%= hidden_field_tag :okaapi_id, okaapi.id %>      
       <% end %>

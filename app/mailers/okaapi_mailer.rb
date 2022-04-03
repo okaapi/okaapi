@@ -37,7 +37,17 @@ class OkaapiMailer < ActionMailer::Base
     entries = []
     pop.each_mail do |message|
 
-      from, subj, body, t = receive( message.pop )
+      message_obj = Mail.new(message.pop)
+      from = message_obj.from
+      subj = message_obj.subject
+      t = message_obj.date
+      if message_obj.multipart?
+        if message_obj.text_part
+          body = message_obj.text_part.body.decoded
+        end
+      else
+        body = message_obj.decoded
+      end
      
       r = subj.split("#")
       subject = r[0]
@@ -62,21 +72,5 @@ class OkaapiMailer < ActionMailer::Base
     return entries
   end
 
-  #
-  #  and this is to tap into ActionMailer receiving capabilities
-  #
-  def receive( email )
 
-    if email.multipart?
-      if email.text_part
-        body = email.text_part.body.decoded
-      end
-    else
-      body = email.decoded
-    end
-
-    return email.from.first, email.subject, body, email.date
-
-  end   
-      
 end

@@ -7,12 +7,12 @@ cd /var/rails/okaapi/lib
 
 pwd
 
-/usr/bin/ruby okaapi_background.rb
+/usr/local/bin/ruby okaapi_background.rb
 #on wien#ruby okaapi_background.rb
 
 echo "okaapi_background done"
 
-/usr/bin/ruby camera_background.rb
+/usr/local/bin/ruby camera_background.rb
 #on wien#ruby camera_background.rb
 
 echo "camera background done"

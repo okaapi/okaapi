@@ -27,12 +27,13 @@ module Okaapi2
     config.action_mailer.raise_delivery_errors = true
     config.fb_app_id = false
     captcha_config = (YAML::load( File.open(config.root + 'config/captcha_config.yml') ))
-	config.captcha_secret = captcha_config["secret"]	
-	config.captcha_good_test_token = captcha_config["good-test-token"]
-	config.captcha_bad_test_token = captcha_config["bad-test-token"]
-	config.captcha_bypass = captcha_config["bypass"]
+    config.captcha_secret = captcha_config["secret"]	
+    config.captcha_good_test_token = captcha_config["good-test-token"]
+    config.captcha_bad_test_token = captcha_config["bad-test-token"]
+    config.captcha_bypass = captcha_config["bypass"]
 
-
+    # why is this necessary all of a sudden?
     config.hosts << 'www.okaapi.com'        
+    config.hosts << 'okaapi.com'        
   end
 end

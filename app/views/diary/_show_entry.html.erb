@@ -3,9 +3,6 @@
 	<button class="btn btn-primary btn-lg">
 	  <%= @weekday %> <%= @day %> <%= monthname( @month ) %> <%= @year %>
 	</button>
-	<button type="button" class="close">
-	  <%= link_to 'X', calendar_path( month: @month, year: @year ) %>
-	</button>
 	<p></p>
 	<%= form_tag update_diary_entry_path do %>
 	  <div class="col-xs-8">
