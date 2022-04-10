@@ -1,6 +1,7 @@
 class OkaapiController < ApplicationController
   
   def index
+    @users = User.all.first
     if @current_user 	
       termcloud_render    
 	  render 'termcloud'

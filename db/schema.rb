@@ -2,17 +2,17 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_11_143702) do
+ActiveRecord::Schema.define(version: 2021_08_16_203058) do
 
-  create_table "alexas", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "alexas", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "intent"
     t.string "slot"
     t.string "skill"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2018_10_11_143702) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "diary_entries", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "diary_entries", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.datetime "date"
     t.integer "day", default: 0
     t.integer "month", default: 0
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2018_10_11_143702) do
     t.string "g", default: "false"
   end
 
-  create_table "okaapis", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "okaapis", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "subject"
     t.text "content"
     t.datetime "time"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 2018_10_11_143702) do
     t.string "g", default: "false"
   end
 
-  create_table "site_maps", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "site_maps", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "external"
     t.string "internal"
     t.string "aux"
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 2018_10_11_143702) do
     t.datetime "updated_at"
   end
 
-  create_table "user_actions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "user_actions", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.integer "user_session_id"
     t.string "controller"
     t.string "action"
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 2018_10_11_143702) do
     t.index ["user_session_id"], name: "index_user_actions_on_user_session_id"
   end
 
-  create_table "user_sessions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "user_sessions", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.integer "user_id"
     t.string "client"
     t.string "ip"
@@ -77,10 +77,11 @@ ActiveRecord::Schema.define(version: 2018_10_11_143702) do
     t.datetime "updated_at"
     t.string "site", default: "localhost"
     t.string "remember_digest"
+    t.string "isp"
     t.index ["user_id"], name: "index_user_sessions_on_user_id"
   end
 
-  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "users", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "username"
     t.string "email"
     t.string "alternate_email", default: ""
@@ -96,7 +97,7 @@ ActiveRecord::Schema.define(version: 2018_10_11_143702) do
     t.string "goal_in_subject", default: ""
   end
 
-  create_table "words", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "words", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "term"
     t.integer "priority", default: 0
     t.string "person", default: "false"

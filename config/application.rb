@@ -35,5 +35,9 @@ module Okaapi2
     # why is this necessary all of a sudden?
     config.hosts << 'www.okaapi.com'        
     config.hosts << 'okaapi.com'        
+    config.hosts << "www.blackberryhillhouse.com"
+    config.hosts << "blackberryhillhouse.com"
+    config.hosts << 'otherhost'        
+    config.hosts << 'testhost45A67'        
   end
 end

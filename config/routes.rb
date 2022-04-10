@@ -8,8 +8,6 @@ Rails.application.routes.draw do
   match "_ur_secrets" => "authenticate#ur_secrets", as: "ur_secrets", via: [:get, :post] 
   get "_reset_mail" => "authenticate#reset_mail", as: 'reset_mail'
   get "_see_u" => "authenticate#see_u", as: 'see_u'
-  #get 'testfb' => "authenticate#testfb", as: 'testfb'  
-  #get '_fb_login/:fb_token' => "authenticate#fb_login", as: 'fb_login'
   get '_check/(:code)' => 'authenticate#check', as: 'check'  
   get '_clear' => 'authenticate#clear', as: 'clear'   
       
@@ -57,15 +55,6 @@ Rails.application.routes.draw do
   get 'okaapi/show_okaapi_content', as: "show_okaapi_content"
   get 'okaapi/send_okaapi_emails', as: "send_okaapi_emails"
   get 'okaapi/receive_okaapi_emails', as: "receive_okaapi_emails"
-
-  # alexa
-  match 'movie_theatre_on' => "alexa#movie_theatre_on",
-        as: 'movie_theatre_on', via: [:get, :post] 
-  match 'movie_theatre_off' => "alexa#movie_theatre_off",
-        as: 'movie_theatre_off', via: [:get, :post] 
-  get 'movie_theatre_status' => "alexa#movie_theatre_status",
-        as: 'movie_theatre_status'
-  match 'shopping' => "alexa#shopping", as: 'shopping', via: [:get, :post] 
   
   root "okaapi#index", as: "root"
   

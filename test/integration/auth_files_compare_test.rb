@@ -11,7 +11,7 @@ class AuthFilesCompareTest < ActionDispatch::IntegrationTest
     puts "AuthFilesCompareTest turned off"
   end
 =end
-
+  
   test "models" do
     assert FileUtils.compare_file('app/models/user.rb','../menhardt/app/models/user.rb')
     assert FileUtils.compare_file('app/models/user_action.rb','../menhardt/app/models/user_action.rb')
@@ -40,6 +40,7 @@ class AuthFilesCompareTest < ActionDispatch::IntegrationTest
     assert FileUtils.compare_file('test/fixtures/user_sessions.yml','../menhardt/test/fixtures/user_sessions.yml')   
     assert FileUtils.compare_file('test/fixtures/site_maps.yml','../menhardt/test/fixtures/site_maps.yml')                                  
   end  
+
 
   test "controllers" do
     assert FileUtils.compare_file('app/controllers/admin/users_controller.rb',
@@ -102,6 +103,11 @@ class AuthFilesCompareTest < ActionDispatch::IntegrationTest
                                   '../menhardt/db/migrate/20150715210318_add_site_to_user_actions.rb') 
     assert FileUtils.compare_file('db/migrate/20150723195726_create_site_maps.rb',
                                   '../menhardt/db/migrate/20150723195726_create_site_maps.rb')  
+    assert FileUtils.compare_file('db/migrate/20181011143702_add_remember_digest_to_user_sessions.rb',
+                                  '../menhardt/db/migrate/20181011143702_add_remember_digest_to_user_sessions.rb')
+    assert FileUtils.compare_file('db/migrate/20210816203058_add_isp_to_user_sessions.rb',
+                                  '../menhardt/db/migrate/20210816203058_add_isp_to_user_sessions.rb')  
+
   end
 
   test "yaml" do

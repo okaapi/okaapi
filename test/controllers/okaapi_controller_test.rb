@@ -60,7 +60,7 @@ class OkaapiControllerTest < ActionController::TestCase
 	    if ! @not_java
 	      get :term_detail, xhr: true, params: { word_id: words(:blue).id }
 	      assert_select_jquery :html, '#term_detail_dialogue' do    
-	        assert_select 'button a', 1
+	        assert_select 'button', 1
 	      end 
 	    else
 		  begin
@@ -71,7 +71,7 @@ class OkaapiControllerTest < ActionController::TestCase
 		  end		   
 	      assert_response :success
 	      assert_select '#term_detail_dialogue' do    
-	        assert_select 'button a', 1
+	        assert_select 'button', 1
 	      end 
 	    end
     end
