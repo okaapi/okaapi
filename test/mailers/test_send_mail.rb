@@ -1,3 +1,4 @@
+
 require "rubygems"
 require 'net/smtp'
 
@@ -28,7 +29,7 @@ mail = DiaryReminder.send_diary_reminder( "wido@menhardt.com", " towards my goal
 
 (1..3).each {puts "."}
 puts "Sending okaapi reminder"
-mail = OkaapiMailer.send_okaapi_reminder( "wido@menhardt.com", "some subject" ).deliver
+mail = OkaapiMailer.send_okaapi_reminder( "wido@menhardt.com", "some subject", "tides", [["person"=>"1"]], ["priorities"] ).deliver
 
 
 (1..3).each {puts "."}

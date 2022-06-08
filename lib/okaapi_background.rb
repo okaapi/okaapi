@@ -10,16 +10,15 @@ puts
 puts "PROCESSING INCOMING MAILS"
 puts
 
-n = Postoffice.receive_diary_emails
-puts "received #{n} diary emails"
-n = Postoffice.receive_okaapi_emails
-puts "received #{n} okaapi emails"
+n_o, n_d = Postoffice.receive_okaapi_and_diary_emails
+puts "received #{n_d} diary emails"
+puts "received #{n_o} okaapi emails"
 
 puts
 puts "SENDING MAILS"
 puts 
 
-if ( Time.now.hour == 18 )
+if TRUE #( Time.now.hour == 18 )
   n = Postoffice.send_all_diary_emails( 1959 ) 
   puts "sent #{n} diary reminder emails"
   n = Postoffice.send_okaapi_emails 

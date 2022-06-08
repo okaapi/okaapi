@@ -1,25 +1,10 @@
 require 'test_helper'
 
-#class DummyDiaryDeliverer
-#  def deliver
-#  end
-#end
-
-class DiaryReceiver
-  def self.get_diary_entries
-    entries = []
-    entries << { day: 1, month: 3, year: 2015, date: Time.parse('15/3/1'), 
-            from: 'wido@mmm.com', content: "day 1"}
-    entries << { day: 2, month: 3, year: 2015, date: Time.parse('15/3/2'), 
-            from: 'john_alternate@menhardt.com', content: "day 2"}
-    entries << { day: 3, month: 3, year: 2015, date: Time.parse('15/3/3'), 
-            from: 'arnaud@gmail.com', content: "day 3"}
-    entries                    
-  end
-  #def self.send_diary_reminder( email, goal, time )
-  #  DummyDiaryDeliverer.new
-  #end
-end
+# overriding GeneralReceiver
+#class GeneralReceiver
+#  def self.get_entries
+#
+#  see okaapi_controller_test
 
 class DiaryControllerTest < ActionController::TestCase
   

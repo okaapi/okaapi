@@ -161,9 +161,8 @@ class DiaryController < ApplicationController
 
   def receive_diary_emails
 
-    n = Postoffice.receive_diary_emails    
-
-    redirect_to calendar_path, notice: "received #{n} diary emails"
+    n_o, n_d = Postoffice.receive_okaapi_and_diary_emails    
+    redirect_to calendar_path, notice: "received #{n_d} diary emails"
 
   end
   

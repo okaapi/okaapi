@@ -139,10 +139,18 @@ class OkaapiController < ApplicationController
     redirect_to session[:okaapi_mode] ? ( '/okaapi/' + session[:okaapi_mode] ) : root_path
   end  
   
+  def send_okaapi_emails
+    
+    Postoffice.send_okaapi_emails
+    redirect_to '/', notice: "sent okaapi reminder"
+        
+  end
+
   def receive_okaapi_emails
     
-    n = Postoffice.receive_okaapi_emails
-    redirect_to '/', notice: "received #{n} okaapis"
+    n_o, n_d = Postoffice.receive_okaapi_and_diary_emails    
+
+    redirect_to '/', notice: "received #{n_o} okaapis"
      
   end
   

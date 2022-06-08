@@ -1,13 +1,23 @@
 require 'test_helper'
 
-class OkaapiMailer < ActionMailer::Base
-  def self.get_okaapis
-    [ { time: Time.now, from: 'wido@mmm.com', 
+# overriding GeneralReceiver
+class GeneralReceiver
+  def self.get_entries
+    okaapis = [ { time: Time.now, from: 'wido@mmm.com', 
           content: 'content 1', subject: 'red green blue' },
       { time: Time.now + 1000, from: 'john_alternate@menhardt.com', 
           content: 'content 2', subject: 'Red blue purple' },
       { time: Time.now + 2000, from: 'arnaud@gmail.com', 
-          content: 'content 2', subject: 'yellow gray green' } ]                        
+        content: 'content 2', subject: 'yellow gray green' } ]
+    diary_entries = []
+    diary_entries << { day: 1, month: 3, year: 2015, date: Time.parse('15/3/1'), 
+            from: 'wido@mmm.com', content: "day 1"}
+    diary_entries << { day: 2, month: 3, year: 2015, date: Time.parse('15/3/2'), 
+            from: 'john_alternate@menhardt.com', content: "day 2"}
+    diary_entries << { day: 3, month: 3, year: 2015, date: Time.parse('15/3/3'), 
+            from: 'arnaud@gmail.com', content: "day 3"}
+
+    return okaapis, diary_entries
   end
 end
 

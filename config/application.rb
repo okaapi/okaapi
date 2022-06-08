@@ -39,5 +39,6 @@ module Okaapi2
     config.hosts << "blackberryhillhouse.com"
     config.hosts << 'otherhost'        
     config.hosts << 'testhost45A67'        
+    config.hosts << 'menhardt.com'        
   end
 end

@@ -16,16 +16,16 @@ OkaapiMailer.smtp_settings.each do |f,v|
 end
 
 (1..3).each {puts "."}
-puts "Diary Reminder ----------------------------------------------------------"
-entries = DiaryReceiver.get_diary_entries
+puts "General Receiver Diary Entries----------------------------------------------------------"
+okaapis, entries = GeneralReceiver.get_entries
 entries.each do |e|
   p e
   (1..2).each {puts "."}
 end
 
 (1..3).each {puts "."}
-puts "Okaapi Mail ----------------------------------------------------------"
-entries = OkaapiMailer.get_okaapis
+puts "General Receiver Okaapis----------------------------------------------------------"
+entries, diary_entries = GeneralReceiver.get_entries
 entries.each do |e|
   p e
   (1..2).each {puts "."}

@@ -2,25 +2,6 @@ require 'net/http'
 
 class Postoffice
 
-  def self.receive_okaapi_emails  
-    new_entries = OkaapiMailer.get_okaapis
-    n = 0
-    new_entries.each do |entry|
-      if user = User.by_email_or_alternate( entry[:from] )
-        ok = Okaapi.new( entry )
-        ok.user_id = user.id
-        begin
-          ok.save!
-        rescue
-          ok.content = 'content erased'
-          ok.save!
-        end
-        n = n + 1
-      end
-    end
-    return n
-  end
-
   def self.send_okaapi_emails
     n = 0
     users = User.where( active: 'confirmed' )
@@ -62,20 +43,6 @@ class Postoffice
     return n
   end
 
-  def self.receive_diary_emails    
-    new_entries = DiaryReceiver.get_diary_entries 
-    n = 0
-    new_entries.each do |entry|
-      if user = User.by_email_or_alternate( entry[:from] )
-        entry[:user_id] = user.id
-        de = DiaryEntry.create( entry )
-         de.save!
-         n = n + 1
-      end
-    end
-    return n
-  end
-  
   def self.send_all_diary_emails( token )    
     n = 0
     if token
@@ -83,10 +50,42 @@ class Postoffice
       users.each do |user|
         puts "sending email to #{user.email} (#{user.goal_in_subject})"
         DiaryReminder.send_diary_reminder( user.email, user.goal_in_subject, Time.now, token ).deliver_now
-    n = n + 1
+        n = n + 1
       end
     end  
     return n
   end
   
+  def self.receive_okaapi_and_diary_emails
+
+    new_okaapis, new_diary_entries = GeneralReceiver.get_entries
+    n_d = 0
+    new_diary_entries.each do |entry|
+      if user = User.by_email_or_alternate( entry[:from] )
+        entry[:user_id] = user.id
+        de = DiaryEntry.create( entry )
+          de.save!
+          n_d = n_d + 1
+      end
+    end
+
+    n_o = 0
+    new_okaapis.each do |entry|
+      if user = User.by_email_or_alternate( entry[:from] )
+        ok = Okaapi.new( entry )
+        ok.user_id = user.id
+        begin
+          ok.save!
+        rescue
+          ok.content = 'content erased'
+          ok.save!
+        end
+        n_o = n_o + 1
+      end
+    end
+
+    return n_o, n_d
+
+  end
+    
 end
