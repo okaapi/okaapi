@@ -52,7 +52,7 @@ class DiaryController < ApplicationController
             entry = DiaryEntry.entry_for_day( @current_user.id, day_in_month, @month, @year )
             entry_tags = DiaryEntry.tags(entry)
 	    tags += entry_tags if entry_tags
-            thisweek[day] = { day: day_in_month,  content: entry }
+            thisweek[day] = { day: day_in_month,  content: entry ? entry.rstrip.lstrip : '' }
           else
             thisweek[day] = { day: day_in_month }
           end
@@ -94,9 +94,23 @@ class DiaryController < ApplicationController
       @weekday = params[:weekday]
       @week = params[:week]    
       @divid = '#show_diary_entry' + @week.to_s    
-      @entry = params[:entry]    
-      DiaryEntry.replace_entry_for_day( @current_user.id, 
-                                  @day, @month, @year, @entry )                       
+      @entry = params[:entry].rstrip
+      @entry.chop! if @entry.last == "<"        
+      puts params
+      if params[:commit] == "left"
+        # get current entry, and clear the day
+        DiaryEntry.replace_entry_for_day( @current_user.id, 
+                                          @day, @month, @year, '' )                    
+        # then add to entry on the left
+        @day, @month, @year = yesterday( @day, @month, @year )
+	left_entry = DiaryEntry.entry_for_day( @current_user.id, @day, @month, @year )
+        new_entry = left_entry ? left_entry + @entry : @entry
+        DiaryEntry.replace_entry_for_day( @current_user.id, 
+                                          @day, @month, @year, new_entry )
+      else # normal submit
+        DiaryEntry.replace_entry_for_day( @current_user.id, 
+                                          @day, @month, @year, @entry )
+      end
       redirect_to calendar_path( month: @month, year: @year )
     else
       redirect_to who_are_u_path
@@ -164,6 +178,26 @@ class DiaryController < ApplicationController
     n_o, n_d = Postoffice.receive_okaapi_and_diary_emails    
     redirect_to calendar_path, notice: "received #{n_d} diary emails"
 
+  end
+
+  private
+
+  def yesterday( day, month, year )
+    day = day.to_i
+    month = month.to_i
+    year = year.to_i
+    day = day - 1
+    if day == 0
+      month = month - 1
+      if month == 0
+        year = year - 1
+        month = 12
+        day = 31
+      else
+        day = Time.days_in_month( month, year )
+      end
+    end
+    return day.to_s, month.to_s, year.to_s
   end
   
 end

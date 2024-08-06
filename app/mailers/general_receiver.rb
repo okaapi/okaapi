@@ -41,6 +41,7 @@ class GeneralReceiver < ActionMailer::Base
     end
 
     mails = Mail.all
+    p mails.count
     
     mails.each do |message_obj|
       from = message_obj.from
@@ -59,25 +60,26 @@ class GeneralReceiver < ActionMailer::Base
       #
       if subj.include?( "#whatdidyoudo" )
 
-        t = Time.parse( subject ) rescue Time.now
-        entry = { day: t.day, month: t.month, year: t.year, date: t, from: from }   
+        t_subj = Time.parse( subj ) rescue Time.now
+        if body.include?('2023')
+          t_subj = t_subj - 1.year
+        end
+        puts subj
+        puts t_subj
+                 
+        entry = { day: t_subj.day, month: t_subj.month, year: t_subj.year, date: t_subj, from: from }   
       
-        #
-        #  remove
-        #       On Tuesday, March 22, 2016, Automatic Diary <automaticdiary@gmail.com> wrote:
-        # 
+        body.gsub!(/\n/,"")
+        body.gsub!(/\r/,"")
         body.gsub!(/On(?:(?!On).)*?wrote:/m, '')
-      
-        #
-        #  remove
-        #         From: Automatic Diary [mailto:automaticdiary@gmail.com] 
-        #         Sent: Friday, March 25, 2016 6:00 PM
-        #         To: wido@menhardt.com
-        #         Subject: What did you do on Friday 25 March ?
-        #
-        body.gsub!( /(From: Automatic Diary.*?\?)?/m ,'' )
-        
-        body.gsub!(/\n>/, '')      
+        body.gsub!(/Am(?:(?!Am).)*?>:/m, '')
+        body.squeeze!('>')
+        body.gsub!(/<>/, '')
+        body.gsub!(/> >/, '>')
+        body.gsub!(/^\s*>/,'')
+        body.gsub!(/>$/,'')
+        body.strip!
+
         entry[:content] = body || "" 
       
         diary_entries << entry
@@ -89,7 +91,7 @@ class GeneralReceiver < ActionMailer::Base
       else # message subject does not include #whatdidyoudo
 
         r = subj.split("#")
-        subject = r[0]
+        subj = r[0]
         t_r = Time.parse(r[1..-1].join("#")) rescue Time.now
         # if t_r is very close to "now", assume there is no reminder specified... remind tomorrow
         if (Time.now - t_r).to_i.abs < 3
@@ -99,7 +101,7 @@ class GeneralReceiver < ActionMailer::Base
         end        
       
         entry = { time: t, from: from, content: ( body || "" ),
-                  subject: subject, reminder: t_r }    
+                  subject: subj, reminder: t_r }    
             
         okaapis << entry
 
@@ -108,12 +110,12 @@ class GeneralReceiver < ActionMailer::Base
       # pop
       # message.delete
       message_obj.mark_for_delete = true
+      Mail.find_and_delete
 
     end 
       
     # pop
     # pop.finish
-    Mail.find_and_delete
     
     return okaapis, diary_entries
 

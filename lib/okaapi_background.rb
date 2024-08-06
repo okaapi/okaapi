@@ -18,7 +18,7 @@ puts
 puts "SENDING MAILS"
 puts 
 
-if TRUE #( Time.now.hour == 18 )
+if ( Time.now.hour == 18 )
   n = Postoffice.send_all_diary_emails( 1959 ) 
   puts "sent #{n} diary reminder emails"
   n = Postoffice.send_okaapi_emails 

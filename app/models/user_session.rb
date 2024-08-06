@@ -1,18 +1,19 @@
-
-  class UserSession < ZiteActiveRecord
+class UserSession < ZiteActiveRecord
     
     attr_accessor :remember_token
     belongs_to :user
-	has_many :user_actions, dependent: :destroy
+    has_many :user_actions, dependent: :destroy
     validate :id_valid
 	
-	def _user	
-	  # overriding this in because it fails with scope
-	  User.by_id( user_id )
-	end
-
+    def _user	
+      # overriding this in because it fails with scope
+      User.by_id( user_id )
+    end
   
-    def id_valid	  
+    def id_valid
+      puts "UserSession"
+      p user_id
+      p User.by_id(user_id)
       if user_id and ! User.by_id(user_id) 
         errors.add( :user_id, "has to be valid, #{user_id} is not")
       end

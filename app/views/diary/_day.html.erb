@@ -1,25 +1,54 @@
 
+<div style="padding:2px; width: 50%; float: left;">
 
-<div style="padding:2px;	  width: 50%; float: left;">
-  
+ 
   <% if entry %>
-	<div class="card" >
+        <div class="card" >
 	  <div class="card-header">	    
 	    <%= link_to show_diary_entry_path( weekday: day, day: entry[:day], month: month, year: year,
 	                                       week: week ),
 	        remote: js? do %>
-	      <%= day %> <%= entry[:day] %>
+	      <%= day %> <%= entry[:day] %> 
+
 	    <% end %>
 	  </div>
 	  <div class="diary_entry card-body" 
 	      style="padding: 10px;
 				 overflow-x: hidden;
 				 word-wrap: break-word">
-        <%= substitute_tag_and_color_helper( entry[:content], @tag_list, @colors ).html_safe %>	        
+            <%= substitute_tag_and_color_helper( entry[:content], @tag_list, @colors ).html_safe %>
+<!--            <% autoheight = "autoresizing"+entry[:day].to_s %>
+            <%= form_tag update_diary_entry_path do %>
+               <%= text_area_tag :entry, entry[:content], rows: 4,
+                   style: "width: 100%; max-width: 100%; border: none; outline: none;
+                           font-size: 8pt; display:block; overflow:hidden;
+			   border:none; outline:none;resize: none;	      ", id: autoheight %>
+               <script>
+	         textarea = document.querySelector("<%='#'+autoheight%>");
+		 var lht = parseInt($('textarea').css('lineHeight'),10);
+                 var lines = textarea.scrollHeight / lht
+		 textarea.style.height = textarea.scrollHeight + 'px';
+	       </script>
+               <%= hidden_field_tag :day, entry[:day] %>  
+               <%= hidden_field_tag :month, month %> 
+               <%= hidden_field_tag :year, year %>    
+               <%= hidden_field_tag :week, week %>  
+               <%= hidden_field_tag :weekday, day %>
 	  </div>
+	  <style>
+	    .submit-as-link{ border:none; background:none; text-align: left; margin:0;
+	    padding: 10 0 0 0;
+            cursor: pointer; color: #777777; display: inline-block }
+	    .submit-as-link:hover { color:red }
+	  </style>
+	  <div>
+	  <%= submit_tag "submit",
+	      class: "submit-as-link" %>
+	      <%= submit_tag "left",
+	      class: "submit-as-link" %>-->
+	  </div>
+            <% end %>
 	</div>
   <% end %>
 </div>  
-
-
 

@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   get 'diary/show_entry', as: "show_diary_entry"
   get 'diary/show_tag', as: "show_diary_tag"  
   post 'diary/update_entry', as: "update_diary_entry"  
+  post 'diary/shift_diary_entry_left', as: "shift_diary_entry_left"
   
   get 'okaapi/termcloud', as: "termcloud"
   get 'okaapi/mindmap', as: "mindmap"

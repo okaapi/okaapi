@@ -3,13 +3,12 @@ require File.dirname(__FILE__) + "/../../config/environment" unless defined?(RAI
 require 'mail'
 
 Mail.defaults do
-    delivery_method :smtp, address: "smtp.1and1.com", port: 587, domain: "okaapi.com", authentication: "plain", enable_starttls_auto: true, user_name: "email@okaapi.com", password: "adjk34xx7d7s"
-
+    delivery_method :smtp, address: "smtp.1and1.com", port: 587, domain: "okaapi.com", authentication: "plain", enable_starttls_auto: true, user_name: "email@okaapi.com", password: "Adjk34x@7d7s"
 end
 
 
 mail = Mail.deliver do
-  to      'wmenhardt@beckman.com'
+  to      'wido.menhardt@evidentscientific.com'
   from    'wido@menhardt.com'
   subject 'First multipart email sent with Mail'
 

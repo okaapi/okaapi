@@ -6,18 +6,18 @@
 	<p></p>
 	<%= form_tag update_diary_entry_path do %>
 	  <div class="col-xs-8">
-        <%= text_field_tag :entry, @entry, lines: 2, class: "form-control input-sm" %>
-      </div>
-      <%= hidden_field_tag :day, @day %>  
-      <%= hidden_field_tag :month, @month %> 
-      <%= hidden_field_tag :year, @year %>    
-      <%= hidden_field_tag :week, @week %>  
-      <%= hidden_field_tag :weekday, @weekday %>                           
-    <% end %>
-    <% @tag_list.uniq.each do |tag| %>
-      <%= link_to show_diary_tag_path( month: @month, year: @year, tag: tag ),
-	        remote: js? do %>
+            <%= text_field_tag :entry, @entry, rows: 20, class: "form-control input-sm"  %>
+          </div>
+          <%= hidden_field_tag :day, @day %>  
+          <%= hidden_field_tag :month, @month %> 
+          <%= hidden_field_tag :year, @year %>    
+          <%= hidden_field_tag :week, @week %>  
+          <%= hidden_field_tag :weekday, @weekday %>                           
+        <% end %>
+        <% @tag_list.uniq.each do |tag| %>
+          <%= link_to show_diary_tag_path( month: @month, year: @year, tag: tag ),
+	      remote: js? do %>
 	    #<%= tag %> 
-      <% end %><%= monthname( @month ) %> <%= @year %><br>
-    <% end if @tag_list %>
+	  <% end %><%= monthname( @month ) %> <%= @year %><br>
+        <% end if @tag_list %>
 </div>
