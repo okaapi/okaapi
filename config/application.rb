@@ -1,3 +1,4 @@
+
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
@@ -32,13 +33,5 @@ module Okaapi2
     config.captcha_bad_test_token = captcha_config["bad-test-token"]
     config.captcha_bypass = captcha_config["bypass"]
 
-    # why is this necessary all of a sudden?
-    config.hosts << 'www.okaapi.com'        
-    config.hosts << 'okaapi.com'        
-    config.hosts << "www.blackberryhillhouse.com"
-    config.hosts << "blackberryhillhouse.com"
-    config.hosts << 'otherhost'        
-    config.hosts << 'testhost45A67'        
-    config.hosts << 'menhardt.com'        
   end
 end

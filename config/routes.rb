@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   get 'calendar' => 'diary#calendar', as: "calendar"
   get 'diary/send_diary_email', as: "send_diary_email"
   get 'diary/send_all_diary_emails/:token' => 'diary#send_all_diary_emails', as: "send_all_diary_emails"
+  get 'diary/show_as_excel', as: "show_as_excel"  
   get 'diary/receive_diary_emails', as: "receive_diary_emails"  
   get 'diary/turn_off_diary_emails', as: "turn_off_diary_emails"
   get 'diary/show_entry', as: "show_diary_entry"

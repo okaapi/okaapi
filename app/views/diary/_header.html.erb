@@ -28,6 +28,11 @@
 
 <ul class="nav justify-content-end nav-pills " >
 <% if @current_user and @current_user.diary_service == 'on' %>	  
+  <li class="nav-item" >
+    <%= link_to show_as_excel_path, class: 'nav-link ' , title: "Show as Excel" do %>
+      &nbsp;<i class="fas fa-file-excel"></i>&nbsp;
+    <% end %>
+  </li> 
   <li class="nav-item" >      
     <%= link_to turn_off_diary_emails_path, class: 'nav-link ' , title: "Turn off reminder emails" do %>
       &nbsp;<i class="fas fa-ban"></i>&nbsp;

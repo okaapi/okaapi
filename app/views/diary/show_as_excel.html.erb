@@ -1,0 +1,30 @@
+
+<h1> Excel </h1>
+
+<table>
+
+    <tr>
+    <th style="width: 5%;">day</th>
+    <th style="width: 5%;">month</th>
+    <th style="width: 5%;">year</th>
+    <th style="width: 15%;">date</th>
+    <th style="width: 70%;">content</th>
+    </tr>
+    
+<% @diary_entries.each do |entry| %>
+
+  <tr>
+    <td width=5%> <%= entry.day %>,</td>
+    <td> <%= entry.month %>, </td>
+    <td> <%= entry.year %>, </td>
+    <% date_display = Date.new(entry.year, entry.month, entry.day) %>
+    <td> <%= date_display.strftime("%m-%d-%Y") %>,  </td>
+    <% content = entry.content.gsub("<br>","\n") %>
+    <% content.gsub!(",",";") %>
+    <% content.gsub!("<br >","\n") %>
+    <td style="word-break: break-all;"> <%= content %> </td>
+  </tr>
+  
+<% end %>
+
+</table>

@@ -23,25 +23,22 @@ class GeneralReceiver < ActionMailer::Base
     #
     #  pop version
     #
-    #pop = Net::POP3.new smtp_settings[:pop_server]
-    #pop.enable_ssl
-    #pop.start smtp_settings[:user_name], smtp_settings[:password]
-    #pop.each_mail do |message|
-    #  message_obj = Mail.new(message.pop) 
-
     pop_server = smtp_settings[:pop_server]
     user_name = smtp_settings[:user_name]
     password = smtp_settings[:password]
     Mail.defaults do
-      retriever_method :pop3, :address    => pop_server,
-                          :port       => 995,
-                          :user_name  => user_name,
-                          :password   => password,
-                          :enable_ssl => true
+      retriever_method :pop3,
+                       address: pop_server,
+                       port: 995,
+                       user_name: user_name,
+                       password: password,
+                       enable_ssl: true,
+                       openssl_verify_mode: OpenSSL::SSL::VERIFY_PEER,
+                       read_timeout: 30,
+                       open_timeout: 30
     end
 
-    mails = Mail.all
-    p mails.count
+    mails = Mail.find(:what => :last, :count => 20)
     
     mails.each do |message_obj|
       from = message_obj.from
@@ -61,10 +58,8 @@ class GeneralReceiver < ActionMailer::Base
       if subj.include?( "#whatdidyoudo" )
 
         t_subj = Time.parse( subj ) rescue Time.now
-        if body.include?('2023')
-          t_subj = t_subj - 1.year
-        end
         puts subj
+        puts body[0,30]
         puts t_subj
                  
         entry = { day: t_subj.day, month: t_subj.month, year: t_subj.year, date: t_subj, from: from }   
@@ -92,6 +87,8 @@ class GeneralReceiver < ActionMailer::Base
 
         r = subj.split("#")
         subj = r[0]
+        puts(">>>>>>>>>>>>>>>>>>>>>>>>")
+        puts(subj)
         t_r = Time.parse(r[1..-1].join("#")) rescue Time.now
         # if t_r is very close to "now", assume there is no reminder specified... remind tomorrow
         if (Time.now - t_r).to_i.abs < 3
@@ -100,7 +97,7 @@ class GeneralReceiver < ActionMailer::Base
           t_r = t_r.utc.to_s
         end        
       
-        entry = { time: t, from: from, content: ( body || "" ),
+        entry = { time: t_r, from: from, content: ( body || "" ),
                   subject: subj, reminder: t_r }    
             
         okaapis << entry
@@ -109,8 +106,9 @@ class GeneralReceiver < ActionMailer::Base
 
       # pop
       # message.delete
-      message_obj.mark_for_delete = true
-      Mail.find_and_delete
+      # commented these Feb 17 2026
+      #message_obj.mark_for_delete = true
+      #Mail.find_and_delete
 
     end 
       

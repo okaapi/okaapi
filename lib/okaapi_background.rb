@@ -3,6 +3,8 @@ require "../config/environment" unless defined?(::Rails.root)
 #dbconfig = YAML::load(File.open('../config/database.yml'))
 #ActiveRecord::Base.establish_connection(dbconfig["development"])
 
+puts "starting okaapi_background"
+
 ZiteActiveRecord.site( "www.okaapi.com" )
 
 puts "background.rb at #{Time.now.utc} or #{Time.now}"
@@ -21,8 +23,6 @@ puts
 if ( Time.now.hour == 18 )
   n = Postoffice.send_all_diary_emails( 1959 ) 
   puts "sent #{n} diary reminder emails"
-  n = Postoffice.send_okaapi_emails 
-  puts "sent #{n} okaapi emails"
 end
 
 puts 

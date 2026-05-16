@@ -148,17 +148,22 @@ class DiaryController < ApplicationController
     end       
     
   end
-
-  def send_diary_email
+  def turn_off_diary_emails
     
     if @current_user
-      if @current_user.diary_service == "off"
-        @current_user.diary_service = "on"
-        @current_user.save!(validate: false)
-      end
-      DiaryReminder.send_diary_reminder( @current_user.email, @current_user.goal_in_subject,
-                                         Time.now ).deliver_now
-      redirect_to calendar_path, notice: "daily reminders sent to  #{@current_user.email}"
+      @current_user.diary_service = "off"
+      @current_user.save!(validate: false)
+	  redirect_to calendar_path, notice: "daily reminders turned off"
+    else
+      redirect_to who_are_u_path
+    end       
+    
+  end
+
+  def show_as_excel
+    
+    if @current_user
+      @diary_entries = DiaryEntry.all
     else
       redirect_to who_are_u_path
     end   
